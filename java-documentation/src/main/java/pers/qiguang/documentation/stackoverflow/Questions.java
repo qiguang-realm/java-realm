@@ -52,4 +52,27 @@ public class Questions {
     // 将原始数据类型转换为字符串的更好方法是什么
 
     // https://stackoverflow.com/questions/6679015/what-is-the-better-approach-to-convert-primitive-data-type-into-string
+
+    // Spring 中的@Component、@Repository 和@Service 注解有什么区别？
+
+    // https://stackoverflow.com/questions/6827752/whats-the-difference-between-component-repository-service-annotations-in
+
+    // Java 中的 public、protected、package-private 和 private 有什么区别？
+
+    // https://stackoverflow.com/questions/215497/what-is-the-difference-between-public-protected-package-private-and-private-in
+
+
+    /**
+     * 究竟什么是 JavaBean？
+     * https://stackoverflow.com/questions/3295496/what-is-a-javabean-exactly
+     */
+
+
+
+
+
+
+
+
+
 }

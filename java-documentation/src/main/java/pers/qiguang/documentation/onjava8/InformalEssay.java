@@ -13,7 +13,10 @@ public class InformalEssay {
     // Code Review 指南  https://blog.csdn.net/itguangit/article/details/123003006
 
 
-
-    //
+    /**
+     * 关于Bean 映射工具
+     *
+     * https://cloud.tencent.com/developer/article/1949970
+     */
 
 }
