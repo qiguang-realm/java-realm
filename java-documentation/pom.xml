@@ -2,18 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>java-realm</artifactId>
-        <groupId>com.example</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <!--父项目的坐标。如果项目中没有规定某个元素的值，那么父项目中的对应值即为项目的默认值。 坐标包括group ID，artifact ID和 version。 -->
+    <parent>
+        <artifactId>realm</artifactId>
+        <groupId>cn.realm.cloud</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <!-- 模型版本 -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 项目的唯一ID，一个groupId下面可能多个项目，就是靠artifactId来区分的 -->
     <artifactId>java-documentation</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+    <!-- 名称 -->
+    <name>${project.artifactId}</name>
+    <!-- 项目的详细描述, Maven 产生的文档用。 -->
+    <description>Documentation</description>
+    <!-- 主页的URL, Maven产生的文档用 -->
+    <url>https://mvnrepository.com/</url>
+
+    <!-- 打包的机制，如pom,jar, maven-plugin, ejb, war, ear, rar, par，默认为jar -->
+    <packaging>jar</packaging>
 
 </project>
