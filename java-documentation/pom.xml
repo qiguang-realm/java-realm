@@ -3,26 +3,49 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!--父项目的坐标。如果项目中没有规定某个元素的值，那么父项目中的对应值即为项目的默认值。 坐标包括group ID，artifact ID和 version。 -->
+<!--    按照标准的顺序排列：modelVersion -> parent -> groupId（如果有的话） -> artifactId -> version -> packaging -> name -> description -> url -> 其他配置。    -->
+
+    <!-- ========== 基础配置 ========== -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 继承父 POM 配置 -->
     <parent>
-        <artifactId>realm</artifactId>
         <groupId>cn.realm.cloud</groupId>
+        <artifactId>realm</artifactId>
+        <!-- 版本号与父 POM 的 revision 变量保持同步 -->
         <version>${revision}</version>
     </parent>
 
-    <!-- 模型版本 -->
-    <modelVersion>4.0.0</modelVersion>
-    <!-- 项目的唯一ID，一个groupId下面可能多个项目，就是靠artifactId来区分的 -->
+    <!-- ========== 项目标识 ========== -->
+    <!-- 文档模块唯一标识（继承父项目的 groupId） -->
     <artifactId>java-documentation</artifactId>
+    <!-- 使用 POM 类型管理文档相关配置 -->
+    <packaging>pom</packaging>
 
-    <!-- 名称 -->
+    <!-- ========== 项目信息 ========== -->
     <name>${project.artifactId}</name>
-    <!-- 项目的详细描述, Maven 产生的文档用。 -->
-    <description>Documentation</description>
-    <!-- 主页的URL, Maven产生的文档用 -->
-    <url>https://mvnrepository.com/</url>
+    <!-- 详细模块描述（建议说明具体文档类型） -->
+    <description>Java 项目文档模块，包含 API 文档、技术规范及部署指南</description>
+    <!-- 建议替换为实际文档站点地址 -->
+    <url>https://docs.your-domain.com/java</url>
 
-    <!-- 打包的机制，如pom,jar, maven-plugin, ejb, war, ear, rar, par，默认为jar -->
-    <packaging>jar</packaging>
+    <!-- ========== 模块扩展配置 ========== -->
+    <!-- 注：如需管理文档生成插件（如 asciidoctor/maven-javadoc-plugin）可在此处添加 -->
+
+
+    <!-- 文档生成插件示例 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <configuration>
+                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -3,41 +3,59 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- ========== 基础信息 ========== -->
     <groupId>cn.realm.cloud</groupId>
     <artifactId>realm</artifactId>
+    <!-- 使用 flatten 插件动态管理版本号 -->
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <modules>
-        <module>java-documentation</module>
-
-
-        <module>realm-dependencies</module>
-
-
-    </modules>
 
     <name>${project.artifactId}</name>
-    <description>mvn</description>
+    <description>Realm 项目核心父模块，统一管理依赖及构建配置</description>
+    <!-- 建议替换为实际项目地址 -->
     <url>https://mvnrepository.com/</url>
 
+    <!-- ========== 子模块定义 ========== -->
+    <modules>
+        <!-- 项目文档模块 -->
+        <module>java-documentation</module>
+        <!-- 统一依赖管理模块 -->
+        <module>realm-dependencies</module>
+        <module>realm-gateway</module>
+        <module>realm-framework</module>
+        <module>realm-module-system</module>
+    </modules>
+
+    <!-- ========== 全局属性配置 ========== -->
     <properties>
-        <revision>2.2.0-snapshot</revision>
-        <!-- Maven 相关 -->
+        <!-- 项目版本号（主版本） -->
+        <revision>2.4.1-SNAPSHOT</revision>
+
+        <!-- JDK 版本配置 -->
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- 构建插件版本 -->
         <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
-        <!-- 看看咋放到 bom 里 -->
-        <lombok.version>1.18.34</lombok.version>
-        <spring.boot.version>3.3.1</spring.boot.version>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+
+        <!-- 依赖库版本 -->
+        <lombok.version>1.18.36</lombok.version>
+        <!-- 统一 Spring Boot 属性命名风格（短横线） -->
+        <spring-boot.version>3.4.1</spring-boot.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+
+        <!-- 编码配置 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- ========== 依赖管理 ========== -->
     <dependencyManagement>
         <dependencies>
+            <!-- 导入统一依赖管理模块 -->
             <dependency>
                 <groupId>cn.realm.cloud</groupId>
                 <artifactId>realm-dependencies</artifactId>
@@ -48,42 +66,46 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- ========== 构建配置 ========== -->
     <build>
+        <!-- 插件默认配置（可被子模块继承） -->
         <pluginManagement>
             <plugins>
-                <!-- maven-surefire-plugin 插件，用于运行单元测试。 -->
-                <!-- 注意，需要使用 3.0.X+，因为要支持 Junit 5 版本 -->
+                <!-- 单元测试插件（需 3.0+ 以支持 JUnit 5） -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
-                <!-- maven-compiler-plugin 插件，解决 Lombok + MapStruct 组合 -->
-                <!-- https://stackoverflow.com/questions/33483697/re-run-spring-boot-configuration-annotation-processor-to-update-generated-metada -->
+
+                <!-- 编译器插件（解决 Lombok + MapStruct 注解处理问题） -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
+                        <!-- 配置注解处理器路径 -->
                         <annotationProcessorPaths>
+                            <!-- Spring 配置元数据生成 -->
                             <path>
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-configuration-processor</artifactId>
-                                <version>${spring.boot.version}</version>
+                                <version>${spring-boot.version}</version>
                             </path>
+                            <!-- Lombok 注解处理 -->
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
+                            <!-- MapStruct 代码生成 -->
                             <path>
                                 <groupId>org.mapstruct</groupId>
                                 <artifactId>mapstruct-processor</artifactId>
                                 <version>${mapstruct.version}</version>
                             </path>
                         </annotationProcessorPaths>
-                        <!-- 编译参数写在 arg 内，解决 Spring Boot 3.2 的 Parameter Name Discovery 问题 -->
-                        <debug>false</debug>
+                        <!-- 启用参数名称保留（Spring Boot 3+ 需要） -->
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>
@@ -92,49 +114,58 @@
             </plugins>
         </pluginManagement>
 
+        <!-- 全局生效的插件 -->
         <plugins>
-            <!-- 统一 revision 版本 -->
+            <!-- 版本号统一管理插件 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
                 <version>${flatten-maven-plugin.version}</version>
                 <configuration>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    <flattenMode>oss</flattenMode>  <!-- 开源项目模式 -->
                     <updatePomFile>true</updatePomFile>
                 </configuration>
                 <executions>
+                    <!-- 在 process-resources 阶段生成 flatten 文件 -->
                     <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>flatten</goal>
                         </goals>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
                     </execution>
+                    <!-- 清理时移除 flatten 文件 -->
                     <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
                         </goals>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
 
-    <!-- 使用 huawei / aliyun 的 Maven 源，提升下载速度 -->
+    <!-- ========== 仓库配置 ========== -->
     <repositories>
-        <repository>
-            <id>huaweicloud</id>
-            <name>huawei</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
-        </repository>
+        <!-- 国内镜像优先 -->
         <repository>
             <id>aliyunmaven</id>
-            <name>aliyun</name>
+            <name>Aliyun Public</name>
             <url>https://maven.aliyun.com/repository/public</url>
+            <snapshots>
+                <enabled>false</enabled>  <!-- 默认关闭快照 -->
+            </snapshots>
         </repository>
 
+        <repository>
+            <id>huaweicloud</id>
+            <name>Huawei Cloud</name>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+        </repository>
+
+        <!-- Spring 官方仓库 -->
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -148,9 +179,8 @@
             <name>Spring Snapshots</name>
             <url>https://repo.spring.io/snapshot</url>
             <releases>
-                <enabled>false</enabled>
+                <enabled>false</enabled>  <!-- 仅启用快照 -->
             </releases>
         </repository>
     </repositories>
-
 </project>
