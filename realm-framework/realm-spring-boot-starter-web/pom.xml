@@ -2,18 +2,98 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Parent project details -->
     <parent>
-        <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-spring-boot-starter-web</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>Web framework: Global exception handling, API logging, desensitization, error codes, etc.</description>
+    <url>https://github.com/</url>
 
+    <dependencies>
+        <!-- Common dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- Spring Boot configuration processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Web related dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Spring Security Core for GlobalExceptionHandler -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- OpenAPI support -->
+        <dependency>
+            <groupId>com.github.xingfudeshi</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+        </dependency>
+
+        <!-- RPC remote call dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Business components -->
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-module-infra-api</artifactId> &lt;!&ndash; Used for operation log recording &ndash;&gt;-->
+<!--            <version>${revision}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-module-system-api</artifactId> <!-- Used for error code recording -->
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- XSS protection -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
+        <!-- Test related dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

@@ -2,18 +2,79 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Parent project details -->
     <parent>
-        <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-spring-boot-starter-security</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>
+        1. security: User authentication and authorization, implementing "who" can do "what"
+        2. operatelog: Operation log, implementing "who" did "what" to "whom" at "what time"
+    </description>
+    <url>https://github.com/</url>
 
+    <dependencies>
+        <!-- Common dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- Spring core dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- Web related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Spring Boot configuration processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- RPC remote call dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Business components -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-module-system-api</artifactId> <!-- Used for Token validation -->
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- Utility dependencies -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- Operation log component -->
+        <dependency>
+            <groupId>io.github.mouzt</groupId>
+            <artifactId>bizlog-sdk</artifactId>
+        </dependency>
+    </dependencies>
 </project>

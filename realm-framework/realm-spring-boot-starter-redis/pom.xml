@@ -2,18 +2,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 基础项目定义 -->
     <parent>
-        <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-spring-boot-starter-redis</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>Redis 集成封装，提供分布式锁、缓存管理、对象存储等增强功能</description>
+    <url>https://github.com/</url>
+
+    <dependencies>
+        <!-- ==================== 基础依赖 ==================== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId> <!-- 项目通用工具和基础类 -->
+        </dependency>
+
+        <!-- ==================== Redis 核心支持 ==================== -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId> <!-- Redis 客户端增强，支持分布式锁/数据结构 -->
+        </dependency>
+
+        <!-- ==================== 缓存支持 ==================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId> <!-- Spring Cache 自动化配置 -->
+        </dependency>
+
+        <!-- ==================== 数据序列化 ==================== -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId> <!-- Java8 时间类型序列化支持 -->
+        </dependency>
+    </dependencies>
 
 </project>

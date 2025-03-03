@@ -1,19 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Project Object Model (POM) for yudao-spring-boot-starter-biz-data-permission -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- POM model version -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Parent project information -->
     <parent>
         <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <!-- Project artifact identifier -->
     <artifactId>realm-spring-boot-starter-biz-data-permission</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <!-- Project name and description -->
+    <name>${project.artifactId}</name>
+    <description>数据权限</description>
+
+    <!-- Project URL -->
+    <url>https://github.com/</url>
+
+    <!-- Project dependencies -->
+    <dependencies>
+        <!-- Common library -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- Web related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-security</artifactId>
+            <optional>true</optional> <!-- Optional, required if using DeptDataPermissionRule -->
+        </dependency>
+
+        <!-- Database related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+
+        <!-- RPC related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+            <optional>true</optional> <!-- Optional dependency for remote procedure calls -->
+        </dependency>
+
+        <!-- Business component dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-module-system-api</artifactId> <!-- Needed for fetching data permissions -->
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- Test related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-test</artifactId>
+            <scope>test</scope> <!-- Scope set to test -->
+        </dependency>
+    </dependencies>
 
 </project>

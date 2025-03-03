@@ -152,7 +152,7 @@
         <!-- 国内镜像优先 -->
         <repository>
             <id>aliyunmaven</id>
-            <name>Aliyun Public</name>
+            <name>Aliyun Cloud</name>
             <url>https://maven.aliyun.com/repository/public</url>
             <snapshots>
                 <enabled>false</enabled>  <!-- 默认关闭快照 -->
@@ -160,7 +160,7 @@
         </repository>
 
         <repository>
-            <id>huaweicloud</id>
+            <id>tencent</id>
             <name>Huawei Cloud</name>
             <url>https://mirrors.huaweicloud.com/repository/maven/</url>
         </repository>

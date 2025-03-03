@@ -1,19 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Project Object Model (POM) for yudao-spring-boot-starter-biz-ip -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>realm-framework</artifactId>realm-framework-common
-        <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
-    </parent>
+
+    <!-- POM model version -->
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>realm-spring-boot-starter-biz-ip</artifactId>
+    <!-- Parent project information -->
+    <parent>
+        <groupId>cn.realm.cloud</groupId>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <!-- Project artifact identifier -->
+    <artifactId>realm-spring-boot-starter-biz-ip</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- Project name and description -->
+    <name>${project.artifactId}</name>
+    <description>
+        IP 拓展，支持如下功能：
+        1. IP 功能：查询 IP 对应的城市信息
+        基于 https://gitee.com/lionsoul/ip2region 实现
+        2. 城市功能：查询城市编码对应的城市信息
+        基于 https://github.com/modood/Administrative-divisions-of-China 实现
+    </description>
+
+    <!-- Project URL -->
+    <url>https://github.com/</url>
+
+    <!-- Project dependencies -->
+    <dependencies>
+        <!-- Common library -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- IP address lookup library -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+        </dependency>
+
+        <!-- Lombok library for reducing boilerplate code -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- SLF4J API for logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope> <!-- Set to provided as it is only required for utility classes -->
+        </dependency>
+
+        <!-- Test related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-test</artifactId>
+            <scope>test</scope> <!-- Scope set to test -->
+        </dependency>
+    </dependencies>
 
 </project>

@@ -2,23 +2,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- 继承父项目基础配置 -->
     <parent>
-        <artifactId>realm</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm</artifactId>
+        <!-- 使用动态版本号变量，便于统一管理版本 -->
+        <version>${revision}</version>
     </parent>
+
+    <!-- Maven 模型版本，固定值 -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 当前项目标识 -->
     <artifactId>realm-module-system</artifactId>
+    <!-- 打包方式为 pom，表示这是一个聚合模块 -->
     <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+
+    <!-- 子模块定义（按字母顺序排序） -->
     <modules>
+        <!-- 系统模块 API 定义（供其他模块依赖） -->
         <module>realm-module-system-api</module>
+        <!-- 系统模块业务实现（包含具体业务逻辑） -->
         <module>realm-module-system-biz</module>
     </modules>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <!-- 项目描述 -->
+    <description>
+        system 模块是平台的核心基础模块，主要包含：
+        - 用户、角色、权限等基础身份管理
+        - 组织架构（部门、岗位等）
+        - 数据字典、系统配置等通用功能
+        为上层业务模块提供基础支撑能力。
+    </description>
 
 </project>

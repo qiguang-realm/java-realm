@@ -2,18 +2,65 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Parent project details -->
     <parent>
-        <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-spring-boot-starter-test</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>Testing components for unit and integration tests</description>
+    <url>https://github.com/</url>
 
+    <dependencies>
+        <!-- Common dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- Database related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-redis</artifactId>
+        </dependency>
+
+        <!-- Testing related dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <!-- H2 Database for unit testing -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
+        <!-- Embedded Redis for unit testing -->
+        <dependency>
+            <groupId>com.github.fppt</groupId>
+            <artifactId>jedis-mock</artifactId>
+        </dependency>
+
+        <!-- Random POJO generation for unit testing -->
+        <dependency>
+            <groupId>uk.co.jemos.podam</groupId>
+            <artifactId>podam</artifactId>
+        </dependency>
+    </dependencies>
 </project>

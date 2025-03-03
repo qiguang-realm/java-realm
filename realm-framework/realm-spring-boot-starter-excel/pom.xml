@@ -2,18 +2,97 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>realm-framework</artifactId>
-        <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
-    </parent>
+
+    <!-- POM model version -->
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>realm-spring-boot-starter-excel</artifactId>
+    <!-- Parent project information -->
+    <parent>
+        <groupId>cn.realm.cloud</groupId>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <!-- Project artifact identifier -->
+    <artifactId>realm-spring-boot-starter-excel</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- Project name and description -->
+    <name>${project.artifactId}</name>
+    <description>Excel 拓展</description>
+
+    <!-- Project URL -->
+    <url>https://github.com/</url>
+
+    <!-- Project dependencies -->
+    <dependencies>
+        <!-- Common library -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId>
+        </dependency>
+
+        <!-- Spring core starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- RPC related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+            <optional>true</optional> <!-- 可选依赖 -->
+        </dependency>
+
+        <!-- Business component dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-module-system-api</artifactId> <!-- 用于 Dict 查询 -->
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- Web related dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope> <!-- 仅在 ExcelUtils 中使用 -->
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope> <!-- 仅在 ExcelUtils 中使用 -->
+        </dependency>
+
+        <!-- Utility libraries -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId> <!-- 解决 easyexcel issue: https://github.com/alibaba/easyexcel/issues/3954 -->
+        </dependency>
+
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-biz-ip</artifactId>
+            <optional>true</optional> <!-- 仅在 AreaConvert 中使用 -->
+        </dependency>
+
+        <!-- Test related dependencies -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-test</artifactId>
+            <scope>test</scope> <!-- 测试范围依赖 -->
+        </dependency>
+    </dependencies>
 
 </project>

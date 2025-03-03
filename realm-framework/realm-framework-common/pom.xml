@@ -2,18 +2,153 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 基础项目定义 -->
     <parent>
-        <artifactId>realm-framework</artifactId>realm-spring-boot-starter-mybatis
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-framework</artifactId>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-framework-common</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>定义基础 POJO 类、枚举、工具类等通用组件</description>
+    <url>https://github.com/qiguang-realm/java-realm</url>
+
+    <dependencies>
+        <!-- ==================== Spring 核心支持 ==================== -->
+        <!-- 注意：核心组件作用域标记为 provided，仅工具类需要编译时依赖 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <scope>provided</scope> <!-- AOP 切面支持 -->
+        </dependency>
+
+        <!-- Spring Boot 配置处理 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional> <!-- 生成配置元数据 -->
+        </dependency>
+
+        <!-- ==================== Web 相关 ==================== -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope> <!-- Web 上下文工具类依赖 -->
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope> <!-- Servlet API -->
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <scope>provided</scope> <!-- OpenAPI 分页参数支持 -->
+        </dependency>
+
+        <!-- ==================== 监控支持 ==================== -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId> <!-- SkyWalking 链路追踪 -->
+        </dependency>
+
+        <!-- ==================== 开发工具库 ==================== -->
+        <!-- 代码简化工具 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- 对象映射工具 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-jdk8</artifactId> <!-- 支持 Java8 特性 -->
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- 通用工具集 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>provided</scope> <!-- Google 核心工具库 -->
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId> <!-- 国产全能工具库 -->
+        </dependency>
+
+        <!-- ==================== 数据序列化 ==================== -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <scope>provided</scope> <!-- Java8 时间类型支持 -->
+        </dependency>
+
+        <!-- ==================== 上下文管理 ==================== -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId> <!-- 线程上下文传递 -->
+        </dependency>
+
+        <!-- ==================== 验证与翻译 ==================== -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <scope>provided</scope> <!-- 参数校验支持 -->
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>easy-trans-anno</artifactId> <!-- VO 数据翻译注解 -->
+        </dependency>
+
+        <!-- ==================== 日志与诊断 ==================== -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope> <!-- 日志门面接口 -->
+        </dependency>
+
+        <!-- ==================== 测试相关 ==================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

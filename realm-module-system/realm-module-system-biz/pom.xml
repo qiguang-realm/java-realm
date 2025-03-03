@@ -2,18 +2,177 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>realm-module-system</artifactId>
-        <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>realm-module-system-biz</artifactId>
+    <!-- 继承父模块基础配置 -->
+    <parent>
+        <groupId>cn.realm.cloud</groupId>
+        <artifactId>realm-module-system</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <artifactId>realm-module-system-biz</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+
+    <!-- 模块描述 -->
+    <description>
+        system 模块下，我们放通用业务，支撑上层的核心业务。
+        例如说：用户、部门、权限、数据字典等基础功能模块
+    </description>
+
+    <dependencies>
+        <!-- ========== 框架基础依赖 ========== -->
+        <!-- 环境配置 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-env</artifactId>
+        </dependency>
+
+        <!-- ========== 内部模块依赖 ========== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-module-system-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-module-infra-api</artifactId>-->
+<!--            <version>${revision}</version>-->
+<!--        </dependency>-->
+
+        <!-- ========== 业务组件 ========== -->
+        <!-- 数据权限控制 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-biz-data-permission</artifactId>
+        </dependency>
+        <!-- 多租户支持 -->
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-spring-boot-starter-biz-tenant</artifactId>-->
+<!--        </dependency>-->
+        <!-- IP 库支持 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-biz-ip</artifactId>
+        </dependency>
+
+        <!-- ========== Web 安全相关 ========== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- ========== 数据持久化 ========== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-redis</artifactId>
+        </dependency>
+
+        <!-- ========== 分布式相关 ========== -->
+        <!-- RPC 远程调用 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+        </dependency>
+        <!-- Nacos 注册中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- Nacos 配置中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!-- 定时任务 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-job</artifactId>
+        </dependency>
+        <!-- 消息队列 -->
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-spring-boot-starter-mq</artifactId>-->
+<!--        </dependency>-->
+
+        <!-- ========== 工具类 ========== -->
+        <!-- Excel 操作 -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-excel</artifactId>
+        </dependency>
+        <!-- 邮件服务 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- ========== 监控相关 ========== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-monitor</artifactId>
+        </dependency>
+
+        <!-- ========== 第三方服务集成 ========== -->
+        <!-- 社交登录 -->
+        <dependency>
+            <groupId>com.xingyuv</groupId>
+            <artifactId>spring-boot-starter-justauth</artifactId>
+        </dependency>
+        <!-- 微信生态集成 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>wx-java-mp-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- 验证码功能 -->
+        <dependency>
+            <groupId>com.xingyuv</groupId>
+            <artifactId>spring-boot-starter-captcha-plus</artifactId>
+        </dependency>
+        <!-- Hutool 工具扩展 -->
+        <dependency>
+            <groupId>org.dromara.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+        </dependency>
+
+        <!-- ========== 测试相关 ========== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- ========== 构建配置 ========== -->
+    <build>
+        <!-- 最终打包名称（默认已包含版本号，建议保留原始配置） -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- Spring Boot 打包插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 构建可执行 jar 包 -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

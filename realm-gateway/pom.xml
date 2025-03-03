@@ -81,21 +81,19 @@
         </dependency>
     </dependencies>
 
-    <!-- ========== 构建配置 ========== -->
     <build>
-        <!-- 最终打包名称（默认已包含版本号，建议保留原始配置） -->
+        <!-- 设置构建的 jar 包名 -->
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!-- Spring Boot 打包插件 -->
+            <!-- 打包 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot.version}</version> <!-- 如果 spring-boot.version 版本修改，则这里也要跟着修改 -->
                 <executions>
                     <execution>
                         <goals>
-                            <!-- 构建可执行 jar 包 -->
-                            <goal>repackage</goal>
+                            <goal>repackage</goal> <!-- 将引入的 jar 打入其中 -->
                         </goals>
                     </execution>
                 </executions>

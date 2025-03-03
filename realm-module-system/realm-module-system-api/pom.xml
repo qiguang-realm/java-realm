@@ -2,18 +2,48 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 基础项目定义 -->
     <parent>
-        <artifactId>realm-module-system</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <version>2.4.1-SNAPSHOT</version>
+        <artifactId>realm-module-system</artifactId>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>realm-module-system-api</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <name>${project.artifactId}</name>
+    <description>
+        系统模块 API 定义，包含 DTO、枚举、Feign 客户端等跨模块调用契约
+    </description>
+
+    <dependencies>
+        <!-- ==================== 基础依赖 ==================== -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-framework-common</artifactId> <!-- 通用工具类/基础POJO -->
+        </dependency>
+
+        <!-- ==================== 接口文档支持 ==================== -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <scope>provided</scope> <!-- 接口文档模型定义，运行时由具体模块提供 -->
+        </dependency>
+
+        <!-- ==================== 参数校验支持 ==================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <optional>true</optional> <!-- 校验注解支持，不强制依赖传递 -->
+        </dependency>
+
+        <!-- ==================== 远程调用支持 ==================== -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <optional>true</optional> <!-- Feign 客户端支持，按需启用 -->
+        </dependency>
+    </dependencies>
 
 </project>
