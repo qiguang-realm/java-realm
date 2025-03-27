@@ -1,0 +1,43 @@
+统一命名风格（方法名动词开头，查询用find，操作用handle）
+
+    // ------------------------------------------------------辅助方法、私有方法------------------------------------------------------
+
+
+        final String methodName = "transferVehicle - 车辆过户服务";
+        final String inputParams = JsonUtils.toJsonString(reqDTO);
+
+        // 1. 防御性校验：请求参数非空校验
+        if (ObjectUtils.isEmpty(reqDTO)) {
+            logger.error("【{}】请求参数不能为空", methodName);
+            basisVo.setBasisVo(BasisVo.RESULT_FAIL, "请求参数不能为空");
+            return basisVo;
+        }
+
+        logger.info("【{}】开始处理请求，入参：{}", methodName, inputParams);
+
+        logger.info("【{}】处理成功，出参：{}", methodName, JsonUtils.toJsonString(basisVo));
+
+final String logTag = "bindVehicle | 车辆信息创建";
+logger.info("【{}】开始新建车辆信息 | 用户ID:{} | 输入参数:{}", logTag, userId, input);
+
+
+if (ObjectUtils.isEmpty(user)) {
+    logger.error("【{}】用户不存在：{}", methodName, userId);
+    infoVo.setBasisVo(BasisVo.RESULT_FAIL, "用户不存在");
+    return infoVo;
+}
+
+if (!ObjectUtils.isEmpty(product)) {
+    log.error("【{}】该商品已存在：{}", "编辑商品", dto.getCouponId());
+    basisVo.setBasisVo(BasisVo.RESULT_FAIL, "该商品已存在");
+    return basisVo;
+}
+
+
+log.info("根据优惠券ID获取小楹甄选优惠券库存");
+
+
+logger.error("【{}】处理过程中发生异常，inputParams: {} and errorMessage: {}", methodName, inputParams, e.getMessage(), e);
+
+
+logger.error("【{}】系统处理异常，入参：{}，异常信息：{}", methodName, inputParams, e.getMessage(), e);

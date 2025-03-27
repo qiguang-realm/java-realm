@@ -1,0 +1,27 @@
+
+在 Oracle 数据库中，可以通过 CREATE INDEX 语句为表中的某个字段创建索引。
+
+CREATE INDEX index_name
+ON table_name (column_name);
+
+在 Oracle 数据库中，可以使用 ALTER TABLE 语句来向现有表添加新字段，并使用 COMMENT 语句为字段添加注释。
+
+ALTER TABLE 表名
+ADD (字段名 数据类型 [约束条件]);
+
+COMMENT ON COLUMN 表名.字段名 IS '注释内容';
+
+示例
+
+ALTER TABLE KYC_VEHICLE_TRANSFER
+ADD (APPLICANT VARCHAR2(100));
+
+COMMENT ON COLUMN KYC_VEHICLE_TRANSFER.APPLICANT IS '申请人';
+
+
+
+
+
+
+
+

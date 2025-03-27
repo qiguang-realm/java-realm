@@ -1,0 +1,27 @@
+
+CREATE TABLE `st_xy_coupons` (
+	`id` VARCHAR ( 64 ) NOT NULL COMMENT '唯一标识符ID',
+	`third_party_id` VARCHAR ( 64 ) NOT NULL COMMENT '第三方标识（如商户ID、平台ID），用于区分不同来源的优惠券',
+	`third_party_name` VARCHAR ( 64 ) NOT NULL COMMENT '第三方名称',
+	`coupon_id` VARCHAR ( 64 ) NOT NULL COMMENT '优惠券ID',
+	`coupon_name` VARCHAR ( 64 ) DEFAULT NULL COMMENT '优惠券名称',
+	`coupon_code` VARCHAR ( 64 ) NOT NULL COMMENT '优惠券券码',
+	`discount_type` VARCHAR ( 64 ) DEFAULT NULL COMMENT '折扣类型：百分比/percent或固定金额/fixed',
+	`discount_value` VARCHAR ( 64 ) DEFAULT NULL COMMENT '优惠券折扣值',
+	`receive_status` VARCHAR ( 8 ) DEFAULT NULL COMMENT '领取状态：01 已领取/received、02 未领取/unreceived',
+	`usage_status` VARCHAR ( 8 ) DEFAULT NULL COMMENT '使用状态：01 未使用/unused、02 已使用/used、03 已核销 04 已过期/expired',
+	`received_at` datetime DEFAULT NULL COMMENT '领取时间',
+	`used_at` datetime DEFAULT NULL COMMENT '使用时间',
+	`order_id` VARCHAR ( 64 ) DEFAULT NULL COMMENT '订单ID',
+	`user_id` VARCHAR ( 64 ) DEFAULT NULL COMMENT '用户ID',
+	`user_name` VARCHAR ( 64 ) DEFAULT NULL COMMENT '用户名称',
+	`user_phone` VARCHAR ( 32 ) DEFAULT NULL COMMENT '用户手机号',
+	`data_status` VARCHAR ( 8 ) DEFAULT NULL COMMENT '数据状态：01 正常/active、02 已删除/deleted',
+	`remark` VARCHAR ( 255 ) DEFAULT NULL COMMENT '备注',
+	`created_by` VARCHAR ( 64 ) DEFAULT NULL COMMENT '创建人ID',
+	`created_at` datetime NOT NULL COMMENT '创建时间',
+	`updated_by` VARCHAR ( 64 ) DEFAULT NULL COMMENT '更新人ID',
+	`updated_at` datetime NOT NULL COMMENT '更新时间',
+PRIMARY KEY ( `id` ) USING BTREE
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT = '第三方优惠券信息表';
+

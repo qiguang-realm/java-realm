@@ -1,0 +1,18 @@
+
+要查询数据库表中某字段是否有重复数据，并统计重复数据的数量，可以使用 GROUP BY 和 HAVING 子句来实现。以下是一个示例 SQL 查询：
+
+SELECT column_name, COUNT(*) AS duplicate_count
+FROM table_name
+GROUP BY column_name
+HAVING COUNT(*) > 1;
+
+解释：
+column_name: 你要检查的字段名。
+
+table_name: 你要查询的表名。
+
+COUNT(*): 统计每个值的出现次数。
+
+GROUP BY column_name: 按字段值分组。
+
+HAVING COUNT(*) > 1: 过滤出出现次数大于 1 的记录，即重复数据。

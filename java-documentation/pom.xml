@@ -25,27 +25,27 @@
     <!-- ========== 项目信息 ========== -->
     <name>${project.artifactId}</name>
     <!-- 详细模块描述（建议说明具体文档类型） -->
-    <description>Java 项目文档模块，包含 API 文档、技术规范及部署指南</description>
+    <description>Java Development 项目文档模块，包含 API 文档、技术规范及部署指南</description>
     <!-- 建议替换为实际文档站点地址 -->
-    <url>https://docs.your-domain.com/java</url>
+    <url>https://github.com/</url>
 
     <!-- ========== 模块扩展配置 ========== -->
     <!-- 注：如需管理文档生成插件（如 asciidoctor/maven-javadoc-plugin）可在此处添加 -->
 
 
     <!-- 文档生成插件示例 -->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>2.2.0</version>
-                <configuration>
-                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.asciidoctor</groupId>-->
+<!--                <artifactId>asciidoctor-maven-plugin</artifactId>-->
+<!--                <version>2.2.0</version>-->
+<!--                <configuration>-->
+<!--                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>-->
+<!--                    <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
