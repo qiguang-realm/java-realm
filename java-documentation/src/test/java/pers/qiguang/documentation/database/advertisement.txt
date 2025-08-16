@@ -1,0 +1,216 @@
+
+-- 创建广告位基本信息表
+CREATE TABLE kyc_ad_space (
+	id VARCHAR2 ( 64 ) NOT NULL,
+	space_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	description VARCHAR2 ( 255 ) DEFAULT NULL,
+	TYPE VARCHAR2 ( 64 ) DEFAULT NULL,
+	platform VARCHAR2 ( 255 ) DEFAULT NULL,
+	position VARCHAR2 ( 255 ) DEFAULT NULL,
+	status VARCHAR2 ( 64 ) DEFAULT NULL,
+	create_time DATE NOT NULL,
+	creator_id VARCHAR2 ( 64 ) DEFAULT NULL,
+	creator_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	update_time DATE DEFAULT NULL,
+	updater_id VARCHAR2 ( 64 ) DEFAULT NULL,
+	updater_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	CONSTRAINT PK_KYC_AD_SPACE PRIMARY KEY ( ID )
+);
+-- 创建索引以提高查询性能
+CREATE INDEX IDX_AD_SPACE_STATUS ON kyc_ad_space ( STATUS );
+CREATE INDEX IDX_AD_SPACE_TYPE ON kyc_ad_space ( TYPE );
+CREATE INDEX IDX_AD_SPACE_PLATFORM ON kyc_ad_space ( PLATFORM );
+CREATE INDEX idx_ad_create_time ON kyc_ad_space ( create_time );
+CREATE INDEX IDX_AD_SPACE_POSITION ON kyc_ad_space ( position );
+-- 添加注释
+COMMENT ON TABLE kyc_ad_space IS '广告位基本信息表';
+-- 主键信息
+COMMENT ON COLUMN kyc_ad_space.id IS '广告位ID，主键';
+COMMENT ON COLUMN kyc_ad_space.space_name IS '广告位名称';
+COMMENT ON COLUMN kyc_ad_space.description IS '广告位描述';
+COMMENT ON COLUMN kyc_ad_space.TYPE IS '广告位类型：1-图片 2-视频 3-文字 4-混合';
+COMMENT ON COLUMN kyc_ad_space.platform IS '平台类型：1-PC网页 2-移动网页 3-APP 4-小程序';
+COMMENT ON COLUMN kyc_ad_space.position IS '广告位位置描述（如：首页顶部轮播、侧边栏、文章页底部等）';
+-- 基础信息
+COMMENT ON COLUMN kyc_ad_space.status IS '状态 01:启用 02:禁用';
+COMMENT ON COLUMN kyc_ad_space.create_time IS '创建时间';
+COMMENT ON COLUMN kyc_ad_space.creator_id IS '创建人ID';
+COMMENT ON COLUMN kyc_ad_space.creator_name IS '创建人名称';
+COMMENT ON COLUMN kyc_ad_space.update_time IS '更新时间';
+COMMENT ON COLUMN kyc_ad_space.updater_id IS '更新人ID';
+COMMENT ON COLUMN kyc_ad_space.updater_name IS '更新人名称';
+
+-- 添加广告位位置字段
+ALTER TABLE kyc_ad_space ADD position VARCHAR2(255) DEFAULT NULL;
+COMMENT ON COLUMN kyc_ad_space.position IS '广告位位置描述（如：首页顶部轮播、侧边栏、文章页底部等）';
+
+-- 为提高位置查询效率，可以添加索引
+CREATE INDEX IDX_AD_SPACE_POSITION ON kyc_ad_space (position);
+
+
+-- 创建广告内容信息表
+CREATE TABLE kyc_ad_content (
+	id VARCHAR2 ( 64 ) NOT NULL,
+	ad_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	ad_type VARCHAR2 ( 64 ) DEFAULT NULL,
+	content_url VARCHAR2 ( 255 ) DEFAULT NULL,
+	image_url VARCHAR2 ( 255 ) DEFAULT NULL,
+	text_content CLOB DEFAULT NULL,
+	link_type VARCHAR2 ( 64 ) DEFAULT NULL,
+	link_url VARCHAR2 ( 255 ) DEFAULT NULL,
+	appid VARCHAR2 ( 255 ) DEFAULT NULL,
+	original_id VARCHAR2 ( 255 ) DEFAULT NULL,
+	sort_order VARCHAR2 ( 64 ) DEFAULT NULL,
+	weight VARCHAR2 ( 64 ) DEFAULT NULL,
+	status VARCHAR2 ( 64 ) DEFAULT NULL,
+	create_time DATE NOT NULL,
+	creator_id VARCHAR2 ( 64 ) DEFAULT NULL,
+	creator_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	update_time DATE DEFAULT NULL,
+	updater_id VARCHAR2 ( 64 ) DEFAULT NULL,
+	updater_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	CONSTRAINT pk_kyc_ad_content PRIMARY KEY ( id )
+);
+-- 创建索引以提高查询性能
+CREATE INDEX IDX_AD_CONTENT_STATUS ON kyc_ad_content ( STATUS );
+CREATE INDEX IDX_AD_CONTENT_TYPE ON kyc_ad_content ( AD_TYPE );
+CREATE INDEX IDX_AD_CONTENT_link_type ON kyc_ad_content ( link_type );
+CREATE INDEX IDX_AD_CONTENT_create_time ON kyc_ad_content ( create_time );
+CREATE INDEX IDX_AD_CONTENT_sort ON kyc_ad_content ( sort_order );
+CREATE INDEX IDX_AD_CONTENT_weight ON kyc_ad_content ( weight );
+-- 添加注释
+COMMENT ON TABLE kyc_ad_content IS '广告内容信息表';
+-- 主键信息
+COMMENT ON COLUMN kyc_ad_content.id IS '广告ID，主键';
+COMMENT ON COLUMN kyc_ad_content.ad_name IS '广告名称';
+COMMENT ON COLUMN kyc_ad_content.ad_type IS '广告类型(1:图片,2:视频,3:文字,4:HTML)';
+COMMENT ON COLUMN kyc_ad_content.content_url IS '广告内容URL';
+COMMENT ON COLUMN kyc_ad_content.image_url IS '广告图片的URL地址';
+COMMENT ON COLUMN kyc_ad_content.text_content IS '文字广告内容';
+COMMENT ON COLUMN kyc_ad_content.link_type IS '链接类型：1-网页 2-应用内页 3-下载 4-Deeplink';
+COMMENT ON COLUMN kyc_ad_content.link_url IS '广告跳转链接';
+COMMENT ON COLUMN kyc_ad_content.appid IS '小程序的AppID';
+COMMENT ON COLUMN kyc_ad_content.original_id IS '小程序的账号原始ID';
+COMMENT ON COLUMN kyc_ad_content.sort_order IS '排序，数值越小优先级越高';
+COMMENT ON COLUMN kyc_ad_content.weight IS '权重，用于轮播广告的展示概率';
+-- 基础信息
+COMMENT ON COLUMN kyc_ad_content.status IS '状态 01:启用 02:禁用';
+COMMENT ON COLUMN kyc_ad_content.create_time IS '创建时间';
+COMMENT ON COLUMN kyc_ad_content.creator_id IS '创建人ID';
+COMMENT ON COLUMN kyc_ad_content.creator_name IS '创建人名称';
+COMMENT ON COLUMN kyc_ad_content.update_time IS '更新时间';
+COMMENT ON COLUMN kyc_ad_content.updater_id IS '更新人ID';
+COMMENT ON COLUMN kyc_ad_content.updater_name IS '更新人名称';
+
+
+
+-- 创建广告位与广告内容关联表
+CREATE TABLE kyc_ad_space_content (
+	id VARCHAR2 ( 64 ) NOT NULL,
+	space_id VARCHAR2 ( 255 ) DEFAULT NULL,
+	ad_id VARCHAR2 ( 255 ) DEFAULT NULL,
+	status VARCHAR2 ( 64 ) DEFAULT NULL,
+	create_time DATE NOT NULL,
+	update_time DATE DEFAULT NULL,
+	CONSTRAINT pk_kyc_ad_space_content PRIMARY KEY ( id ),
+	CONSTRAINT UK_SPACE_AD UNIQUE ( space_id, ad_id )
+
+);
+-- 创建索引以提高查询性能
+CREATE INDEX IDX_AD_SPACE_CONTENT_STATUS ON kyc_ad_space_content ( STATUS );
+-- 添加注释
+COMMENT ON TABLE kyc_ad_space_content IS '广告位与广告内容关联表';
+-- 主键信息
+COMMENT ON COLUMN kyc_ad_space_content.id IS '主键ID';
+COMMENT ON COLUMN kyc_ad_space_content.space_id IS '广告位ID';
+COMMENT ON COLUMN kyc_ad_space_content.ad_id IS '广告ID';
+COMMENT ON COLUMN kyc_ad_space_content.status IS '状态 01:启用 02:禁用';
+COMMENT ON COLUMN kyc_ad_space_content.create_time IS '创建时间';
+COMMENT ON COLUMN kyc_ad_space_content.update_time IS '更新时间';
+
+
+
+-- 创建广告点击记录表
+CREATE TABLE kyc_ad_click (
+	id VARCHAR2 ( 64 ) NOT NULL,
+	space_id VARCHAR2 ( 255 ) DEFAULT NULL,
+	ad_id VARCHAR2 ( 255 ) DEFAULT NULL,
+	user_id VARCHAR2 ( 64 ) DEFAULT NULL,
+	user_name VARCHAR2 ( 255 ) DEFAULT NULL,
+	status VARCHAR2 ( 64 ) DEFAULT NULL,
+	create_time DATE NOT NULL,
+	CONSTRAINT pk_kyc_ad_click PRIMARY KEY ( id )
+);
+-- 创建索引以提高查询性能
+CREATE INDEX IDX_kyc_ad_click_STATUS ON kyc_ad_click ( STATUS );
+-- 添加注释
+COMMENT ON TABLE kyc_ad_click IS '广告点击记录表';
+-- 主键信息
+COMMENT ON COLUMN kyc_ad_click.id IS '主键ID';
+COMMENT ON COLUMN kyc_ad_click.space_id IS '广告位ID';
+COMMENT ON COLUMN kyc_ad_click.ad_id IS '广告ID';
+COMMENT ON COLUMN kyc_ad_click.user_id IS '用户ID，未登录用户可为空';
+COMMENT ON COLUMN kyc_ad_click.user_name IS '用户名称，未登录用户可为空';
+COMMENT ON COLUMN kyc_ad_click.status IS '状态 01:启用 02:禁用';
+COMMENT ON COLUMN kyc_ad_click.create_time IS '创建时间/点击时间';
+
+
+-- 添加用户账号字段
+ALTER TABLE kyc_ad_click ADD user_account VARCHAR2(255) DEFAULT NULL;
+COMMENT ON COLUMN kyc_ad_click.user_account IS '用户账号，未登录用户可为空';
+
+-- 添加用户手机号字段
+ALTER TABLE kyc_ad_click ADD user_phone VARCHAR2(64) DEFAULT NULL;
+COMMENT ON COLUMN kyc_ad_click.user_phone IS '用户手机号，未登录用户可为空';
+
+-- 为新增字段创建索引（可选）
+CREATE INDEX IDX_kyc_ad_click_ACCOUNT ON kyc_ad_click (user_account);
+CREATE INDEX IDX_kyc_ad_click_PHONE ON kyc_ad_click (user_phone);
+
+
+
+三张表关系分析如下：
+
+表结构与关系
+kyc_ad_space（广告位表）
+
+主键：id
+描述：广告位的基本信息，每个广告位有唯一 id。
+kyc_ad_content（广告内容表）
+
+主键：id
+描述：广告内容的基本信息，每个广告内容有唯一 id。
+kyc_ad_space_content（广告位与内容关联表）
+
+主键：id
+外键：space_id（关联广告位）、ad_id（关联广告内容）
+描述：用于建立广告位与广告内容的多对多关系。一个广告位可以有多个广告内容，一个广告内容也可以被多个广告位使用。
+逻辑关系
+kyc_ad_space 通过 space_id 与 kyc_ad_space_content 关联。
+kyc_ad_content 通过 ad_id 与 kyc_ad_space_content 关联。
+kyc_ad_space_content 的唯一约束是 space_id, ad_id，确保一个广告位与一个广告内容的关联只出现一次。
+业务操作主键选择建议
+查询业务
+如果查询广告位的详情或列表：以 kyc_ad_space.id 为主键。
+如果查询广告内容详情或列表：以 kyc_ad_content.id 为主键。
+如果查询某个广告位下有哪些广告内容：先用 kyc_ad_space.id，通过 kyc_ad_space_content 的 space_id 查询相关 ad_id，再查 kyc_ad_content。
+如果查询某个广告内容属于哪些广告位：用 kyc_ad_content.id，通过 kyc_ad_space_content 的 ad_id 查询相关 space_id，再查 kyc_ad_space。
+修改业务
+修改广告位信息：用 kyc_ad_space.id。
+修改广告内容信息：用 kyc_ad_content.id。
+修改广告位与内容的关联：用 kyc_ad_space_content.id，或通过 space_id 和 ad_id 唯一约束定位到具体关联记录。
+业务逻辑主键选择总结
+单表操作（如详情、编辑、删除）：以该表的主键 id 为准。
+关联操作（如广告位内的广告内容排序、广告内容分配到广告位）：以 kyc_ad_space_content 的主键 id 或唯一约束 space_id, ad_id 为准。
+推荐业务主键操作原则
+单表操作：主表主键 id
+关联操作：关联表主键 id，或 space_id, ad_id 唯一约束
+最佳实践：
+
+关联查询、批量操作时，优先用主表的主键 id，通过关联表的外键（space_id 或 ad_id）进行操作。
+如果是对关联本身（如激活/禁用某关系）进行操作，则以 kyc_ad_space_content.id 为准。
+查询时一般以主表主键为入口，通过关联表连接另一主表。
+简洁答案：
+
+业务操作应以主表（kyc_ad_space 或 kyc_ad_content）的主键 id 为准，进行查询与修改；但如需操作广告位与广告内容的关系（如分配、移除、排序），则应以 kyc_ad_space_content 表的主键 id 或唯一约束（space_id, ad_id）为准。
+

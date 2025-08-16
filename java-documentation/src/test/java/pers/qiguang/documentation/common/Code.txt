@@ -1,0 +1,204 @@
+
+
+    /**
+     * 检查文件名是否已存在（优化版，使用LIMIT 1提高查询效率）
+     *
+     * @param fileName 要检查的文件名
+     * @return 如果文件名已存在返回true，否则返回false
+     */
+    public boolean isFileNameDuplicate(String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            return false;
+        }
+
+        LambdaQueryWrapper<VehiclePassMileage> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(VehiclePassMileage::getOriginalFileName, fileName)
+                .last("LIMIT 1");  // 关键优化点
+
+        return baseMapper.selectOne(queryWrapper) != null;
+    }
+
+
+方案3：分批次查询导出大数据量（推荐10万+数据）
+public void writeVehicle(ListPageVehicleReqDTO reqDTO, HttpServletResponse response) {
+    try {
+        setExcelRespProp(response);
+
+        // 移除分页限制，一次性查询所有数据
+        reqDTO.setPageNum(1);
+        reqDTO.setPageSize(Integer.MAX_VALUE); // 或者使用一个足够大的数字
+
+        // 或者更好的方式 - 分批查询写入
+        List<Vehicle> allRecords = new ArrayList<>();
+        int currentPage = 1;
+        int pageSize = 5000; // 适当的分批大小
+        boolean hasMore = true;
+
+        while (hasMore) {
+            reqDTO.setPageNum(currentPage);
+            reqDTO.setPageSize(pageSize);
+            Page<Vehicle> page = vehicleService.listPageVehicle(reqDTO).getPage();
+            allRecords.addAll(page.getRecords());
+
+            hasMore = page.getRecords().size() >= pageSize;
+            currentPage++;
+        }
+
+        EasyExcel.write(response.getOutputStream(), Vehicle.class)
+                .sheet("车辆信息")
+                .doWrite(allRecords);
+
+        logger.info("车辆信息Excel导出成功，记录数：{}", allRecords.size());
+    } catch (IOException e) {
+        logger.error("导出车辆信息Excel失败，异常信息：{}", e.getMessage(), e);
+    }
+}
+
+
+    @ApiOperation(value = "导出企业车辆信息Excel文件")
+    @RequestMapping(value = "/exportEnterpriseVehicles", method = RequestMethod.GET)
+    public void exportEnterpriseVehicles(ListPageEnterpriseVehiclesReqDTO reqDTO, HttpServletResponse response) {
+        // 1. 设置响应头（必须在获取 OutputStream 之前）
+        try {
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode("车辆信息", "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            log.info("Excel响应属性设置成功，文件名：{}", fileName + ".xlsx");
+        } catch (Exception e) {
+            log.error("设置响应头失败", e);
+            return;
+        }
+
+        // 2. 获取数据（避免在 try-with-resources 中处理业务逻辑）
+        reqDTO.setPageNum(1);
+        reqDTO.setPageSize(10000);
+        List<EnterpriseVehiclesDO> records = enterpriseVehiclesService.listPageEnterpriseVehicles(reqDTO).getPage().getRecords();
+
+        // 3. 使用 try-with-resources 确保流关闭，但手动控制写入过程
+        try (ServletOutputStream out = response.getOutputStream()) {
+            // 关键点：使用 ExcelWriter 显式控制写入流程
+            ExcelWriter excelWriter = EasyExcel.write(out)
+                    .head(EnterpriseVehiclesDO.class)
+                    .autoCloseStream(false)  // 必须设为 false，防止 EasyExcel 自动关闭流
+                    .build();
+
+            try {
+                WriteSheet writeSheet = EasyExcel.writerSheet("车辆信息").build();
+                excelWriter.write(records, writeSheet);
+                excelWriter.finish();  // 显式调用 finish() 确保数据刷出
+                out.flush();           // 强制刷新缓冲区
+                log.info("车辆信息Excel导出成功，记录数：{}", records.size());
+            } catch (Exception e) {
+                log.error("Excel写入失败", e);
+                throw e; // 重新抛出异常以确保流被正确关闭
+            }
+        } catch (IOException e) {
+            log.error("导出车辆信息Excel失败", e);
+            // 注意：此处不要抛异常，否则可能触发容器级别的重复异常处理
+        }
+    }
+
+
+
+
+    @PostMapping(value = "/push", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> receivePush(@RequestBody String payload) {
+        try {
+            logger.info("Received push: {}", payload);
+            return ResponseEntity.ok("Data accepted");
+        } catch (Exception e) {
+            logger.error("Data processing failed", e);
+            return ResponseEntity.status(500).body("Processing error");
+        }
+    }
+
+
+public BasisVo saveEnterpriseSignUp(String userId, String enterpriseId, String activityId) {
+    final String methodName = "saveEnterpriseSignUp";
+    BasisVo response = new BasisVo();
+    response.setBasisVo(BasisVo.RESULT_SUCCESS, "处理成功");
+
+    try {
+        // ==================== 1. 参数校验 ====================
+        logger.info("【{}】开始处理企业报名请求 | 用户ID:{} | 企业ID:{} | 活动ID:{}",
+            methodName, userId, enterpriseId, activityId);
+
+        if (StringUtils.isBlank(userId)) {
+            logger.error("【{}】参数校验失败 - 用户ID不能为空", methodName);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "用户ID不能为空");
+        }
+        if (StringUtils.isBlank(enterpriseId)) {
+            logger.error("【{}】参数校验失败 - 企业ID不能为空", methodName);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "企业ID不能为空");
+        }
+        if (StringUtils.isBlank(activityId)) {
+            logger.error("【{}】参数校验失败 - 活动ID不能为空", methodName);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "活动ID不能为空");
+        }
+
+        // ==================== 2. 获取自动审批配置 ====================
+        logger.info("【{}】获取自动审批配置", methodName);
+        SysConfig config = sysConfigService.getConfigByKey("auto_approve");
+        String configValue = config != null ? config.getConfigValue() : null;
+        if (ObjectUtils.isEmpty(config)) {
+            logger.info("【{}】自动审批配置为空，使用默认审批流程", methodName);
+        }
+
+        // ==================== 3. 验证用户信息 ====================
+        logger.info("【{}】验证用户信息 | 用户ID:{}", methodName, userId);
+        MemberDO member = memberService.getBaseMemberById(userId);
+        if (ObjectUtil.isEmpty(member) || MemberStatusEnum.CANCEL.equals(member.getStatus())) {
+            logger.error("【{}】用户不存在或已注销 | 用户ID:{}", methodName, userId);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "用户信息不存在或已注销");
+        }
+
+        // ==================== 4. 验证活动信息 ====================
+        logger.info("【{}】验证活动信息 | 活动ID:{}", methodName, activityId);
+        PromotionManagementDO promotion = promotionManagementService.getValidPromotionById(activityId);
+        if (ObjectUtil.isEmpty(promotion)) {
+            logger.error("【{}】活动不存在或已结束 | 活动ID:{}", methodName, activityId);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "当前暂无可用活动，请稍后再试或联系客服");
+        }
+
+        // ==================== 5. 验证企业信息及用户关联 ====================
+        logger.info("【{}】验证企业信息及用户关联 | 用户ID:{} | 企业ID:{}", methodName, userId, enterpriseId);
+        Enterprise enterprise = enterpriseService.getEnterpriseByIdAndUserId(enterpriseId, userId);
+        if (ObjectUtils.isEmpty(enterprise)) {
+            logger.error("【{}】企业不存在或用户无权限 | 用户ID:{} | 企业ID:{}", methodName, userId, enterpriseId);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "企业信息不存在或您无权限操作");
+        }
+
+        // ==================== 6. 检查该企业是否已报名 ====================
+        logger.info("【{}】检查企业是否已报名 | 企业ID:{} | 活动ID:{}", methodName, enterpriseId, activityId);
+        if (checkEnterpriseAlreadySignedUp(activityId, enterpriseId)) {
+            logger.warn("【{}】该企业已报名活动 | 企业ID:{} | 活动ID:{}", methodName, enterpriseId, activityId);
+            return response.setBasisVo(BasisVo.RESULT_FAIL, "该企业已报名该活动");
+        }
+
+        // ==================== 7. 处理报名记录 ====================
+        logger.info("【{}】创建报名记录 | 用户ID:{} | 企业ID:{} | 活动ID:{}",
+            methodName, userId, enterpriseId, activityId);
+        PromotionUserManagementDO signUpRecord = createSignUpRecord(activityId, member, enterprise, promotion);
+
+        // ==================== 8. 处理自动审批 ====================
+        if ("01".equals(configValue)) {
+            logger.info("【{}】执行自动审批 | 记录ID:{} | 企业ID:{} | 配置值:{}",
+                methodName, signUpRecord.getId(), enterpriseId, configValue);
+            processAutoApproval(signUpRecord, enterprise);
+        }
+
+        logger.info("【{}】企业报名成功 | 记录ID:{} | 用户ID:{} | 企业ID:{} | 活动ID:{}",
+                methodName, signUpRecord.getId(), userId, enterpriseId, activityId);
+
+    } catch (Exception e) {
+        logger.error("【{}】系统处理异常 | 用户ID:{} | 企业ID:{} | 活动ID:{} | 错误信息:{}",
+                methodName, userId, enterpriseId, activityId, e.getMessage(), e);
+        response.setBasisVo(BasisVo.RESULT_FAIL, "系统繁忙，请稍后重试");
+    }
+
+    return response;
+}
+
+
