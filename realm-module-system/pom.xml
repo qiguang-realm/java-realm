@@ -24,8 +24,8 @@
     <modules>
         <!-- 系统模块 API 定义（供其他模块依赖） -->
         <module>realm-module-system-api</module>
-        <!-- 系统模块业务实现（包含具体业务逻辑） -->
-        <module>realm-module-system-biz</module>
+        <!-- 系统模块 server 实现（包含具体业务逻辑） -->
+        <module>realm-module-system-server</module>
     </modules>
 
     <!-- 项目描述 -->

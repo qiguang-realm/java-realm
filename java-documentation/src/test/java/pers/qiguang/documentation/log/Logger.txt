@@ -3,12 +3,44 @@
 // ------------------------------------------------------辅助方法、私有方法-----------------------------------------------
 
 
-// ==================== 4. 验证活动信息 ====================
-
-
  *************************************
  **  Java Token防重提交最佳流程设计  **
  *************************************
+
+        /*---------------------------------
+        *          参数基础校验
+        *--------------------------------*/
+
+        /*---------------------------------
+        *          数据预处理
+        *--------------------------------*/
+
+        /*---------------------------------
+        *          数据库操作
+        *--------------------------------*/
+
+
+
+        /*---------------------------------
+         *          数据查询阶段
+         *--------------------------------*/
+
+
+        /*---------------------------------
+         *          数据更新阶段
+         *--------------------------------*/
+
+
+        /*---------------------------------
+         *          订单状态更新
+         *--------------------------------*/
+
+
+        /*---------------------------------
+         *          操作日志记录
+         *--------------------------------*/
+
+
 
 ========================================================================================================================
 
@@ -25,36 +57,6 @@
             return response;
         }
 
-========================================================================================================================
-
-========================================================================================================================
-
-
-        BasisVo response = new BasisVo();
-        response.setBasisVo();
-        final String methodName = "saveAdSpace";
-        final String traceId = MDC.get("traceId"); // 获取日志追踪ID
-        final String inputParams = JsonUtils.toJsonString(request);
-
-        logger.info("【{}】traceId:{} 开始处理请求，入参：{}", methodName, traceId, inputParams);
-
-        try {
-
-            logger.info("【{}】traceId:{} 广告位保存成功，spaceId: {}, adId: {}", methodName, traceId, spaceId, adId);
-        } catch (Exception e) {
-            logger.error("【{}】traceId:{} 处理过程中发生异常，inputParams: {}, error: {}", methodName, traceId, inputParams, e.getMessage(), e);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
-        }
-        return response;
-
-
-
-        BasisVo response = new BasisVo();
-        response.setBasisVo();
-        final String methodName = "saveVehicleBlacklist";
-        final String inputParams = JsonUtils.toJsonString(reqDTO);
-        logger.info("【{}】开始处理请求，入参：{}", methodName, inputParams);
-
         // 1. 防御性校验：请求参数非空校验
         if (ObjectUtils.isEmpty(reqDTO)) {
             logger.error("【{}】请求参数不能为空", methodName);
@@ -62,78 +64,61 @@
             return response;
         }
 
-        try {
-
-
-        } catch (Exception e) {
-            logger.error("【{}】处理过程中发生异常，inputParams: {} and errorMessage: {}", methodName, inputParams, e.getMessage(), e);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
-        }
-        return response;
-
 ========================================================================================================================
 
 ========================================================================================================================
 
-        InfoVo<VehicleBlacklist> response = new InfoVo<>();
-        response.setBasisVo();
-        final String methodName = "getVehicleBlacklistById";
-        logger.info("【{}】开始处理请求，入参：{}", methodName, id);
+private static final Logger logger = LoggerFactory.getLogger(Test.class)
 
-        // 1. 防御性校验：请求参数非空校验
-        if (StringUtils.isBlank(id)) {
-            logger.error("【{}】ID不为空", methodName);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "ID不为空");
-            return response;
-        }
+logger.debug("Processing trade with id : {} and symbol : {}", id, symbol)
 
-        try {
+logger.debug("Current ID is: {} and name is: {}", id, getName())
 
-        } catch (Exception e) {
-            logger.error("【{}】处理过程中发生异常，inputParams: {} and errorMessage: {}", methodName, id, e.getMessage(), e);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
-        }
-        return response;
-
-========================================================================================================================
-
-        ListPageVo<TodayRegisteredUser> response = new ListPageVo<>();
-        response.setBasisVo();
-        final String methodName = "countTodayRegister";
-        final String inputParams = JsonUtils.toJsonString(reqDTO);
-        logger.info("【{}】开始处理请求，入参：{}", methodName, inputParams);
-
-        try {
+logger.error("inputParams: {} and errorMessage: {}", 各类参数或者对象 toString(), e.getMessage(), e);
 
 
-        } catch (Exception e) {
-            logger.error("【{}】处理过程中发生异常，inputParams: {} and errorMessage: {}", methodName, inputParams, e.getMessage(), e);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
-        }
-        return response;
+final String methodName = "countTodayRegister";
+final String requestParams = JsonUtils.toJsonString(reqDTO);
 
-========================================================================================================================
+// ==================== 1. 参数校验 ====================
 
-        logger.info("【{}】开始处理请求，入参：{}", methodName, inputParams);
+// ----------------- 原始查询方法优化 -----------------
 
-        logger.info("【{}】开始处理请求 | 用户ID：{} ", methodName, userId);
 
-        logger.info("【{}】开始处理请求 | 用户ID：{} | 活动ID：{}", methodName, userId, activityId);
+// 统一格式：[方法名] 关键操作 - 关键参数(key=value)
+logger.info("[{}] 开始处理请求 - inputParams={}", methodName, inputParams);
 
-        logger.info("【{}】开始处理请求 | 企业ID：{} | 新手机号：{} | 操作人：{}", methodName, id, newContactPhone, operatorName);
+// 带用户ID的请求
+logger.info("[{}] 开始处理请求 - userId={}", methodName, userId);
+
+// 带用户和活动ID的请求
+logger.info("[{}] 开始处理请求 - userId={}, activityId={}", methodName, userId, activityId);
+
+// 复杂业务场景
+logger.info("[{}] 变更联系方式 - enterpriseId={}, newPhone={}, operator={}",
+    methodName, id, newContactPhone, operatorName);
 
 
 
-        try {
+try {
+    // 业务代码
+} catch (Exception e) {
+    // 统一使用英文日志格式，避免中文符号
+    // 包含完整异常堆栈（最后一个参数传e）
+    logger.error("[{}] process error - params={}, errorMsg={}",
+        methodName, inputParams, e.getMessage(), e);
 
-        } catch (Exception e) {
-            logger.error("【{}】系统处理异常，inputParams: {} and errorMessage: {}", methodName, inputParams, e.getMessage(), e);
-            logger.error("【{}】系统处理异常 | 用户ID:{} | 错误信息:{} | error:{}", methodName, userId, e.getMessage(), e);
-            logger.error("【{}】系统处理异常 | 用户ID:{} | 活动ID:{} | error:{}", methodName, userId, activityId, e.getMessage(), e);
-            logger.error("【{}】系统处理异常 | 广告位ID:{} | 变更状态:{} | 操作人:{} | error:{}", methodName, id, status, loginUser.getName(), e.getMessage(), e);
-            response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
-        }
-        return response;
+    // 带业务上下文的错误日志
+    logger.error("[{}] process error - userId={}, activityId={}, error={}",
+        methodName, userId, activityId, e.getMessage(), e);
+
+    // 复杂业务场景错误日志
+    logger.error("[{}] update error - adId={}, status={}, operator={}, error={}",
+        methodName, id, status, loginUser.getName(), e.getMessage(), e);
+
+    response.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
+}
+return response;
 
 ========================================================================================================================
 
@@ -153,7 +138,7 @@ log.warn("[{}] 任务执行失败 <<< 耗时: {}ms", taskName, costTime);
 
 ========================================================================================================================
 
-logger.info("系统繁忙，请稍后重试");
+logger.info("系统繁忙，请稍后再试");
 
 logger.info("服务器繁忙，请稍后再试");
 

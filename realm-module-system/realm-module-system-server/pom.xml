@@ -11,7 +11,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>realm-module-system-biz</artifactId>
+    <artifactId>realm-module-system-server</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
 
@@ -35,11 +35,11 @@
             <artifactId>realm-module-system-api</artifactId>
             <version>${revision}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-module-infra-api</artifactId>-->
-<!--            <version>${revision}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cn.realm.cloud</groupId>-->
+        <!--            <artifactId>realm-module-infra-api</artifactId>-->
+        <!--            <version>${revision}</version>-->
+        <!--        </dependency>-->
 
         <!-- ========== 业务组件 ========== -->
         <!-- 数据权限控制 -->
@@ -48,10 +48,10 @@
             <artifactId>realm-spring-boot-starter-biz-data-permission</artifactId>
         </dependency>
         <!-- 多租户支持 -->
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-spring-boot-starter-biz-tenant</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cn.realm.cloud</groupId>-->
+        <!--            <artifactId>realm-spring-boot-starter-biz-tenant</artifactId>-->
+        <!--        </dependency>-->
         <!-- IP 库支持 -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
@@ -96,10 +96,10 @@
             <artifactId>realm-spring-boot-starter-job</artifactId>
         </dependency>
         <!-- 消息队列 -->
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-spring-boot-starter-mq</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cn.realm.cloud</groupId>-->
+        <!--            <artifactId>realm-spring-boot-starter-mq</artifactId>-->
+        <!--        </dependency>-->
 
         <!-- ========== 工具类 ========== -->
         <!-- Excel 操作 -->

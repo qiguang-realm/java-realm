@@ -1,22 +1,37 @@
 
+// MySQL
 
-    /**
-     * 检查文件名是否已存在（优化版，使用LIMIT 1提高查询效率）
-     *
-     * @param fileName 要检查的文件名
-     * @return 如果文件名已存在返回true，否则返回false
-     */
-    public boolean isFileNameDuplicate(String fileName) {
-        if (StringUtils.isBlank(fileName)) {
-            return false;
-        }
-
-        LambdaQueryWrapper<VehiclePassMileage> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(VehiclePassMileage::getOriginalFileName, fileName)
-                .last("LIMIT 1");  // 关键优化点
-
-        return baseMapper.selectOne(queryWrapper) != null;
+/**
+ * 检查文件名是否已存在（优化版，使用LIMIT 1提高查询效率）
+ *
+ * @param fileName 要检查的文件名
+ * @return 如果文件名已存在返回true，否则返回false
+ */
+public boolean isFileNameDuplicate(String fileName) {
+    if (StringUtils.isBlank(fileName)) {
+        return false;
     }
+
+    LambdaQueryWrapper<VehiclePassMileage> queryWrapper = new LambdaQueryWrapper<>();
+    queryWrapper.eq(VehiclePassMileage::getOriginalFileName, fileName)
+            .last("LIMIT 1");  // 关键优化点
+
+    return baseMapper.selectOne(queryWrapper) != null;
+}
+
+// Oracle
+
+public boolean isFileNameDuplicate(String fileName) {
+    if (StringUtils.isBlank(fileName)) {
+        return false;
+    }
+
+    LambdaQueryWrapper<VehiclePassMileage> queryWrapper = new LambdaQueryWrapper<>();
+    queryWrapper.eq(VehiclePassMileage::getOriginalFileName, fileName);
+
+    // 对于Oracle，使用selectCount并限制只查询1条记录
+    return baseMapper.selectCount(queryWrapper) > 0;
+}
 
 
 方案3：分批次查询导出大数据量（推荐10万+数据）
@@ -55,64 +70,64 @@ public void writeVehicle(ListPageVehicleReqDTO reqDTO, HttpServletResponse respo
 }
 
 
-    @ApiOperation(value = "导出企业车辆信息Excel文件")
-    @RequestMapping(value = "/exportEnterpriseVehicles", method = RequestMethod.GET)
-    public void exportEnterpriseVehicles(ListPageEnterpriseVehiclesReqDTO reqDTO, HttpServletResponse response) {
-        // 1. 设置响应头（必须在获取 OutputStream 之前）
-        try {
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setCharacterEncoding("utf-8");
-            String fileName = URLEncoder.encode("车辆信息", "UTF-8").replaceAll("\\+", "%20");
-            response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-            log.info("Excel响应属性设置成功，文件名：{}", fileName + ".xlsx");
-        } catch (Exception e) {
-            log.error("设置响应头失败", e);
-            return;
-        }
-
-        // 2. 获取数据（避免在 try-with-resources 中处理业务逻辑）
-        reqDTO.setPageNum(1);
-        reqDTO.setPageSize(10000);
-        List<EnterpriseVehiclesDO> records = enterpriseVehiclesService.listPageEnterpriseVehicles(reqDTO).getPage().getRecords();
-
-        // 3. 使用 try-with-resources 确保流关闭，但手动控制写入过程
-        try (ServletOutputStream out = response.getOutputStream()) {
-            // 关键点：使用 ExcelWriter 显式控制写入流程
-            ExcelWriter excelWriter = EasyExcel.write(out)
-                    .head(EnterpriseVehiclesDO.class)
-                    .autoCloseStream(false)  // 必须设为 false，防止 EasyExcel 自动关闭流
-                    .build();
-
-            try {
-                WriteSheet writeSheet = EasyExcel.writerSheet("车辆信息").build();
-                excelWriter.write(records, writeSheet);
-                excelWriter.finish();  // 显式调用 finish() 确保数据刷出
-                out.flush();           // 强制刷新缓冲区
-                log.info("车辆信息Excel导出成功，记录数：{}", records.size());
-            } catch (Exception e) {
-                log.error("Excel写入失败", e);
-                throw e; // 重新抛出异常以确保流被正确关闭
-            }
-        } catch (IOException e) {
-            log.error("导出车辆信息Excel失败", e);
-            // 注意：此处不要抛异常，否则可能触发容器级别的重复异常处理
-        }
+@ApiOperation(value = "导出企业车辆信息Excel文件")
+@RequestMapping(value = "/exportEnterpriseVehicles", method = RequestMethod.GET)
+public void exportEnterpriseVehicles(ListPageEnterpriseVehiclesReqDTO reqDTO, HttpServletResponse response) {
+    // 1. 设置响应头（必须在获取 OutputStream 之前）
+    try {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("车辆信息", "UTF-8").replaceAll("\\+", "%20");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        log.info("Excel响应属性设置成功，文件名：{}", fileName + ".xlsx");
+    } catch (Exception e) {
+        log.error("设置响应头失败", e);
+        return;
     }
 
+    // 2. 获取数据（避免在 try-with-resources 中处理业务逻辑）
+    reqDTO.setPageNum(1);
+    reqDTO.setPageSize(10000);
+    List<EnterpriseVehiclesDO> records = enterpriseVehiclesService.listPageEnterpriseVehicles(reqDTO).getPage().getRecords();
 
+    // 3. 使用 try-with-resources 确保流关闭，但手动控制写入过程
+    try (ServletOutputStream out = response.getOutputStream()) {
+        // 关键点：使用 ExcelWriter 显式控制写入流程
+        ExcelWriter excelWriter = EasyExcel.write(out)
+                .head(EnterpriseVehiclesDO.class)
+                .autoCloseStream(false)  // 必须设为 false，防止 EasyExcel 自动关闭流
+                .build();
 
-
-    @PostMapping(value = "/push", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> receivePush(@RequestBody String payload) {
         try {
-            logger.info("Received push: {}", payload);
-            return ResponseEntity.ok("Data accepted");
+            WriteSheet writeSheet = EasyExcel.writerSheet("车辆信息").build();
+            excelWriter.write(records, writeSheet);
+            excelWriter.finish();  // 显式调用 finish() 确保数据刷出
+            out.flush();           // 强制刷新缓冲区
+            log.info("车辆信息Excel导出成功，记录数：{}", records.size());
         } catch (Exception e) {
-            logger.error("Data processing failed", e);
-            return ResponseEntity.status(500).body("Processing error");
+            log.error("Excel写入失败", e);
+            throw e; // 重新抛出异常以确保流被正确关闭
         }
+    } catch (IOException e) {
+        log.error("导出车辆信息Excel失败", e);
+        // 注意：此处不要抛异常，否则可能触发容器级别的重复异常处理
     }
+}
+
+
+
+
+@PostMapping(value = "/push", consumes = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<?> receivePush(@RequestBody String payload) {
+    try {
+        logger.info("Received push: {}", payload);
+        return ResponseEntity.ok("Data accepted");
+    } catch (Exception e) {
+        logger.error("Data processing failed", e);
+        return ResponseEntity.status(500).body("Processing error");
+    }
+}
 
 
 public BasisVo saveEnterpriseSignUp(String userId, String enterpriseId, String activityId) {
@@ -202,3 +217,74 @@ public BasisVo saveEnterpriseSignUp(String userId, String enterpriseId, String a
 }
 
 
+            // 5. 车牌号冲突校验（带分布式锁）
+            if (StringUtils.isBlank(vehicleId)) {
+                RLock checkLock = redissonClient.getLock("vehicle:check:" + licensePlate);
+                try {
+                    if (checkLock.tryLock(3, 15, TimeUnit.SECONDS)) {
+                        Vehicle existVehicle = validateLicensePlate(licensePlate);
+                        if (!ObjectUtils.isEmpty(existVehicle)) {
+                            logger.error("【{}】车牌号已存在：{}", methodName, licensePlate);
+                            infoVo.setBasisVo(BasisVo.RESULT_FAIL, "该车牌号已被注册");
+                            return infoVo;
+                        }
+                    }
+                } finally {
+                    if (checkLock.isHeldByCurrentThread()) {
+                        checkLock.unlock();
+                    }
+                }
+            }
+
+
+                    // 获取分布式锁 vehicle:create:lock
+                    RLock lock = redissonClient.getLock("vehicle:create:lock:" + userId + ":" + id);
+                    try {
+                        // 1. 尝试获取锁（等待5秒，持有10秒）
+                        boolean locked = lock.tryLock(5, 10, TimeUnit.SECONDS);
+                        if (!locked) {
+                            logger.error("服务器繁忙，请稍后再试。input : {}", input);
+                            infoVo.setBasisVo(BasisVo.RESULT_FAIL, "服务器繁忙，请稍后再试。");
+                            return infoVo;
+                        }
+                        // 2. 插入车辆基础信息
+                        baseMapper.insert(vehicle);
+
+                        // 3. 道路运输许可证核验（参数校验）
+                        if (!isValidParams(userId, licensePlate, vin)) {
+                            return infoVo; // 参数无效时提前退出
+                        }
+
+                        // 4. 调用Feign服务进行许可证核验
+                        InfoVo<String> transportationLicenseInfoVo;
+                        try {
+                            transportationLicenseInfoVo = serviceBaseFeign.verifyTransportationLicense(userId, licensePlate, vin);
+                        } catch (FeignException e) {
+                            logger.error("[{}]运输许可证验证服务调用失败 | 参数: userId={}, plate={}, vin={} | 错误:{}",
+                                    methodName, userId, licensePlate, vin, e.getMessage(), e);
+                            return infoVo;
+                        }
+
+                        // 5. 处理核验结果
+                        if (!BasisVo.RESULT_SUCCESS.equals(transportationLicenseInfoVo.getResultCode())) {
+                            logger.error("道路运输许可证核验失败 | 参数: userId={}, plate={}, vin={} | 原因:{}",
+                                    userId, licensePlate, vin, transportationLicenseInfoVo.getResultMsg());
+                            return infoVo;
+                        }
+
+                        // 6. 解析核验结果并触发自动审核
+                        processLicenseVerification(transportationLicenseInfoVo.getClazz(), id, methodName);
+
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        logger.error("车辆创建流程被中断 | input:{}", input, e);
+                        infoVo.setBasisVo(BasisVo.RESULT_FAIL, "系统繁忙，请重试");
+                    } catch (Exception e) {
+                        logger.error("车辆创建异常 | input:{}", input, e);
+                        infoVo.setBasisVo(BasisVo.RESULT_FAIL, "系统异常，请联系管理员");
+                    } finally {
+                        // 确保锁释放的安全性
+                        if (lock.isHeldByCurrentThread()) {
+                            lock.unlock();
+                        }
+                    }

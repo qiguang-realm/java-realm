@@ -4,7 +4,7 @@ CREATE TABLE new_table AS SELECT * FROM KYC_VEHICLE_USER;
 
 
 CREATE TABLE sys_user_license (
-                                  id VARCHAR2(64) NOT NULL,
+                                  id NUMBER(19) NOT NULL,
                                   user_id VARCHAR2(64) NOT NULL,
                                   user_name VARCHAR2(100),
                                   user_phone VARCHAR2(200),
