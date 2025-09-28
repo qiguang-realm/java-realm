@@ -67,12 +67,14 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId> <!-- Micrometer 集成 Prometheus -->
+            <optional>true</optional>
         </dependency>
 
         <!-- Spring Boot Admin 支持 -->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId> <!-- Spring Boot Admin 客户端 -->
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

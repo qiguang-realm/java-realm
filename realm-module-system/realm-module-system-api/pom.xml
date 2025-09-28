@@ -26,8 +26,8 @@
 
         <!-- ==================== 接口文档支持 ==================== -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <groupId>org.springdoc</groupId> <!-- 接口文档：使用最新版本的 Swagger 模型 -->
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <scope>provided</scope> <!-- 接口文档模型定义，运行时由具体模块提供 -->
         </dependency>
 

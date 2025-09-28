@@ -26,7 +26,7 @@
         <!-- ==================== Web 相关 ==================== -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-spring-boot-starter-web</artifactId>
+            <artifactId>realm-spring-boot-starter-security</artifactId>
             <scope>provided</scope> <!-- 仅 OncePerRequestFilter 使用 -->
         </dependency>
 

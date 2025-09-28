@@ -53,11 +53,11 @@
         </dependency>
 
         <!-- Business component dependencies -->
-        <dependency>
-            <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-module-system-api</artifactId> <!-- Needed for fetching data permissions -->
-            <version>${revision}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-module-system-api</artifactId> &lt;!&ndash; Needed for fetching data permissions &ndash;&gt;-->
+<!--            <version>${revision}</version>-->
+<!--        </dependency>-->
 
         <!-- Test related dependencies -->
         <dependency>

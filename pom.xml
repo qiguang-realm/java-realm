@@ -30,7 +30,7 @@
     <!-- ========== 全局属性配置 ========== -->
     <properties>
         <!-- 项目版本号（主版本） -->
-        <revision>2.4.1-SNAPSHOT</revision>
+        <revision>2025.09-SNAPSHOT</revision>
 
         <!-- JDK 版本配置 -->
         <java.version>17</java.version>
@@ -38,14 +38,14 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- 构建插件版本 -->
-        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
 
         <!-- 依赖库版本 -->
-        <lombok.version>1.18.36</lombok.version>
-        <!-- 统一 Spring Boot 属性命名风格（短横线） -->
-        <spring-boot.version>3.4.1</spring-boot.version>
+        <lombok.version>1.18.38</lombok.version>
+        <!-- 统一 Spring Boot 属性命名风格 -->
+        <spring.boot.version>3.5.4</spring.boot.version>
         <mapstruct.version>1.6.3</mapstruct.version>
 
         <!-- 编码配置 -->
@@ -90,7 +90,7 @@
                             <path>
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-configuration-processor</artifactId>
-                                <version>${spring-boot.version}</version>
+                                <version>${spring.boot.version}</version>
                             </path>
                             <!-- Lombok 注解处理 -->
                             <path>
@@ -149,20 +149,16 @@
 
     <!-- ========== 仓库配置 ========== -->
     <repositories>
-        <!-- 国内镜像优先 -->
+        <!-- 国内镜像优先 -->  <!-- 使用 huawei / aliyun 的 Maven 源，提升下载速度 -->
+        <repository>
+            <id>huaweicloud</id>
+            <name>huawei</name>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+        </repository>
         <repository>
             <id>aliyunmaven</id>
-            <name>Aliyun Cloud</name>
+            <name>aliyun</name>
             <url>https://maven.aliyun.com/repository/public</url>
-            <snapshots>
-                <enabled>false</enabled>  <!-- 默认关闭快照 -->
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>tencent</id>
-            <name>Huawei Cloud</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
         </repository>
 
         <!-- Spring 官方仓库 -->
@@ -179,7 +175,7 @@
             <name>Spring Snapshots</name>
             <url>https://repo.spring.io/snapshot</url>
             <releases>
-                <enabled>false</enabled>  <!-- 仅启用快照 -->
+                <enabled>false</enabled>
             </releases>
         </repository>
     </repositories>

@@ -46,11 +46,7 @@
         </dependency>
 
         <!-- Business component dependencies -->
-        <dependency>
-            <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-module-system-api</artifactId> <!-- 用于 Dict 查询 -->
-            <version>${revision}</version>
-        </dependency>
+
 
         <!-- Web related dependencies -->
         <dependency>
@@ -67,18 +63,13 @@
 
         <!-- Utility libraries -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel</artifactId>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId> <!-- 解决 easyexcel issue: https://github.com/alibaba/easyexcel/issues/3954 -->
         </dependency>
 
         <dependency>

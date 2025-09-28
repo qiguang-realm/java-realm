@@ -122,9 +122,21 @@
         <!-- ========== 第三方服务集成 ========== -->
         <!-- 社交登录 -->
         <dependency>
-            <groupId>com.xingyuv</groupId>
-            <artifactId>spring-boot-starter-justauth</artifactId>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId> <!-- 社交登陆（例如说，个人微信、企业微信等等） -->
         </dependency>
+        <dependency>
+            <groupId>com.xkcoding.justauth</groupId>
+            <artifactId>justauth-spring-boot-starter</artifactId>
+            <exclusions>
+                <!-- 移除，避免和项目里的 hutool-all 冲突 -->
+                <exclusion>
+                    <groupId>cn.hutool</groupId>
+                    <artifactId>hutool-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- 微信生态集成 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -134,11 +146,12 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
         </dependency>
-        <!-- 验证码功能 -->
+
         <dependency>
-            <groupId>com.xingyuv</groupId>
-            <artifactId>spring-boot-starter-captcha-plus</artifactId>
+            <groupId>com.anji-plus</groupId>
+            <artifactId>captcha-spring-boot-starter</artifactId> <!-- 验证码，一般用于登录使用 -->
         </dependency>
+
         <!-- Hutool 工具扩展 -->
         <dependency>
             <groupId>org.dromara.hutool</groupId>
@@ -162,7 +175,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring.boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

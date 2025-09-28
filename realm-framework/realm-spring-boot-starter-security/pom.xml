@@ -59,11 +59,11 @@
         </dependency>
 
         <!-- Business components -->
-        <dependency>
-            <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-module-system-api</artifactId> <!-- Used for Token validation -->
-            <version>${revision}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.realm.cloud</groupId>-->
+<!--            <artifactId>realm-module-system-api</artifactId> &lt;!&ndash; Used for Token validation &ndash;&gt;-->
+<!--            <version>${revision}</version>-->
+<!--        </dependency>-->
 
         <!-- Utility dependencies -->
         <dependency>

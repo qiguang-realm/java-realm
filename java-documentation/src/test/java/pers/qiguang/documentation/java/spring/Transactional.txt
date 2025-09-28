@@ -57,7 +57,7 @@ rollbackFor = Exception.class 确保所有 Exception（包括检查型异常）�
 @Service
 public class YourService {
 
-    @Autowired
+    @Resource
     private SomeRepository repository;
 
     @Transactional(rollbackFor = Exception.class)
@@ -183,7 +183,7 @@ public class SomeRepository {
 @Service
 public class YourService {
 
-    @Autowired
+    @Resource
     private SomeRepository repository;
 
     @Transactional(rollbackFor = Exception.class)

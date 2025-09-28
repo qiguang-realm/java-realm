@@ -430,3 +430,48 @@ INSERT INTO user_event_log (
              'user_1002', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36', 'device_def456', 'sess_7g6h5k', '10.0.0.1', '网页', '1.2.0',
              '2023-10-27 09:20:15.600'
          );
+
+
+
+
+-- ----------------------------
+-- Table structure for sys_driver_rehire_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_driver_rehire_log`;
+CREATE TABLE sys_driver_rehire_log (
+                                       id BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+
+    -- 司机信息
+                                       driver_id BIGINT NOT NULL COMMENT '司机ID',
+                                       driver_name VARCHAR(50) NOT NULL COMMENT '司机姓名',
+                                       driver_phone VARCHAR(20) COMMENT '司机手机号',
+
+    -- 车队信息
+                                       fleet_id BIGINT DEFAULT NULL COMMENT '车队ID',
+                                       fleet_name VARCHAR(255) COMMENT '车队名称',
+
+    -- 入职相关信息
+                                       rehire_date DATETIME NOT NULL COMMENT '重新入职日期',
+                                       rehire_reason VARCHAR(500) COMMENT '重新入职原因',
+
+    -- 上次离职相关信息
+                                       last_leave_date DATETIME COMMENT '上次离职日期',
+                                       last_leave_reason VARCHAR(500) COMMENT '上次离职原因',
+
+    -- 系统信息
+                                       is_deleted TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
+                                       create_by BIGINT NOT NULL COMMENT '创建人ID',
+                                       create_by_name VARCHAR(50) NOT NULL COMMENT '创建人姓名',
+                                       create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                       update_by BIGINT COMMENT '更新人ID',
+                                       update_by_name VARCHAR(50) COMMENT '更新人姓名',
+                                       update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+    -- 索引
+                                       PRIMARY KEY (id),
+                                       INDEX idx_driver_id (driver_id),
+                                       INDEX idx_fleet_id (fleet_id),
+                                       INDEX idx_rehire_date (rehire_date),
+                                       INDEX idx_create_time (create_time),
+                                       INDEX idx_driver_phone (driver_phone)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='司机重新入职记录表';

@@ -51,12 +51,12 @@
 
         <!-- OpenAPI support -->
         <dependency>
-            <groupId>com.github.xingfudeshi</groupId>
+            <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
         <!-- RPC remote call dependencies -->
@@ -67,15 +67,12 @@
         </dependency>
 
         <!-- Business components -->
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-module-infra-api</artifactId> &lt;!&ndash; Used for operation log recording &ndash;&gt;-->
-<!--            <version>${revision}</version>-->
-<!--        </dependency>-->
+
+
         <dependency>
-            <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-module-system-api</artifactId> <!-- Used for error code recording -->
-            <version>${revision}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- XSS protection -->
