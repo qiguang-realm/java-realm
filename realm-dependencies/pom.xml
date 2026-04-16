@@ -572,7 +572,7 @@
             <!-- Realm 框架通用工具依赖 -->
             <dependency>
                 <groupId>cn.realm.cloud</groupId>
-                <artifactId>realm-framework-common</artifactId>
+                <artifactId>realm-common</artifactId>
                 <version>${revision}</version>
             </dependency>
 

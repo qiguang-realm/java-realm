@@ -1,4 +1,4 @@
-package cn.realm.cloud.module.system.base.api;
+package cn.realm.cloud.framework.common.base.api;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -73,12 +73,12 @@ public class ResponseBuilder {
     /**
      * 构建分页响应
      */
-    public static <T> ResponseEntity<ApiResponse<PageResponse<T>>> page(
-            com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
-        PageResponse<T> pageResponse = PageResponse.from(page);
-        ApiResponse<PageResponse<T>> response = ApiResponse.success(pageResponse);
-        return ResponseEntity.ok(response);
-    }
+//    public static <T> ResponseEntity<ApiResponse<PageResponse<T>>> page(
+//            com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
+//        PageResponse<T> pageResponse = PageResponse.from(page);
+//        ApiResponse<PageResponse<T>> response = ApiResponse.success(pageResponse);
+//        return ResponseEntity.ok(response);
+//    }
 
     /**
      * 构建带HTTP头的响应

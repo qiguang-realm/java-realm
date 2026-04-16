@@ -21,7 +21,7 @@
         <!-- ==================== 基础依赖 ==================== -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-framework-common</artifactId> <!-- 通用工具类/基础POJO -->
+            <artifactId>realm-common</artifactId> <!-- 通用工具类/基础POJO -->
         </dependency>
 
         <!-- ==================== 接口文档支持 ==================== -->

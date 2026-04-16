@@ -20,7 +20,7 @@
         <!-- ==================== 基础依赖 ==================== -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-framework-common</artifactId>
+            <artifactId>realm-common</artifactId>
         </dependency>
 
         <!-- ==================== Spring 核心支持 ==================== -->

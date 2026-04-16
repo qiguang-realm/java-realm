@@ -60,24 +60,6 @@ ORDER BY
     day ASC;
 
 
-
--- Oracle IN查询解决办法
-
-+ "<if test='dto.goodsBaseIds  != null and dto.goodsBaseIds.size()  > 0'> "
-+ "AND ( "
-+ "<foreach collection='dto.goodsBaseIds'  item='id' index='index' separator=' '> "
-    + "<choose> "
-    + "<when test='index == 0'>CON.GOODS_BASE_ID IN (#{id}</when> "
-    + "<when test='index % 999 == 0'>) OR CON.GOODS_BASE_ID IN (#{id}</when> "
-    + "<otherwise>, #{id}</otherwise> "
-    + "</choose> "
-+ "<if test='index == dto.goodsBaseIds.size()  - 1'>)</if> "
-+ "</foreach> "
-+ ") "
-+ "</if> "
-
-
-
 -- MySQL 删除上千万级数据表的命令与优化方案
 
 1. 直接删除整个表（适合不需要保留表结构）

@@ -459,7 +459,7 @@ CREATE TABLE sys_driver_rehire_log (
                                        last_leave_reason VARCHAR(500) COMMENT '上次离职原因',
 
     -- 系统信息
-                                       is_deleted TINYINT NOT NULL DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
+                                       `is_deleted` TINYINT DEFAULT 0 COMMENT '是否删除：0-否，1-是',
                                        create_by BIGINT NOT NULL COMMENT '创建人ID',
                                        create_by_name VARCHAR(50) NOT NULL COMMENT '创建人姓名',
                                        create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -475,3 +475,613 @@ CREATE TABLE sys_driver_rehire_log (
                                        INDEX idx_create_time (create_time),
                                        INDEX idx_driver_phone (driver_phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='司机重新入职记录表';
+
+
+-- ----------------------------
+-- Table structure for sys_order_payment_voucher
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_order_payment_voucher`;
+CREATE TABLE `sys_order_payment_voucher` (
+                                             `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                             `order_id` BIGINT NOT NULL COMMENT '运单ID',
+                                             `fee_id` BIGINT DEFAULT NULL COMMENT '费用ID（关联sys_order_extra_fee.id）',
+                                             `voucher_url` VARCHAR(500) NOT NULL COMMENT '凭证URL',
+                                             `payment_amount` DECIMAL(15,2) NOT NULL COMMENT '支付金额',
+
+    -- 费用相关
+                                             `fee_name` VARCHAR(500) NOT NULL COMMENT '费用名称',
+
+    -- 系统字段
+                                             `is_deleted` VARCHAR(10) NOT NULL DEFAULT '0' COMMENT '是否删除：0-未删除，1-已删除',
+                                             `create_by` VARCHAR(50) NOT NULL COMMENT '创建人ID',
+                                             `create_by_name` VARCHAR(50) NOT NULL COMMENT '创建人姓名',
+                                             `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                             `update_by` VARCHAR(50) COMMENT '更新人ID',
+                                             `update_by_name` VARCHAR(50) COMMENT '更新人姓名',
+                                             `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+                                             PRIMARY KEY (`id`),
+                                             UNIQUE KEY `uk_order_voucher` (`order_id`, `voucher_url`(200), `is_deleted`),
+                                             UNIQUE KEY `uk_fee_voucher` (`fee_id`, `is_deleted`),
+                                             KEY `idx_order_id` (`order_id`),
+                                             KEY `idx_fee_id` (`fee_id`),
+                                             KEY `idx_is_deleted` (`is_deleted`),
+                                             KEY `idx_fee_name` (`fee_name`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='运单支付凭证表';
+
+
+ALTER TABLE `sys_order`
+    ADD COLUMN `data_source_type` TINYINT DEFAULT 0 COMMENT '数据来源类型：0-系统数据，1-补录数据，2-导入数据';
+
+ALTER TABLE `sys_order` ADD INDEX `idx_data_source_type` (`data_source_type`);
+
+
+
+-- ----------------------------
+-- Table structure for sys_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_operation_log`;
+CREATE TABLE `sys_operation_log` (
+    -- 基础信息
+                                     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+--                                      `id` varchar(64) NOT NULL COMMENT '主键ID',
+                                     `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户ID(多租户系统使用)',
+                                     `trace_id` varchar(64) DEFAULT NULL COMMENT '请求追踪ID(用于分布式系统跟踪)',
+                                     `span_id` varchar(64) DEFAULT NULL COMMENT 'Span ID(链路追踪)',
+                                     `log_type` tinyint(2) NOT NULL DEFAULT '1' COMMENT '日志类型(1:操作日志 2:登录日志 3:异常日志 4:定时任务日志)',
+                                     `log_level` varchar(10) DEFAULT 'INFO' COMMENT '日志级别(DEBUG/INFO/WARN/ERROR)',
+
+    -- 操作内容
+                                     `module_type` varchar(20) DEFAULT NULL COMMENT '模块类型(SYSTEM:系统管理 BUSINESS:业务管理 REPORT:报表管理 API:接口监控 TOOL:工具操作)',
+                                     `module` varchar(50) NOT NULL COMMENT '操作模块(如用户管理/订单管理)',
+                                     `sub_module` varchar(50) DEFAULT NULL COMMENT '操作子模块',
+                                     `feature` varchar(50) DEFAULT NULL COMMENT '功能点',
+                                     `business_type` tinyint(2) DEFAULT NULL COMMENT '业务类型(0其它 1新增 2修改 3删除 4授权 5导出 6导入 7强退 8生成代码 9清空数据)',
+                                     `operation_type` varchar(20) NOT NULL COMMENT '操作类型(ADD/UPDATE/DELETE/SELECT/LOGIN/LOGOUT/EXPORT/IMPORT/API_CALL等)',
+                                     `operation_desc` varchar(1000) DEFAULT NULL COMMENT '操作描述',
+                                     `primary_business_id` varchar(64) DEFAULT NULL COMMENT '主业务ID(用于快速查询)',
+                                     `business_ids` text DEFAULT NULL COMMENT '业务ID集合(JSON格式文本)',
+
+    -- 业务数据
+                                     `business_data` text DEFAULT NULL COMMENT '业务数据快照(JSON格式字符串)',
+                                     `business_data_type` varchar(20) DEFAULT 'FULL' COMMENT '业务数据类型(FULL:完整数据 DIFF:差异数据)',
+                                     `changed_fields` text DEFAULT NULL COMMENT '变更字段列表(逗号分隔)',
+                                     `data_version` varchar(50) DEFAULT NULL COMMENT '数据版本号',
+
+    -- 请求信息
+                                     `request_method` varchar(10) DEFAULT NULL COMMENT '请求方法(GET/POST/PUT/DELETE/PATCH等)',
+                                     `request_url` varchar(500) DEFAULT NULL COMMENT '请求URL',
+                                     `api_version` varchar(20) DEFAULT NULL COMMENT 'API版本号',
+
+    -- 请求参数
+                                     `request_params` text DEFAULT NULL COMMENT '请求参数(JSON格式字符串)',
+                                     `request_param_count` int(11) DEFAULT '0' COMMENT '请求参数个数',
+                                     `request_body` longtext DEFAULT NULL COMMENT '请求体内容',
+                                     `request_content_type` varchar(100) DEFAULT NULL COMMENT '请求内容类型',
+                                     `request_headers` text DEFAULT NULL COMMENT '请求头信息(JSON格式字符串)',
+
+                                     `response_code` varchar(20) DEFAULT NULL COMMENT '响应状态码(HTTP状态码或业务状态码)',
+                                     `response_data` longtext DEFAULT NULL COMMENT '响应数据',
+                                     `response_headers` text DEFAULT NULL COMMENT '响应头信息(JSON格式字符串)',
+                                     `response_time` bigint(20) DEFAULT NULL COMMENT '响应时间(毫秒)',
+
+    -- 系统环境
+                                     `app_name` varchar(50) DEFAULT NULL COMMENT '应用名称(微服务架构下使用)',
+                                     `app_version` varchar(20) DEFAULT NULL COMMENT '应用版本',
+                                     `device_type` varchar(20) DEFAULT NULL COMMENT '设备类型(WEB/IOS/ANDROID/H5/小程序等)',
+                                     `os_info` varchar(100) DEFAULT NULL COMMENT '操作系统信息',
+                                     `browser_info` varchar(200) DEFAULT NULL COMMENT '浏览器信息',
+
+    -- 客户端详细信息
+                                     `client_info` text DEFAULT NULL COMMENT '客户端详细信息(JSON格式字符串)',
+                                     `screen_resolution` varchar(20) DEFAULT NULL COMMENT '屏幕分辨率',
+                                     `client_language` varchar(20) DEFAULT NULL COMMENT '客户端语言',
+                                     `timezone` varchar(50) DEFAULT NULL COMMENT '时区',
+
+    -- 网络信息
+                                     `ip_address` varchar(64) DEFAULT NULL COMMENT 'IP地址(支持IPv6)',
+                                     `ip_location` text DEFAULT NULL COMMENT 'IP地理位置信息(JSON格式字符串)',
+                                     `network_type` varchar(20) DEFAULT NULL COMMENT '网络类型(WIFI/4G/5G等)',
+                                     `user_agent` text DEFAULT NULL COMMENT '完整的User-Agent',
+
+    -- 操作人信息
+                                     `operator_id` varchar(64) DEFAULT NULL COMMENT '操作人ID',
+                                     `operator_name` varchar(50) DEFAULT NULL COMMENT '操作人姓名',
+                                     `operator_account` varchar(50) DEFAULT NULL COMMENT '操作人账号',
+
+    -- 角色信息
+                                     `operator_roles` text DEFAULT NULL COMMENT '操作人角色列表(JSON格式字符串)',
+                                     `role_level` int(11) DEFAULT NULL COMMENT '角色等级',
+                                     `operator_dept` varchar(100) DEFAULT NULL COMMENT '操作人部门',
+                                     `operator_org` varchar(100) DEFAULT NULL COMMENT '操作人组织',
+                                     `operator_position` varchar(100) DEFAULT NULL COMMENT '操作人职位',
+                                     `operator_ext_info` text DEFAULT NULL COMMENT '操作人扩展信息(JSON格式字符串)',
+
+    -- 操作状态
+                                     `status` tinyint(1) DEFAULT '1' COMMENT '操作状态(0:失败 1:成功 2:部分成功)',
+                                     `error_code` varchar(50) DEFAULT NULL COMMENT '错误码',
+                                     `error_msg` text DEFAULT NULL COMMENT '错误信息',
+                                     `error_stack` text DEFAULT NULL COMMENT '错误堆栈',
+                                     `retry_count` tinyint(2) DEFAULT '0' COMMENT '重试次数',
+                                     `error_details` text DEFAULT NULL COMMENT '错误详细信息(JSON格式字符串)',
+
+    -- 性能指标
+                                     `execute_time` bigint(20) DEFAULT NULL COMMENT '执行耗时(毫秒)',
+                                     `db_query_count` int(11) DEFAULT NULL COMMENT '数据库查询次数',
+                                     `db_query_time` bigint(20) DEFAULT NULL COMMENT '数据库查询总耗时(毫秒)',
+                                     `memory_usage` bigint(20) DEFAULT NULL COMMENT '内存使用量(KB)',
+                                     `data_size` int(11) DEFAULT NULL COMMENT '数据大小(字节)',
+                                     `cpu_usage` decimal(5,2) DEFAULT NULL COMMENT 'CPU使用率(%)',
+                                     `performance_metrics` text DEFAULT NULL COMMENT '性能指标数据(JSON格式字符串)',
+
+    -- 时间信息
+                                     `start_time` datetime(3) DEFAULT NULL COMMENT '操作开始时间(精确到毫秒)',
+                                     `end_time` datetime(3) DEFAULT NULL COMMENT '操作结束时间',
+                                     `create_time` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '日志创建时间',
+
+    -- 管理字段
+                                     `cost_category` varchar(20) DEFAULT NULL COMMENT '成本分类(高频/低频/重要业务)',
+                                     `archived` tinyint(1) DEFAULT '0' COMMENT '是否已归档(0:未归档 1:已归档)',
+                                     `storage_level` tinyint(1) DEFAULT '1' COMMENT '存储级别(1:热数据 2:温数据 3:冷数据)',
+                                     `data_source` varchar(50) DEFAULT 'SYSTEM' COMMENT '数据来源(SYSTEM/IMPORT/API等)',
+                                     `tags` text DEFAULT NULL COMMENT '标签列表(JSON格式字符串)',
+
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_module` (`module`),
+                                     KEY `idx_module_type` (`module_type`),
+                                     KEY `idx_business_type` (`business_type`),
+                                     KEY `idx_operator` (`operator_id`),
+                                     KEY `idx_time` (`create_time`),
+                                     KEY `idx_status` (`status`),
+                                     KEY `idx_trace_id` (`trace_id`),
+                                     KEY `idx_primary_business` (`primary_business_id`),
+                                     KEY `idx_tenant` (`tenant_id`),
+                                     KEY `idx_ip` (`ip_address`),
+                                     KEY `idx_operation_type` (`operation_type`),
+                                     KEY `idx_module_time` (`module`, `create_time`),
+                                     KEY `idx_operator_time` (`operator_id`, `create_time`),
+                                     KEY `idx_status_time` (`status`, `create_time`),
+                                     KEY `idx_tenant_time` (`tenant_id`, `create_time`),
+                                     KEY `idx_log_type_time` (`log_type`, `create_time`),
+                                     KEY `idx_app_name` (`app_name`),
+                                     KEY `idx_device_type` (`device_type`),
+                                     KEY `idx_cost_category` (`cost_category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='系统操作日志表';
+
+
+-- ----------------------------
+-- Table structure for vehicle_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `vehicle_operation_log`;
+
+CREATE TABLE `vehicle_operation_log` (
+    -- 核心标识
+                                         `id` varchar(64) NOT NULL COMMENT '主键ID',
+                                         `vehicle_id` varchar(64) NOT NULL COMMENT '车辆ID',
+                                         `license_plate` varchar(20) NOT NULL COMMENT '车牌号',
+
+    -- 操作信息
+                                         `operation_type` varchar(30) NOT NULL COMMENT '操作类型',
+                                         `operation_name` varchar(100) NOT NULL COMMENT '操作类型名称',
+
+    -- 操作人信息
+                                         `operator_id` varchar(64) NOT NULL COMMENT '操作人ID',
+                                         `operator_name` varchar(100) NOT NULL COMMENT '操作人姓名',
+
+    -- 用户信息
+                                         `user_id` varchar(64) DEFAULT NULL COMMENT '用户ID',
+                                         `user_name` varchar(100) DEFAULT NULL COMMENT '用户姓名',
+                                         `user_account` varchar(50) DEFAULT NULL COMMENT '用户账号',
+                                         `user_phone` varchar(20) DEFAULT NULL COMMENT '用户手机号',
+
+    -- 描述信息
+                                         `operation_summary` varchar(255) DEFAULT NULL COMMENT '操作摘要',
+                                         `operation_details` text COMMENT '操作详情',
+
+    -- 环境信息
+                                         `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP地址',
+                                         `source` varchar(50) NOT NULL DEFAULT 'SYSTEM' COMMENT '操作来源: SYSTEM/WEB/APP/API',
+
+    -- 时间戳（操作时间就是创建时间）
+                                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作/创建时间',
+
+    -- 主键和索引
+                                         PRIMARY KEY (`id`),
+                                         KEY `idx_vehicle_id` (`vehicle_id`),
+                                         KEY `idx_license_plate` (`license_plate`),
+                                         KEY `idx_create_time` (`create_time`),
+                                         KEY `idx_operation_type` (`operation_type`),
+                                         KEY `idx_operator_id` (`operator_id`),
+                                         KEY `idx_user_id` (`user_id`),
+                                         KEY `idx_user_account` (`user_account`),
+                                         KEY `idx_user_phone` (`user_phone`),
+                                         KEY `idx_source` (`source`),
+                                         KEY `idx_vehicle_create_time` (`vehicle_id`, `create_time`),
+                                         KEY `idx_plate_create_time` (`license_plate`, `create_time`),
+                                         KEY `idx_operator_create_time` (`operator_id`, `create_time`),
+                                         KEY `idx_operation_type_time` (`operation_type`, `create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='车辆操作日志表';
+
+
+
+-- 新增货单启用禁用功能
+-- 执行人：[Qi]
+-- 执行时间：2025-11-10
+-- 变更原因：将启用禁用状态从货单业务状态中分离，便于独立管理货单的可用性
+
+ALTER TABLE sys_goods
+    ADD COLUMN is_active TINYINT(1) DEFAULT 1 COMMENT '启用状态: 1-启用, 0-禁用',
+ADD COLUMN disable_reason VARCHAR(255) COMMENT '禁用原因',
+ADD INDEX idx_is_active (is_active);
+
+
+
+-- ----------------------------
+-- Table structure for sys_goods_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_goods_operation_log`;
+
+CREATE TABLE `sys_goods_operation_log` (
+                                           `id` bigint NOT NULL AUTO_INCREMENT,
+                                           `goods_id` bigint NOT NULL COMMENT '货单ID',
+                                           `goods_no` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '货单编号',
+                                           `operation_type` smallint DEFAULT NULL COMMENT '操作类型：1-创建 2-修改 3-启用 4-禁用 5-派单 6-作废 7-完成 8-异常终止 9-报价 10-议价 11-状态变更',
+                                           `operation_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作类型名称',
+                                           `operation_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '操作内容详情',
+                                           `operation_summary` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作摘要',
+                                           `operator_id` bigint DEFAULT NULL COMMENT '操作人ID',
+                                           `operator_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作人姓名',
+                                           `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '操作/创建时间',
+                                           PRIMARY KEY (`id`) USING BTREE,
+                                           KEY `idx_goods_id` (`goods_id`) USING BTREE,
+                                           KEY `idx_goods_no` (`goods_no`) USING BTREE,
+                                           KEY `idx_operator_id` (`operator_id`) USING BTREE,
+                                           KEY `idx_operation_type` (`operation_type`) USING BTREE,
+                                           KEY `idx_create_time` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='货单操作日志表';
+
+
+
+-- ----------------------------
+-- Table structure for sys_order_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_order_operation_log`;
+
+CREATE TABLE `sys_order_operation_log` (
+                                           `id` bigint NOT NULL AUTO_INCREMENT,
+                                           `order_id` bigint NOT NULL COMMENT '运单ID',
+                                           `order_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '运单编号',
+                                           `dispatch_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '调拨单编号',
+                                           `goods_no` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '货单号',
+
+    -- 操作类型信息
+                                           `operation_type` smallint DEFAULT NULL COMMENT '操作类型：1-创建 2-修改 3-派车 4-接单 5-拒绝 6-取消 7-上车 8-到达装货地 9-装货 10-到达卸货地 11-卸货 12-完成 13-作废 14-异常终止 15-状态变更 16-报价 17-议价 18-对账 19-开票 20-报销 21-修改装货榜单图片 22-修改装货净重 23-修改卸货榜单图片 24-修改卸货净重',
+                                           `operation_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作类型名称',
+                                           `operation_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '操作内容详情',
+                                           `operation_summary` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作摘要',
+
+    -- 操作人信息
+                                           `operator_id` bigint DEFAULT NULL COMMENT '操作人ID',
+                                           `operator_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作人姓名',
+
+    -- 运单基础信息
+                                           `order_create_time` datetime DEFAULT NULL COMMENT '运单创建时间',
+
+    -- 司机信息
+                                           `driver_id` bigint DEFAULT NULL COMMENT '司机ID',
+                                           `driver_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '司机姓名',
+                                           `driver_phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '司机手机号',
+                                           `car_id` bigint DEFAULT NULL COMMENT '车辆ID',
+                                           `car_no` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '车牌号',
+
+    -- 车队信息
+                                           `fleet_id` bigint DEFAULT NULL COMMENT '所属车队ID',
+                                           `fleet_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '车队名称',
+
+    -- 货主信息
+                                           `shipper_id` bigint DEFAULT NULL COMMENT '货主ID',
+                                           `shipper_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '货主名称',
+
+    -- 用户信息
+                                           `user_id` bigint DEFAULT NULL COMMENT '用户ID',
+                                           `real_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户真实姓名',
+
+    -- 时间信息
+                                           `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '操作日志创建时间',
+
+                                           PRIMARY KEY (`id`) USING BTREE,
+                                           KEY `idx_order_id` (`order_id`) USING BTREE,
+                                           KEY `idx_order_no` (`order_no`) USING BTREE,
+                                           KEY `idx_dispatch_no` (`dispatch_no`) USING BTREE,
+                                           KEY `idx_goods_no` (`goods_no`) USING BTREE,
+                                           KEY `idx_operator_id` (`operator_id`) USING BTREE,
+                                           KEY `idx_operation_type` (`operation_type`) USING BTREE,
+                                           KEY `idx_driver_id` (`driver_id`),
+                                           KEY `idx_fleet_id` (`fleet_id`),
+                                           KEY `idx_shipper_id` (`shipper_id`),
+                                           KEY `idx_car_no` (`car_no`),
+                                           KEY `idx_order_create_time` (`order_create_time`),
+                                           KEY `idx_create_time` (`create_time`),
+                                           KEY `idx_composite_query` (`order_no`,`operation_type`,`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='运单操作日志表';
+
+
+-- ---------------------------- reconciliation 使用“对账”的专业术语
+-- Table structure for sys_statement_relationship
+-- ---------------------------- reconciliation 使用“对账”的专业术语
+DROP TABLE IF EXISTS `sys_statement_relationship`;
+
+CREATE TABLE `sys_statement_relationship` (
+                                              `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                                              `shipper_subject_id` BIGINT DEFAULT NULL COMMENT '货主主体ID',
+                                              `shipper_subject_name` VARCHAR ( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '货主主体名称',
+                                              `sign_subject_id` BIGINT DEFAULT NULL COMMENT '平台主体（签约主体）ID',
+                                              `sign_subject_name` VARCHAR ( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台主体名称',
+                                              `fleet_id` BIGINT DEFAULT NULL COMMENT '车队ID',
+                                              `fleet_name` VARCHAR ( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '车队名称',
+                                              `fleet_manage_subject_name` VARCHAR(255) DEFAULT NULL COMMENT '车队管理主体名称',
+                                              `type` VARCHAR ( 10 ) NOT NULL COMMENT '类型：01-平台货源模式，02-车队直签模式',
+                                              `is_deleted` VARCHAR ( 10 ) NOT NULL DEFAULT '0' COMMENT '逻辑删除：0-未删除，1-已删除',
+                                              `create_by` BIGINT NOT NULL COMMENT '创建人ID',
+                                              `create_by_name` VARCHAR ( 255 ) NOT NULL COMMENT '创建人姓名',
+                                              `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                              `update_by` BIGINT COMMENT '更新人ID',
+                                              `update_by_name` VARCHAR ( 255 ) COMMENT '更新人姓名',
+                                              `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                              PRIMARY KEY ( `id` ),
+                                              INDEX `idx_type` ( `type` ),
+                                              INDEX `idx_is_deleted` ( `is_deleted` )
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '对账关系表';
+
+
+
+-- ----------------------------
+-- Table structure for sys_shipper_statement_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_shipper_statement_rule`;
+
+CREATE TABLE `sys_shipper_statement_rule` (
+                                              `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                              `shipper_subject_id` BIGINT NOT NULL COMMENT '货主主体ID',
+                                              `shipper_subject_name` VARCHAR ( 255 ) NOT NULL COMMENT '货主主体名称',
+
+                                              `bill_generate_basis` VARCHAR ( 20 ) NOT NULL COMMENT '账单生成时间依据：01-派单时间，02-装货时间，03-卸货时间',
+
+                                              `extra_fee_calculation_status` VARCHAR ( 20 ) NOT NULL COMMENT '额外费用是否参与计算：01-参与，02-不参与',
+                                              `loss_fee_calculation_status` VARCHAR ( 20 ) NOT NULL COMMENT '损耗费用是否参与计算：01-参与，02-不参与',
+                                              `direct_dispatch_fee_rate` DECIMAL ( 6, 4 ) COMMENT '调度服务费费率，如0.05表示5%',
+
+
+                                              `extra_fee_tax_bearer` VARCHAR ( 20 ) NOT NULL COMMENT '额外费用税费承担方：01-平台承担，02-货主承担',
+                                              `extra_fee_bear_percentage` DECIMAL ( 6, 4 ) COMMENT '承担额外费用的百分比',
+
+                                              `loss_fee_calculation_mode` VARCHAR(20) COMMENT '损耗费用整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                              `loss_fee_deduction_type` VARCHAR(20) DEFAULT NULL COMMENT '损耗费用扣款类型：01-全扣，02-不扣，03-按吨位扣，04-按比例扣',
+                                              `loss_deduction_tonnage` DECIMAL(12, 4) DEFAULT NULL COMMENT '按吨位扣的吨位值（单位：吨）',
+                                              `loss_deduction_ratio` DECIMAL(6, 4) DEFAULT NULL COMMENT '按比例扣的比例值（如0.05表示5%）',
+
+                                              `rounding_fee_calculation_mode` VARCHAR(20) COMMENT '抹零费用整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                              `rounding_settlement_type` VARCHAR(20) DEFAULT NULL COMMENT '结算抹零方式：01-不抹零，02-抹零',
+                                              `rounding_threshold` DECIMAL(12, 2) DEFAULT NULL COMMENT '抹零阈值（单位：元），如5表示少于5元时抹零',
+
+                                              `freight_calculation_mode` VARCHAR(20) COMMENT '运价整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                              `loss_tonnage_calculation_mode` VARCHAR(20) COMMENT '亏吨整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                              `settlement_quantity_type` VARCHAR(20) DEFAULT NULL COMMENT '结算数量计算方式：01-以装货数量结算，02-以卸货数量结算，03-以数量少的结算',
+
+
+                                              `generate_rule_type` VARCHAR ( 20 ) NOT NULL COMMENT '对账生成规则类型：01-时间节点，02-运单间隔',
+                                              `time_rule_type` VARCHAR ( 20 ) COMMENT '时间规则类型：01-每日，02-每周，03-每月',
+                                              `execute_time` VARCHAR ( 100 ) COMMENT '执行时间点（HH:mm:ss）',
+
+                                              `weekly_days` VARCHAR ( 100 ) DEFAULT '' COMMENT '每周执行日/基准日：JSON数组[1,2]，1=周一',
+                                              `weekly_days_desc` VARCHAR ( 100 ) DEFAULT NULL COMMENT '每周执行日描述',
+                                              `weekly_range_config` VARCHAR(2000) COMMENT '每周范围配置：JSON格式，key为基准日(1-7)，value为选中的日期数组(-7到7，负数表示上周，正数表示本周)',
+                                              `monthly_days` VARCHAR ( 100 ) DEFAULT '' COMMENT '每月执行日/基准日：JSON数组[1,15,25]，1-31号',
+                                              `monthly_days_desc` VARCHAR ( 100 ) DEFAULT NULL COMMENT '每月描述',
+                                              `monthly_generate_type` VARCHAR ( 20 ) COMMENT '每月生成范围类型：01-上个月自然日整月，02-截止生成时间30天内，03-指定时间范围',
+
+                                              `monthly_time_ranges` TEXT COMMENT '每月起始/结束时间范围：当monthly_generate_type=03时有效，JSON数组格式(-31到31，负数表示上月，正数表示本月) [[-2,-11],[-24,-26],[-29,-31],[-20,-20],[-28,-28]] ',
+                                              `monthly_range_desc` VARCHAR ( 500 ) DEFAULT NULL COMMENT '每月范围描述',
+
+                                              `order_interval_days` INT COMMENT '货主若间隔多少天未产生新运单，则自动生成对账单',
+
+
+                                              `is_deleted` VARCHAR ( 10 ) NOT NULL DEFAULT '0' COMMENT '逻辑删除：0-未删除，1-已删除',
+                                              `create_by` BIGINT NOT NULL COMMENT '创建人ID',
+                                              `create_by_name` VARCHAR ( 255 ) NOT NULL COMMENT '创建人姓名',
+                                              `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                              `update_by` BIGINT COMMENT '更新人ID',
+                                              `update_by_name` VARCHAR ( 255 ) COMMENT '更新人姓名',
+                                              `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                              PRIMARY KEY ( `id` ),
+                                              UNIQUE KEY `uk_shipper_active` ( `shipper_subject_id`, `is_deleted` ) COMMENT '唯一约束',
+                                              INDEX `idx_execute_time` ( `execute_time`, `is_deleted` )
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '货主对账规则配置表';
+
+
+
+-- ----------------------------
+-- Table structure for sys_fleet_statement_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_fleet_statement_rule`;
+
+CREATE TABLE `sys_fleet_statement_rule` (
+                                            `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                            `fleet_id` BIGINT NOT NULL COMMENT '车队ID',
+                                            `fleet_name` VARCHAR ( 255 ) DEFAULT NULL COMMENT '车队名称',
+                                            `fleet_manage_subject_name` VARCHAR(255) DEFAULT NULL COMMENT '车队管理主体名称',
+
+                                            `bill_generate_basis` VARCHAR ( 20 ) NOT NULL COMMENT '账单生成时间依据：01-派单时间，02-装货时间，03-卸货时间',
+
+                                            `extra_fee_bill_generate` VARCHAR(20) COMMENT '额外费用账单是否生成：01-不生成（否），02-生成（是）',
+                                            `extra_fee_calculation_status` VARCHAR ( 20 ) NOT NULL COMMENT '额外费用是否参与计算：01-参与，02-不参与',
+                                            `loss_fee_calculation_status` VARCHAR ( 20 ) NOT NULL COMMENT '损耗费用是否参与计算：01-参与，02-不参与',
+                                            `direct_dispatch_fee_rate` DECIMAL ( 6, 4 ) COMMENT '调度服务费费率，如0.05表示5%',
+
+
+                                            `extra_fee_tax_bearer` VARCHAR ( 20 ) NOT NULL COMMENT '额外费用税费承担方：01-平台承担，02-车队承担',
+                                            `extra_fee_bear_percentage` DECIMAL ( 6, 4 ) COMMENT '承担额外费用的百分比',
+
+                                            `loss_fee_calculation_mode` VARCHAR(20) COMMENT '损耗费用整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                            `loss_fee_deduction_type` VARCHAR(20) DEFAULT NULL COMMENT '损耗费用扣款类型：01-全扣，02-不扣，03-按吨位扣，04-按比例扣',
+                                            `loss_deduction_tonnage` DECIMAL(12, 4) DEFAULT NULL COMMENT '按吨位扣的吨位值（单位：吨）',
+                                            `loss_deduction_ratio` DECIMAL(6, 4) DEFAULT NULL COMMENT '按比例扣的比例值（如0.05表示5%）',
+
+                                            `rounding_fee_calculation_mode` VARCHAR(20) COMMENT '抹零费用整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                            `rounding_settlement_type` VARCHAR(20) DEFAULT NULL COMMENT '结算抹零方式：01-不抹零，02-抹零',
+                                            `rounding_threshold` DECIMAL(12, 2) DEFAULT NULL COMMENT '抹零阈值（单位：元），如5表示少于5元时抹零',
+
+
+                                            `freight_calculation_mode` VARCHAR(20) COMMENT '运价整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                            `loss_tonnage_calculation_mode` VARCHAR(20) COMMENT '亏吨整体计算模式：01-否（按单计算），02-是（整体计算）',
+                                            `settlement_quantity_type` VARCHAR(20) DEFAULT NULL COMMENT '结算数量计算方式：01-以装货数量结算，02-以卸货数量结算，03-以数量少的结算',
+
+
+                                            `generate_rule_type` VARCHAR ( 20 ) NOT NULL COMMENT '对账生成规则类型：01-时间节点，02-运单间隔',
+                                            `time_rule_type` VARCHAR ( 20 ) COMMENT '时间规则类型：01-每日，02-每周，03-每月',
+                                            `execute_time` VARCHAR ( 100 ) COMMENT '执行时间点（HH:mm:ss）',
+
+                                            `weekly_days` VARCHAR ( 100 ) DEFAULT '' COMMENT '每周执行日/基准日：JSON数组[1,2]，1=周一',
+                                            `weekly_days_desc` VARCHAR ( 100 ) DEFAULT NULL COMMENT '每周执行日描述',
+                                            `weekly_range_config` VARCHAR(2000) COMMENT '每周范围配置：JSON格式，key为基准日(1-7)，value为选中的日期数组(-7到7，负数表示上周，正数表示本周)',
+                                            `monthly_days` VARCHAR ( 100 ) DEFAULT '' COMMENT '每月执行日/基准日：JSON数组[1,15,25]，1-31号',
+                                            `monthly_days_desc` VARCHAR ( 100 ) DEFAULT NULL COMMENT '每月描述',
+                                            `monthly_generate_type` VARCHAR ( 20 ) COMMENT '每月生成范围类型：01-上个月自然日整月，02-截止生成时间30天内，03-指定时间范围',
+
+                                            `monthly_time_ranges` TEXT COMMENT '每月起始/结束时间范围：当monthly_generate_type=03时有效，JSON数组格式(-31到31，负数表示上月，正数表示本月) [[-2,-11],[-24,-26],[-29,-31],[-20,-20],[-28,-28]] ',
+                                            `monthly_range_desc` VARCHAR ( 500 ) DEFAULT NULL COMMENT '每月范围描述',
+
+                                            `order_interval_days` INT COMMENT '货主若间隔多少天未产生新运单，则自动生成对账单',
+
+
+                                            `follow_shipper_period` VARCHAR ( 20 ) DEFAULT NULL COMMENT '是否按货主周期：01-否：全部按车队周期走，02-是：部分按货主周期走',
+                                            `except_shipper_ids` TEXT DEFAULT NULL COMMENT '部分货主主体ID列表，JSON数组格式，如[1001,1002,1003]',
+                                            `except_shipper_names` TEXT DEFAULT NULL COMMENT '部分货主主体名称列表，JSON数组格式',
+
+
+                                            `is_deleted` VARCHAR ( 10 ) NOT NULL DEFAULT '0' COMMENT '逻辑删除: 0-否， 1-是',
+                                            `create_by` BIGINT NOT NULL COMMENT '创建人ID',
+                                            `create_by_name` VARCHAR ( 255 ) NOT NULL COMMENT '创建人姓名',
+                                            `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                            `update_by` BIGINT COMMENT '更新人ID',
+                                            `update_by_name` VARCHAR ( 255 ) COMMENT '更新人姓名',
+                                            `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                            PRIMARY KEY ( `id` ),
+                                            UNIQUE KEY `uk_fleet_active` ( `fleet_id`, `is_deleted` ) COMMENT '唯一约束',
+                                            INDEX `idx_execute_time` ( `execute_time`, `is_deleted` ),
+                                            INDEX `idx_follow_period` ( `follow_shipper_period`, `is_deleted` )
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '车队对账规则配置表';
+
+
+
+-- ----------------------------
+-- Table structure for sys_statement_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_statement_operation_log`;
+
+CREATE TABLE `sys_statement_operation_log` (
+                                               `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                               `statement_id` bigint DEFAULT NULL COMMENT '对账单ID',
+                                               `statement_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '对账单编号',
+                                               `statement_type` varchar(10) DEFAULT NULL COMMENT '对账单类型 01:货主对账 02:车主对账',
+
+    -- 业务标识
+                                               `biz_type` varchar(20) DEFAULT NULL COMMENT '业务类型：01-对账单，02-对账关系，03-货主对账规则，04-车队对账规则',
+                                               `biz_id` bigint DEFAULT NULL COMMENT '业务ID',
+                                               `biz_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '业务编号（如对账单号）',
+
+    -- 运单关联信息
+                                               `related_order_ids` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '关联的运单ID列表（JSON数组格式）',
+                                               `related_order_nos` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '关联的运单编号列表（JSON数组格式）',
+
+    -- 操作信息
+                                               `operation_type` smallint NOT NULL COMMENT '操作类型：1-创建 2-修改 3-确认 4-签章 5-开票 6-回款 7-审核 8-状态变更 9-作废 10-完成 11-运单关联 12-运单解除',
+                                               `operation_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '操作类型名称',
+                                               `operation_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '操作内容详情（JSON格式，包含变更前后状态、字段值等）',
+                                               `operation_summary` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '操作摘要',
+
+    -- 操作人信息
+                                               `operator_id` bigint NOT NULL COMMENT '操作人ID',
+                                               `operator_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '操作人姓名',
+                                               `operator_role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '操作人角色',
+
+                                               `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建/操作时间',
+
+                                               PRIMARY KEY (`id`) USING BTREE,
+    -- 核心业务查询索引
+                                               KEY `idx_statement_id` (`statement_id`) USING BTREE,
+                                               KEY `idx_statement_no` (`statement_no`) USING BTREE,
+                                               KEY `idx_create_time` (`create_time`) USING BTREE,
+
+    -- 操作人相关索引
+                                               KEY `idx_operator_id` (`operator_id`) USING BTREE,
+
+    -- 操作类型分析索引
+                                               KEY `idx_operation_type` (`operation_type`) USING BTREE,
+
+    -- 复合查询索引（常用查询场景）
+                                               KEY `idx_statement_operator` (`statement_id`, `operator_id`) USING BTREE,
+                                               KEY `idx_time_operation` (`create_time`, `operation_type`) USING BTREE,
+                                               KEY `idx_statement_type_time` (`statement_type`, `create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='对账单相关业务操作日志表';
+
+
+
+-- ----------------------------
+-- Table structure for sys_order_discrepancy  运单差错表  waybill_discrepancy
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_order_discrepancy`;
+
+CREATE TABLE `sys_order_discrepancy` (
+                                         `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                                         `discrepancy_no` VARCHAR(64) NOT NULL COMMENT '差错单号',
+
+                                         `order_id` BIGINT NOT NULL COMMENT '运单ID',
+                                         `order_no` VARCHAR ( 64 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '运单号',
+
+                                         `discrepancy_type` VARCHAR ( 10 ) DEFAULT NULL COMMENT '差错类型：01-重量差错，02-费用差错，03-财务差错',
+
+                                         `before_data` TEXT COMMENT '修改前数据快照',
+                                         `after_data` TEXT COMMENT '修改后数据',
+                                         `change_fields` TEXT COMMENT '需要修改的字段及新值（JSON格式）',
+
+    -- 描述信息
+                                         `description` TEXT COMMENT '详细问题描述',
+
+    -- 申请信息
+                                         `apply_by` BIGINT NOT NULL COMMENT '申请人ID',
+                                         `apply_name` VARCHAR ( 100 ) COMMENT '申请人姓名',
+    --   `apply_time` DATETIME NOT NULL COMMENT '申请时间',
+                                         `apply_reason` TEXT COMMENT '申请原因/理由',
+    --   `apply_data_before` JSON COMMENT '申请前数据快照',
+--   `apply_data_after` JSON COMMENT '申请后数据',
+                                         `apply_remark` TEXT COMMENT '申请备注',
+
+    -- 审核信息
+                                         `audit_status` TINYINT DEFAULT 0 COMMENT '审核状态：0-待审核，1-审核通过，2-审核驳回',
+                                         `audit_time` DATETIME DEFAULT NULL COMMENT '审核时间',
+                                         `audit_by` BIGINT DEFAULT NULL COMMENT '审核人ID',
+                                         `audit_name` VARCHAR ( 100 ) DEFAULT NULL COMMENT '审核人姓名',
+                                         `audit_opinion` TEXT COMMENT '审核意见（如驳回原因）',
+
+    -- 租户隔离（若系统支持多租户）
+                                         `tenant_id` BIGINT DEFAULT NULL COMMENT '租户ID',
+                                         `is_deleted` TINYINT DEFAULT 0 COMMENT '是否删除：0-否, 1-是',
+                                         `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建/申请时间',
+                                         `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+                                         PRIMARY KEY ( `id` ) USING BTREE,
+    -- 核心业务查询索引
+
+                                         UNIQUE KEY `uk_discrepancy_no` (`discrepancy_no`),
+                                         KEY `idx_order_id` ( `order_id` ) USING BTREE,
+                                         KEY `idx_order_no` (`order_no`) USING BTREE,
+
+
+                                         KEY `idx_audit_status` (`audit_status`),
+                                         KEY `idx_is_deleted` (`is_deleted`),
+                                         KEY `idx_create_time` (`create_time`) USING BTREE
+) ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '运单差错表';
+
+

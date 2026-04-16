@@ -24,7 +24,7 @@
         <!-- Common dependencies -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-framework-common</artifactId> <!-- 项目通用工具和基础类 -->
+            <artifactId>realm-common</artifactId> <!-- 项目通用工具和基础类 -->
         </dependency>
 
         <!-- RPC remote call dependencies -->

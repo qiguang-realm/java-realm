@@ -67,8 +67,8 @@ public class SystemServerApplicationTest {
     public void readTxtToSqlTest() throws IOException {
 
         // 文件路径配置
-        String inputFilePath = "D:\\qiguang\\workspace\\git_workspace\\java-realm\\realm-module-system\\realm-module-system-biz\\src\\main\\resources\\static\\input.txt";
-        String outputFilePath = "D:\\qiguang\\workspace\\git_workspace\\java-realm\\realm-module-system\\realm-module-system-biz\\src\\main\\resources\\static\\output.txt";
+        String inputFilePath = "D:\\qiguang\\workspace\\git_workspace\\java-realm\\realm-module-system\\realm-module-system-server\\src\\main\\resources\\static\\input.txt";
+        String outputFilePath = "D:\\qiguang\\workspace\\git_workspace\\java-realm\\realm-module-system\\realm-module-system-server\\src\\main\\resources\\static\\output.txt";
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
              BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilePath))) {

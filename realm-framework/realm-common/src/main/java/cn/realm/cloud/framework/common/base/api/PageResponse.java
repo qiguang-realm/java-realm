@@ -1,4 +1,4 @@
-package cn.realm.cloud.module.system.base.api;
+package cn.realm.cloud.framework.common.base.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,17 +43,17 @@ public class PageResponse<T> implements Serializable {
     /**
      * 从 MyBatis Plus Page 对象构建分页响应
      */
-    public static <T> PageResponse<T> from(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
-        PageResponse<T> response = new PageResponse<>();
-        response.setRecords(page.getRecords());
-        response.setTotal(page.getTotal());
-        response.setSize(page.getSize());
-        response.setCurrent(page.getCurrent());
-        response.setPages(calculateTotalPages(page.getTotal(), page.getSize()));
-        response.setHasPrevious(page.getCurrent() > 1);
-        response.setHasNext(page.getCurrent() < response.getPages());
-        return response;
-    }
+//    public static <T> PageResponse<T> from(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
+//        PageResponse<T> response = new PageResponse<>();
+//        response.setRecords(page.getRecords());
+//        response.setTotal(page.getTotal());
+//        response.setSize(page.getSize());
+//        response.setCurrent(page.getCurrent());
+//        response.setPages(calculateTotalPages(page.getTotal(), page.getSize()));
+//        response.setHasPrevious(page.getCurrent() > 1);
+//        response.setHasNext(page.getCurrent() < response.getPages());
+//        return response;
+//    }
 
     /**
      * 计算总页数

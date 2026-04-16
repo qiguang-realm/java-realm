@@ -18,7 +18,7 @@
 
     <!-- Modules included in this project -->
     <modules>
-        <module>realm-framework-common</module>
+        <module>realm-common</module>
         <module>realm-spring-boot-starter-mybatis</module>
         <module>realm-spring-boot-starter-redis</module>
         <module>realm-spring-boot-starter-web</module>

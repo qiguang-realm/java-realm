@@ -29,7 +29,7 @@
         <!-- Common library -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-framework-common</artifactId>
+            <artifactId>realm-common</artifactId>
         </dependency>
 
         <!-- Spring core starter -->

@@ -1,4 +1,4 @@
-package cn.realm.cloud.module.system.base.api;
+package cn.realm.cloud.framework.common.base.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

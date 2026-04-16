@@ -25,6 +25,7 @@
         <module>realm-gateway</module>
         <module>realm-framework</module>
         <module>realm-module-system</module>
+        <module>realm-server</module>
     </modules>
 
     <!-- ========== 全局属性配置 ========== -->

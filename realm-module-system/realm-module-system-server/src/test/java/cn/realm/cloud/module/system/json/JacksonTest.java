@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test cases for Jackson
  */
-public class JacksonTest {
+class JacksonTest {
 
     private static final String JSON_STRING =
             "{\"BackInfo\":{\"PlateNo\":\"辽CD8828\",\"FileNo\":\"210321030861\",\"AllowNum\":\"2人\"," +
