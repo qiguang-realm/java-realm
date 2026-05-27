@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -77,11 +79,21 @@ public class FileReaderUtil {
 
     // ------------------ Excel 同步读取（FastExcel） ------------------
     private static List<String> readExcelAll(InputStream is) {
-        List<List<String>> rows = FastExcel.read(is)
+        // 同步读取，返回 List<Map<Integer, String>>
+        List<Map<Integer, String>> rows = FastExcel.read(is)
                 .sheet()
                 .doReadSync();
+        // 将每行 Map 按列索引顺序转换为字符串，用制表符连接各列
         return rows.stream()
-                .map(row -> row.stream().map(cell -> cell == null ? "" : cell).collect(Collectors.joining("\t")))
+                .map(rowMap -> {
+                    // 获取最大列索引
+                    int maxCol = rowMap.keySet().stream().max(Integer::compareTo).orElse(-1);
+                    List<String> cells = new ArrayList<>();
+                    for (int i = 0; i <= maxCol; i++) {
+                        cells.add(rowMap.getOrDefault(i, ""));
+                    }
+                    return String.join("\t", cells);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -162,12 +174,15 @@ public class FileReaderUtil {
     // ------------------ Excel 流式处理（FastExcel 监听器） ------------------
     private static void processExcelLines(InputStream is, Consumer<String> consumer) {
         FastExcel.read(is)
-                .registerReadListener(new AnalysisEventListener<List<String>>() {
+                .registerReadListener(new AnalysisEventListener<Map<Integer, String>>() {
                     @Override
-                    public void invoke(List<String> row, AnalysisContext context) {
-                        String line = row.stream()
-                                .map(cell -> cell == null ? "" : cell)
-                                .collect(Collectors.joining("\t"));
+                    public void invoke(Map<Integer, String> rowMap, AnalysisContext context) {
+                        // 将 Map 按列索引排序并转为 List<String>
+                        List<String> row = rowMap.entrySet().stream()
+                                .sorted(Map.Entry.comparingByKey())
+                                .map(entry -> entry.getValue() == null ? "" : entry.getValue())
+                                .collect(Collectors.toList());
+                        String line = String.join("\t", row);
                         consumer.accept(line);
                     }
 
@@ -260,12 +275,17 @@ public class FileReaderUtil {
         String convert(List<String> cells);
     }
 
+    // ------------------ 自定义转换器 ------------------
     public static void processExcelWithConverter(MultipartFile file, RowConverter converter, Consumer<String> consumer) {
         try (InputStream is = file.getInputStream()) {
             FastExcel.read(is)
-                    .registerReadListener(new AnalysisEventListener<List<String>>() {
+                    .registerReadListener(new AnalysisEventListener<Map<Integer, String>>() {
                         @Override
-                        public void invoke(List<String> row, AnalysisContext context) {
+                        public void invoke(Map<Integer, String> rowMap, AnalysisContext context) {
+                            List<String> row = rowMap.entrySet().stream()
+                                    .sorted(Map.Entry.comparingByKey())
+                                    .map(entry -> entry.getValue() == null ? "" : entry.getValue())
+                                    .collect(Collectors.toList());
                             String line = converter.convert(row);
                             if (line != null && !line.isEmpty()) {
                                 consumer.accept(line);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,16 +29,39 @@ public class FileReaderUtilTest {
     private static final Logger log = LoggerFactory.getLogger(FileReaderUtilTest.class);
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    // ==================== 准备测试数据文件（从 resources 读取） ====================
+    // ==================== 准备测试数据文件（从 main/resources 读取） ====================
 
-    private static MultipartFile getTestFile(String resourcePath, String filename, String contentType) throws IOException {
-        try (InputStream is = FileReaderUtilTest.class.getResourceAsStream(resourcePath)) {
+    /**
+     * 从 classpath（包括 main/resources）加载文件
+     */
+    private static MultipartFile getTestFile(String classpathLocation, String filename, String contentType) throws IOException {
+        // classpathLocation 示例: "/static/test.txt"
+        try (InputStream is = FileReaderUtilTest.class.getResourceAsStream(classpathLocation)) {
             if (is == null) {
-                throw new IllegalArgumentException("Resource not found: " + resourcePath);
+                // 尝试使用 ClassPathResource 作为备选
+                ClassPathResource resource = new ClassPathResource(classpathLocation);
+                if (!resource.exists()) {
+                    throw new IllegalArgumentException("Resource not found: " + classpathLocation);
+                }
+                byte[] content = resource.getInputStream().readAllBytes();
+                return new MockMultipartFile(filename, filename, contentType, content);
+            } else {
+                byte[] content = is.readAllBytes();
+                return new MockMultipartFile(filename, filename, contentType, content);
             }
-            byte[] content = is.readAllBytes();
-            return new MockMultipartFile(filename, filename, contentType, content);
         }
+    }
+
+    /**
+     * 从文件系统绝对路径加载
+     */
+    private static MultipartFile getFileSystemFile(String absolutePath, String filename, String contentType) throws IOException {
+        Path path = Paths.get(absolutePath);
+        if (!Files.exists(path)) {
+            throw new IllegalArgumentException("File not found: " + absolutePath);
+        }
+        byte[] content = Files.readAllBytes(path);
+        return new MockMultipartFile(filename, filename, contentType, content);
     }
 
     // ==================== TXT 文件测试 ====================
@@ -45,7 +69,7 @@ public class FileReaderUtilTest {
     @Test
     public void testReadTxtFile() throws IOException {
         log.info("=== 测试读取 TXT 文件 ===");
-        MultipartFile txtFile = getTestFile("/test.txt", "test.txt", "text/plain");
+        MultipartFile txtFile = getTestFile("/static/test.txt", "test.txt", "text/plain");
 
         // 1. 同步全量读取
         List<String> lines = FileReaderUtil.readAllLines(txtFile, FileReaderUtil.FileType.TXT);
@@ -63,7 +87,7 @@ public class FileReaderUtilTest {
     @Test
     public void testReadCsvFile() throws IOException {
         log.info("=== 测试读取 CSV 文件 ===");
-        MultipartFile csvFile = getTestFile("/test.csv", "test.csv", "text/csv");
+        MultipartFile csvFile = getTestFile("/static/test.csv", "test.csv", "text/csv");
 
         // 同步读取（注意：每行各列会用制表符连接）
         List<String> lines = FileReaderUtil.readAllLines(csvFile, FileReaderUtil.FileType.CSV);
@@ -78,7 +102,7 @@ public class FileReaderUtilTest {
     @Test
     public void testReadExcelFile() throws IOException {
         log.info("=== 测试读取 Excel 文件 ===");
-        MultipartFile excelFile = getTestFile("/test.xlsx", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        MultipartFile excelFile = getTestFile("/static/test.xlsx", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
         // 同步读取（每一行各列按制表符拼接）
         List<String> excelRows = FileReaderUtil.readAllLines(excelFile, FileReaderUtil.FileType.EXCEL);
@@ -99,7 +123,7 @@ public class FileReaderUtilTest {
     public void testReadJsonFile() throws IOException {
         log.info("=== 测试读取 JSON 文件 ===");
         // 假设 JSON 是一个数组 [{"name":"Alice"}, {"name":"Bob"}]
-        MultipartFile jsonFile = getTestFile("/test.json", "test.json", "application/json");
+        MultipartFile jsonFile = getTestFile("/static/data.json", "data.json", "application/json");
 
         // 同步读取：返回 List<String>，每个元素是一个 JSON 对象字符串
         List<String> lines = FileReaderUtil.readAllLines(jsonFile, FileReaderUtil.FileType.JSON);
@@ -122,7 +146,7 @@ public class FileReaderUtilTest {
     @Test
     public void testAutoDetectType() throws IOException {
         log.info("=== 测试自动识别文件类型 ===");
-        MultipartFile txtFile = getTestFile("/test.txt", "test.txt", "text/plain");
+        MultipartFile txtFile = getTestFile("/static/test.txt", "test.txt", "text/plain");
         List<String> lines = FileReaderUtil.readAllLines(txtFile, FileReaderUtil.FileType.AUTO);
         log.info("自动识别为 TXT，读取行数: {}", lines.size());
     }
@@ -147,7 +171,7 @@ public class FileReaderUtilTest {
     @Test
     public void testPerformance() throws IOException {
         log.info("=== 性能测试（同步读取） ===");
-        MultipartFile txtFile = getTestFile("/test.txt", "test.txt", "text/plain");
+        MultipartFile txtFile = getTestFile("/static/test.txt", "test.txt", "text/plain");
         int iterations = 5;
         long total = 0;
         for (int i = 0; i < iterations; i++) {
@@ -169,7 +193,7 @@ public class FileReaderUtilTest {
     @Test
     public void generateSqlStatementsTest() throws IOException {
         log.info("=== 从 JSON 生成 SQL 语句 ===");
-        MultipartFile jsonFile = getTestFile("/data.json", "data.json", "application/json");
+        MultipartFile jsonFile = getTestFile("/static/data.json", "data.json", "application/json");
         List<String> jsonLines = FileReaderUtil.readAllLines(jsonFile, FileReaderUtil.FileType.JSON);
         // 注意：jsonLines 中每个元素是一个 JSON 对象字符串，因为原 JSON 应为数组
         List<String> sqlStatements = new ArrayList<>();
@@ -193,7 +217,9 @@ public class FileReaderUtilTest {
         }
 
         // 输出到文件
-        Path outputPath = Paths.get(System.getProperty("user.dir"), "target", "generated_sql.txt");
+//        Path outputPath = Paths.get(System.getProperty("user.dir"), "target", "generated_sql.txt");
+        // 输出路径：输出到 main/resources/static 目录下
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "static", "output.txt");
         Files.createDirectories(outputPath.getParent());
         Files.write(outputPath, sqlStatements, StandardCharsets.UTF_8);
         log.info("成功生成 {} 条 SQL 语句，输出文件: {}", sqlStatements.size(), outputPath.toAbsolutePath());
