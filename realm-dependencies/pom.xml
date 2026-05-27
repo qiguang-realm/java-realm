@@ -96,6 +96,9 @@
 <!--        <easyexcel.version>4.0.3</easyexcel.version>-->
         <fastexcel.version>1.3.0</fastexcel.version>
 
+        <!--Univocity 的开源解析器使用一致的 API 处理不同的文本格式。-->
+        <univocity-parsers.version>2.9.1</univocity-parsers.version>
+
         <!-- Velocity 模板引擎版本 -->
         <velocity.version>2.4.1</velocity.version>
         <!-- 阿里 Fastjson JSON 库版本 -->
@@ -636,6 +639,15 @@
                 <groupId>cn.idev.excel</groupId>
                 <artifactId>fastexcel</artifactId>
                 <version>${fastexcel.version}</version>
+            </dependency>
+
+            <!--单义解析器-->
+            <!--Univocity 的开源解析器使用一致的 API 处理不同的文本格式。-->
+            <!-- Source: https://mvnrepository.com/artifact/com.univocity/univocity-parsers -->
+            <dependency>
+                <groupId>com.univocity</groupId>
+                <artifactId>univocity-parsers</artifactId>
+                <version>${univocity-parsers.version}</version>
             </dependency>
 
             <!-- Commons IO 依赖，提供 I/O 操作的工具类 -->

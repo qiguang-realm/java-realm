@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * 构建服务统一的响应体类
  *
- * @author qig
+ * @author QI Guang
  */
 @Data
 @NoArgsConstructor

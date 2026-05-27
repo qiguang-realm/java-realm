@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 与 MyBatis Plus 的兼容性，又提供了清晰的分页响应结构
  *
- * @author qig
+ * @author QI Guang
  */
 @Data
 @NoArgsConstructor

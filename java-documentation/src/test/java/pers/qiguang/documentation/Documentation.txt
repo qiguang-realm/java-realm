@@ -518,6 +518,8 @@ https://copilot.tencent.com/setup/vscode/
 ========================================================================================================================
 Java 高效安全地读取多种格式文件（包括 .xlsx、.xls、.txt、.json、.csv），并将其内容转换为字符串或字符串列表。
 ========================================================================================================================
+全球业界最通用、最标准的
+
 各大厂：阿里、腾讯、字节跳动、Google、京东
 ========================================================================================================================
 各大厂文件操作工具类整合：梳理阿里、腾讯、字节跳动、Google、京东等企业的文件处理实现，
@@ -884,6 +886,28 @@ EasyExcel 是通过 @ExcelProperty 注解中的 value 值与 Excel 表头进行�
 @ExcelProperty(index = 0)  // 第一列，无论表头叫什么
 private String goodsNo;
 ========================================================================================================================
+
+那么在 Java 后端开发中，最正确、最高效、最安全的选择就是：采用Spring框架，并使用构造函数注入。
+
+如果不使用 Lombok，最推荐的做法是：显式编写构造函数，并将依赖字段声明为 final。这是最安全、最清晰、最符合 Spring 官方建议的方式。
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+    private final EmailService emailService;
+
+    // ① 手动添加构造器
+    // ② 在Spring 4.3+中，对于只有一个构造器的类，@Autowired 可省略
+    public UserService(UserRepository userRepository, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.emailService = emailService;
+    }
+
+    // 业务方法...
+}
+
 在 Java 中使用构造器注入 Service 有几种方式
 
 Spring 的依赖注入
@@ -1142,7 +1166,11 @@ https://intellij-support.jetbrains.com/hc/en-us/community/posts/14718197525906-i
 ========================================================================================================================
 Git中merge与rebase的区别
 ========================================================================================================================
+标准写法: QI Guang
 
+这是目前在国际学术界（如论文署名）和商业注册中，接受度最高、最严谨的拼写标准。
+
+QI Guang （姓全部大写，名首字母大写）—— 最推荐，符合护照及国际标准
 ========================================================================================================================
 
 [
@@ -1563,21 +1591,219 @@ SQL命名
 
 对于“记录”这类历史快照型数据，冗余名称是标准且正确的做法。 这能保证数据的历史准确性和稳定性。
 ========================================================================================================================
+
+在 MyBatis 的 XML 映射文件中处理日期时间范围查询
+
+<if test="startTime != null">
+    <![CDATA[ AND create_time >= #{startTime} ]]>
+</if>
+<if test="endTime != null">
+    <![CDATA[ AND create_time <= #{endTime} ]]>
+</if>
+
 ========================================================================================================================
+
+Vue Router 主要通过三种模式来管理 URL 和应用状态：Hash 模式、HTML5 (History) 模式和Memory 模式。
+
+
+📌 Vue Router 版本速查
+如果你是从 Vue Router 3 升级，对应关系如下：
+
+Vue Router 3 (Vue 2)	Vue Router 4 (Vue 3)
+mode: "hash"	history: createWebHashHistory()
+换句话说，createWebHashHistory() 就是 Vue Router 4 中替代旧版 mode: "hash" 的方法。
+
+
+💡 简单决策
+不需要 SEO、不想折腾服务器配置 → 用 Hash 模式
+
+需要 SEO、URL 要干净、可以配置服务器 → 用 HTML5 (History) 模式
+
 ========================================================================================================================
+DLPanda
+
+https://dlpanda.com/
 ========================================================================================================================
+
+Spring Boot、Spring Cloud、Spring Security典型的微服务登录流程
+
+在标准的 Spring Boot + Spring Cloud + Spring Security 微服务架构中，双 Token 是安全与易用性平衡的最佳实践。
+除非你有非常明确的简化理由，否则请直接采用双 Token 设计。
+
+
+在 Spring 微服务架构中如何实现双 Token？
+
+
+描述在Spring Boot 单体应用 + 前后端分离应用中使用Spring Security的登录流程。
+
+
+小程序登录的核心机制与前后端分离应用类似，
+关键区别在于身份验证方式：小程序通过微信官方提供的临时 code 换取用户的唯一身份标识 openid，后端据此颁发自己的会话令牌（如 JWT）。
 ========================================================================================================================
+
+茶圈公认的“垃圾茶”
+
+
+👑 世界顶级“天价茶”图谱
+
 ========================================================================================================================
+
+“JWT as a tamper-proof session ID + Redis as session store + exp as safety net”。
+
 ========================================================================================================================
+Four major news agencies in the world
+世界四大通讯社
 ========================================================================================================================
+
+想了解在国际化标准和各大厂：阿里、腾讯、字节跳动、Google、京东中，关于计费的相关术语，应该如何规范命名，相关术语的标准用法
+
+
+术语（推荐）	业务回答的问题	典型取值示例
+计价单位 (Pricing Unit / Unit of Measure)	按什么度量标准来计量数量？	ton（吨）、vehicle（车）、cubic_meter（立方米）、piece（根）
+计价模式 (Pricing Model)	单价和数量之间是什么计算逻辑？	固定单价 / 阶梯计价 / 按量计费
+结算方式 / 结算依据 (Settlement Basis)	结算时按照哪个实际数据来算？	按装货数量 / 按收货数量 / 按二者较小者
+结算模式 (Settlement Mode / Means of Settlement)	钱怎么支付？谁付给谁？	电汇 / 对账抵扣 / 统一结算中心处理
+
+
+
+一、「计价单位」：最底层的尺子  pricing_unit
+在联合国/世界海关组织标准（UN/CEFACT Recommendation No. 20）中，计价单位有标准的三字母代码（TNE=吨, MTQ=立方米, PCE=件等），直接对应你业务场景中的"按吨""按车""按方""按根"。ISO 21041 也明确了同样的要求。
+
+映射到你的业务：
+
+按吨结算 → Pricing_Unit = 'TON'
+
+按车结算 → Pricing_Unit = 'VEHICLE'
+
+按方结算 → Pricing_Unit = 'CUBIC_METER'
+
+按根结算 → Pricing_Unit = 'PIECE'
 ========================================================================================================================
+
+被外界誉为“微信之父”的张小龙及其所带领的团队，正是微信的缔造者。
 ========================================================================================================================
+
+多租户SaaS版（服务多家企业）
+
+tenant_id  租户ID
+
 ========================================================================================================================
+
+// 1. 处理日期范围（默认近7天）
+String startDate = StringUtils.isNotBlank(request.getStartTime())
+        ? DateUtil.formatDateTime(DateUtil.beginOfDay(DateUtil.parseDateTime(request.getStartTime())))
+        : DateUtil.formatDateTime(DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -7)));
+
+String endDate = StringUtils.isNotBlank(request.getEndTime())
+        ? DateUtil.formatDateTime(DateUtil.beginOfDay(DateUtil.offsetDay(DateUtil.parseDateTime(request.getEndTime()), 1)))
+        : DateUtil.formatDateTime(DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), 1)));
+
 ========================================================================================================================
+
+package me.zhengjie.enums;
+
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
+
+@Getter
+public enum PricingUnitEnum {
+
+    TON(1, "吨"),
+    VEHICLE(2, "车"),
+    CUBIC_METER(3, "立方米"),
+    PIECE(4, "根");
+
+    @EnumValue          // MyBatis-Plus 标记数据库存的值
+    @JsonValue          // Jackson 序列化时输出该值
+    private final Integer value;
+    private final String name;
+
+    PricingUnitEnum(Integer value, String name) {
+        this.value = value;
+        this.name = name;
+    }
+
+    // 反序列化：将数据库的 Integer 转为枚举
+    @JsonCreator
+    public static PricingUnitEnum fromValue(Integer value) {
+        if (value == null) return null;
+        for (PricingUnitEnum unit : values()) {
+            if (unit.value.equals(value)) {
+                return unit;
+            }
+        }
+        throw new IllegalArgumentException("Unknown pricing unit value: " + value);
+    }
+}
+
+
+@EnumValue   // MyBatis-Plus 用这个字段的值作为数据库存储值
+private final Integer value;
+
+@JsonValue   // Jackson 序列化时也输出这个值
+private final Integer value;
+
+MyBatis-Plus 看到 @EnumValue 在 value 字段上，就会调用 getValue() 取 Integer 值写入数据库。
+
+
+反过来：从数据库读取
+当 MyBatis-Plus 查询数据时，读到 pricing_unit = 2，会自动调用 PricingUnitEnum.fromValue(2) 将数字转换成 PricingUnitEnum.VEHICLE 对象，赋给实体类的 pricingUnit 属性。
+
+所以你看到的实体类里仍然是枚举对象，而不是数字。
+
 ========================================================================================================================
+金额单位
+
+数据库存储：建议以 bigint 类型存储辅币单位金额（分），如 amount_in_cents，避免浮点数精度问题，符合腾讯和字节跳动的实践。
+舍入模式：推荐使用 RoundingMode.HALF_EVEN（银行家舍入法）作为默认舍入规则，Hutool 和 Google 均采用此模式。
+
 ========================================================================================================================
+被社区视为“神级”的 Java 代码示例
 ========================================================================================================================
+1. 消除冗余的“搬运代码”
+在没有工具类时，将源对象属性拷贝到目标对象需要写大量的：
+
+target.setName(source.getName());
+target.setAge(source.getAge());
+target.setAddress(source.getAddress());
+// ... 20个字段
+
+
+手写 setter 的性能是最优的
+
+
+如果你个人或团队更看重：
+
+· 调试的直观性
+
+· 性能的极致
+
+· 编译期的类型安全
+
+· 不想引入第三方工具的黑盒行为
+
+那就坚持手动写 setter。这是完全正规、可靠、高效的做法。
+
+如果你更看重：
+
+· 代码简洁、行数少
+
+· 字段很多（超过 20 个）
+
+· 对象转换很频繁，且字段基本同名
+
+· 你信任工具的行为，并愿意用单元测试来保证正确性
+
+那可以考虑 BeanUtil.copyProperties 或 MapStruct。
+
+最推荐的 BeanUtil.copyProperties 版本是 Spring 框架（org.springframework.beans.BeanUtils）自带的那个。
 ========================================================================================================================
+
+在 Java 中，创建对象 最高效且最安全 的方式是直接使用 new 关键字调用构造函数。
+
+User user = new User("张三", 25);
 ========================================================================================================================
 ========================================================================================================================
 ========================================================================================================================
@@ -1649,7 +1875,9 @@ https://qveris.ai/
 
 
 -----------------------------------------------New Requirement-----------------------------------------------Start------
+AI大模型聚合平台
 
+https://lsz.ai6700.com/
 -----------------------------------------------New Requirement------------------------------------------------End-------
 
 
@@ -2151,3 +2379,5 @@ Git中merge与rebase的区别
 ========================================================================================================================
 ========================================================================================================================
 ========================================================================================================================
+
+

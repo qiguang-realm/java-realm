@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 分页请求参数
  *
- * @author Qi
+ * @author QI Guang
  */
 @Data
 public class PageRequest implements Serializable {

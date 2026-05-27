@@ -143,6 +143,16 @@
             <scope>provided</scope> <!-- 日志门面接口 -->
         </dependency>
 
+        <!-- ==================== 文件解析 ==================== -->
+        <dependency>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.univocity</groupId>
+            <artifactId>univocity-parsers</artifactId>
+        </dependency>
+
         <!-- ==================== 测试相关 ==================== -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

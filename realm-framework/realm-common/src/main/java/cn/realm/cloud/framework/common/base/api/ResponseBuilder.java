@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * 将 ApiResponse<T> 与 Spring 的 ResponseEntity<T> 结合可以充分利用两者的优势：ApiResponse 提供统一的响应格式，ResponseEntity 提供更灵活的 HTTP 响应控制。
  *
- * @author qig
+ * @author QI Guang
  */
 public class ResponseBuilder {
 
