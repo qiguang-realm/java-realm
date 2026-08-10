@@ -44,7 +44,7 @@ category_id	int	主键
 category_name	varchar(50)	类目名称（如"手机"）
 parent_id	int	父类目ID（0表示一级类目）
 level	tinyint	层级（1-一级，2-二级，3-三级）
-is_leaf	tinyint(1)	是否叶子类目（0-否，1-是）
+is_leaf	TINYINT	是否叶子类目（0-否，1-是）
 sort_order	int	排序权重
 关联关系：
 
@@ -61,7 +61,7 @@ attr_id	int	主键
 attr_name	varchar(50)	属性名称（如"颜色"、"内存"）
 category_id	int	所属类目ID
 attr_type	tinyint	属性类型（1-关键属性，2-销售属性，3-扩展属性）
-is_required	tinyint(1)	是否必填
+is_required	TINYINT	是否必填
 input_type	tinyint	输入方式（1-单选，2-多选，3-手工输入）
 关联关系：
 
@@ -81,7 +81,7 @@ price	decimal(10,2)	销售价（可能单独拆分为价格表）
 stock	int	库存（或关联库存系统）
 spec_values	json	销售属性组合（如{"颜色":"黑","内存":"256GB"}）
 weight	decimal(8,2)	商品重量（用于运费计算）
-is_default	tinyint(1)	是否默认SKU
+is_default	TINYINT	是否默认SKU
 关联关系：
 
 通过spu_id关联SPU表

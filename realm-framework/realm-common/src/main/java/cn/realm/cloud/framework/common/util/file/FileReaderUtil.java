@@ -22,12 +22,13 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * 统一文件读取工具类（支持 Excel、CSV、TXT、JSON）
+ * 专注内容读取（支持 Excel、CSV、TXT、JSON）
  * <p>推荐使用流式处理 {@link #processLines} 应对大文件，避免 OOM。
  * 小文件可直接调用 {@link #readAllLines} 获取完整字符串列表。
  *
  * @author QI Guang
- * @version 1.0
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Slf4j
 public class FileReaderUtil {

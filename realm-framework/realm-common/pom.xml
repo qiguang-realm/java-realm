@@ -153,6 +153,12 @@
             <artifactId>univocity-parsers</artifactId>
         </dependency>
 
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+        </dependency>
+
         <!-- ==================== 测试相关 ==================== -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -2800,7 +2800,7 @@ CREATE TABLE `sys_invoice`
     `receiver_postcode` varchar(10)  NOT NULL COMMENT '邮政编码',
 
     -- 状态控制
-    `is_default`        tinyint(1) NOT NULL COMMENT '是否默认开票信息：01-是 02-否',
+    `is_default`        TINYINT NOT NULL COMMENT '是否默认开票信息：01-是 02-否',
     `status`            tinyint(4) NOT NULL COMMENT '数据状态：01-启用 02-禁用 03-作废 04-已删除',
     `audit_status`      tinyint(4) NOT NULL COMMENT '审核状态：01-待审核 02-审核通过 03-审核驳回',
 
@@ -3285,7 +3285,7 @@ CREATE TABLE `sys_operation_log`
     `operator_ext_info`    text          DEFAULT NULL COMMENT '操作人扩展信息(JSON格式字符串)',
 
     -- 操作状态
-    `status`               tinyint(1) DEFAULT '1' COMMENT '操作状态(0:失败 1:成功 2:部分成功)',
+    `status`               TINYINT DEFAULT '1' COMMENT '操作状态(0:失败 1:成功 2:部分成功)',
     `error_code`           varchar(50)   DEFAULT NULL COMMENT '错误码',
     `error_msg`            text          DEFAULT NULL COMMENT '错误信息',
     `error_stack`          text          DEFAULT NULL COMMENT '错误堆栈',
@@ -3308,8 +3308,8 @@ CREATE TABLE `sys_operation_log`
 
     -- 管理字段
     `cost_category`        varchar(20)   DEFAULT NULL COMMENT '成本分类(高频/低频/重要业务)',
-    `archived`             tinyint(1) DEFAULT '0' COMMENT '是否已归档(0:未归档 1:已归档)',
-    `storage_level`        tinyint(1) DEFAULT '1' COMMENT '存储级别(1:热数据 2:温数据 3:冷数据)',
+    `archived`             TINYINT DEFAULT '0' COMMENT '是否已归档(0:未归档 1:已归档)',
+    `storage_level`        TINYINT DEFAULT '1' COMMENT '存储级别(1:热数据 2:温数据 3:冷数据)',
     `data_source`          varchar(50)   DEFAULT 'SYSTEM' COMMENT '数据来源(SYSTEM/IMPORT/API等)',
     `tags`                 text          DEFAULT NULL COMMENT '标签列表(JSON格式字符串)',
 
@@ -3399,7 +3399,7 @@ CREATE TABLE `vehicle_operation_log`
 -- 变更原因：将启用禁用状态从货单业务状态中分离，便于独立管理货单的可用性
 
 ALTER TABLE sys_goods
-    ADD COLUMN is_active TINYINT(1) DEFAULT 1 COMMENT '启用状态: 1-启用, 0-禁用',
+    ADD COLUMN is_active TINYINT DEFAULT 1 COMMENT '启用状态: 1-启用, 0-禁用',
 ADD COLUMN disable_reason VARCHAR(255) COMMENT '禁用原因',
 ADD INDEX idx_is_active (is_active);
 
@@ -3579,8 +3579,8 @@ CREATE TABLE `sys_shipper_statement_rule`
     `order_interval_days`           INT COMMENT '货主若间隔多少天未产生新运单，则自动生成对账单',
 
 
-    -- 逻辑删除建议使用 TINYINT(1) 或 DATETIME 软删除（记录删除时间）。用 VARCHAR 且默认值 '0' 会浪费空间且查询效率低。
-    `is_deleted`                    TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除 0-否 1-是',
+    -- 逻辑删除建议使用 TINYINT 或 DATETIME 软删除（记录删除时间）。用 VARCHAR 且默认值 '0' 会浪费空间且查询效率低。
+    `is_deleted`                    TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除 0-否 1-是',
     `create_by`                     BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name`                VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`                   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -3654,7 +3654,7 @@ CREATE TABLE `sys_fleet_statement_rule`
     `except_shipper_names`          TEXT                  DEFAULT NULL COMMENT '部分货主主体名称列表，JSON数组格式',
 
 
-    `is_deleted`                    TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除 0-否 1-是',
+    `is_deleted`                    TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除 0-否 1-是',
     `create_by`                     BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name`                VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`                   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -3792,7 +3792,7 @@ CREATE TABLE `sys_release_version`
     `platform`       varchar(30)  NOT NULL DEFAULT 'web' COMMENT '发布平台：web（PC网页）、ios（iOS App）、android（Android App）、harmony（鸿蒙）、miniprogram_wechat（微信小程序）、miniprogram_alipay（支付宝小程序）、desktop_win（Windows桌面）、desktop_mac（Mac桌面）、server（后端服务）',
     `release_date`   datetime     NOT NULL COMMENT '发布日期时间（UTC）',
     `release_type`   varchar(20)  NOT NULL COMMENT '发布类型：initial（初始版）、major（主版本）、minor（次版本）、patch（补丁）、hotfix（热修复）、beta（测试版）',
-    `is_mandatory`   TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为强制更新版本，1: 强制更新, 0: 非强制（可忽略或建议更新）',
+    `is_mandatory`   TINYINT NOT NULL DEFAULT 0 COMMENT '是否为强制更新版本，1: 强制更新, 0: 非强制（可忽略或建议更新）',
     `download_url`   VARCHAR(500)          DEFAULT NULL COMMENT '新版本的下载地址，可为空（例如不需要下载的场景）',
     `description`    VARCHAR(200) NOT NULL COMMENT '版本描述，简要说明本次更新的内容',
     `release_notes`  TEXT COMMENT '更详细的版本更新日志或发布说明，可包含变更点、影响范围、相关 Issue 链接等',
@@ -3876,8 +3876,8 @@ CREATE TABLE party
     auth_valid_from            DATETIME(3) COMMENT '授权有效期开始',
     auth_valid_to              DATETIME(3) COMMENT '授权有效期截止',
 
-    `sign_active`              TINYINT(1) NOT NULL DEFAULT 1 COMMENT '签署功能激活状态：0-停用/关闭，1-启用/激活'
-        `sign_verify_required` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '签署时短信验证：0-不需要，1-每次需短信验证'
+    `sign_active`              TINYINT NOT NULL DEFAULT 1 COMMENT '签署功能激活状态：0-停用/关闭，1-启用/激活'
+        `sign_verify_required` TINYINT NOT NULL DEFAULT 0 COMMENT '签署时短信验证：0-不需要，1-每次需短信验证'
 
         -- 物流行业资质
         road_transport_license VARCHAR (50) COMMENT '道路运输经营许可证号',
@@ -3890,7 +3890,7 @@ CREATE TABLE party
 
     -- 企业级审计与版本控制（硬性规范）
     `version`                  INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`               TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`               TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`                BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name`           VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`              DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -3907,112 +3907,136 @@ CREATE TABLE party
     KEY                        idx_esign_account (esign_account_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='参与方主表（货主/平台/车队）';
 
+-- 客户单位（甲方/货主）
+-- 签约单位（乙方/平台）
 
+-- OA系统管理的是“主体主数据”（企业/个人档案），不承载“合同角色语义”（谁是甲方、谁是乙方）。这两者的分离是合理的架构设计。
+
+-- 固定角色映射（推荐，最适用于物流场景）
+-- 在物流运输合同中，签约双方通常是 “货主/托运方” 和 “承运方（即物流公司）”。
+--
+-- 你们的物流公司主体，在合同业务中通常固定为乙方（承运方/签署方）。
+--
+-- OA中提供的客户主体，固定为甲方（托运方/发起方）。
 -- ----------------------------
 -- Table structure for contract
 -- ----------------------------
 DROP TABLE IF EXISTS `contract`;
 CREATE TABLE contract
 (
-    id                 BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '合同ID',
-    contract_no        VARCHAR(50)  NOT NULL COMMENT '合同编号（全局唯一）',
-    name               VARCHAR(200) NOT NULL COMMENT '合同名称',
+    id                    BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '合同ID',
+    contract_no           VARCHAR(50)  NOT NULL COMMENT '合同编号（全局唯一）',
+    name                  VARCHAR(200) NOT NULL COMMENT '合同名称',
     -- 合同类型与合同形式
-    `contract_type`    TINYINT      NOT NULL DEFAULT 1 COMMENT '合同类型: 1-框架合同；2-主合同；3-子合同；4-补充协议',
-    `contract_format`  TINYINT      NOT NULL DEFAULT 2 COMMENT '合同形式: 1-纸质合同；2-电子合同',
+    `contract_type`       TINYINT      NOT NULL DEFAULT 1 COMMENT '合同类型: 1-框架合同；2-主合同；3-子合同；4-补充协议',
+    `contract_format`     TINYINT      NOT NULL DEFAULT 2 COMMENT '合同形式: 1-纸质合同；2-电子合同',
     -- 签约模式（区分直签/转包）
-    signing_mode       TINYINT      NOT NULL DEFAULT 0 COMMENT '签约模式: 0-转包；1-直签',
+    signing_mode          TINYINT      NOT NULL DEFAULT 0 COMMENT '签约模式: 0-转包；1-直签',
 
     -- 转包子类型（仅当 signing_mode=0 时有值）
-    subcontract_type   TINYINT COMMENT '转包类型: 1-货主↔平台；2-货主↔车队',
+    subcontract_type      TINYINT COMMENT '转包类型: 1-货主↔平台；2-货主↔车队',
 
     -- 合同法律主体（参与方）（甲方/乙方/丙方，由法律合同确定）（关联 party 表）
-    party_a_id         BIGINT       NOT NULL COMMENT '甲方ID（法律合同主体/发包方）',
-    party_a_name       VARCHAR(255) NOT NULL COMMENT '甲方名称（冗余）',
-    party_b_id         BIGINT       NOT NULL COMMENT '乙方ID（法律合同主体/承包方）',
-    party_b_name       VARCHAR(255) NOT NULL COMMENT '乙方名称（冗余）',
-    party_c_id         BIGINT COMMENT '丙方ID（其他法律主体，可选）',
-    party_c_name       VARCHAR(255) COMMENT '丙方名称（冗余，可选）',
+--     party_a_type TINYINT NOT NULL COMMENT '甲方类型: 1-货主, 2-平台, 3-车队',
+--     party_a_id         BIGINT       NOT NULL COMMENT '甲方ID（发包方/托运方）',
+--     party_a_name       VARCHAR(255) NOT NULL COMMENT '甲方名称（冗余）',
+--     party_b_type TINYINT NOT NULL COMMENT '乙方类型: 1-货主, 2-平台, 3-车队',
+--     party_b_id         BIGINT       NOT NULL COMMENT '乙方ID（承包方/承运方）',
+--     party_b_name       VARCHAR(255) NOT NULL COMMENT '乙方名称（冗余）',
+
+    customer_party_type   TINYINT      NOT NULL COMMENT '客户方类型: 1-货主, 2-平台, 3-车队',
+    customer_party_id     BIGINT       NOT NULL COMMENT '客户方ID',
+    customer_company_name VARCHAR(255) NOT NULL COMMENT '客户方公司名称（冗余）',
+
+    signing_party_type    TINYINT      NOT NULL COMMENT '签约方类型: 1-货主, 2-平台, 3-车队',
+    signing_party_id      BIGINT       NOT NULL COMMENT '签约方ID',
+    signing_company_name  VARCHAR(255) NOT NULL COMMENT '签约方公司名称（冗余）',
+
+    party_c_id            BIGINT COMMENT '丙方ID（其他法律主体，可选）',
+    party_c_name          VARCHAR(255) COMMENT '丙方名称（冗余，可选）',
 
     -- 物流业务角色（实际执行方，直签时=party_a_id/party_b_id，转包时可能不同）
-    shipper_id         BIGINT COMMENT '实际托运人ID（负责发货的实体）',
-    carrier_id         BIGINT COMMENT '实际承运人ID（负责运输的实体）',
+    shipper_id            BIGINT COMMENT '实际托运人ID（负责发货的实体）',
+    carrier_id            BIGINT COMMENT '实际承运人ID（负责运输的实体）',
 
     -- 项目关联
-    project_id         BIGINT COMMENT '关联项目ID（如煤矿项目）',
-    project_name       VARCHAR(200) COMMENT '项目名称（冗余）',
+    project_id            BIGINT COMMENT '关联项目ID（如煤矿项目）',
+    project_name          VARCHAR(200) COMMENT '项目名称（冗余）',
 
     -- 货物信息
-    goods_name         VARCHAR(200) COMMENT '货物名称（如：动力煤、焦煤等）',
-    goods_spec         VARCHAR(100) COMMENT '货物规格/指标（如：热值5000大卡、水分<8%）',
+    goods_name            VARCHAR(200) COMMENT '货物名称（如：动力煤、焦煤等）',
+    goods_spec            VARCHAR(100) COMMENT '货物规格/指标（如：热值5000大卡、水分<8%）',
 
-    `quantity`         decimal(18, 3)        DEFAULT NULL COMMENT '货物数量',
-    `unit_price`       DECIMAL(18, 6)        DEFAULT NULL COMMENT '货物单价',
-    `pricing_unit`     tinyint      NOT NULL DEFAULT 1 COMMENT '计价单位：1=吨,2=车,3=立方米,4=根',
+    `quantity`            decimal(18, 3)        DEFAULT NULL COMMENT '货物数量',
+    `unit_price`          DECIMAL(18, 6)        DEFAULT NULL COMMENT '货物单价',
+    `pricing_unit`        tinyint      NOT NULL DEFAULT 1 COMMENT '计价单位：1=吨,2=车,3=立方米,4=根',
 
     -- 运输路径
 --     `loading_address` varchar(500) DEFAULT NULL COMMENT '装货地址',
 --     `unloading_address` varchar(500) DEFAULT NULL COMMENT '卸货地址',
 
-    `pickup_address`   varchar(500)          DEFAULT NULL COMMENT '提货地',
-    `delivery_address` varchar(500)          DEFAULT NULL COMMENT '交货地',
+    `pickup_address`      varchar(500)          DEFAULT NULL COMMENT '提货地',
+    `delivery_address`    varchar(500)          DEFAULT NULL COMMENT '交货地',
 
     -- 合同日期
-    signing_date       DATETIME(3) COMMENT '签订日期',
-    effective_date     DATETIME(3) NOT NULL COMMENT '生效日期',
-    expiry_date        DATETIME(3) COMMENT '失效日期',
-    termination_date   DATETIME(3) COMMENT '实际终止日期',
+    signing_date          DATETIME(3) COMMENT '签订日期',
+    effective_date        DATETIME(3) NOT NULL COMMENT '生效日期',
+    expiry_date           DATETIME(3) COMMENT '失效日期',
+    termination_date      DATETIME(3) COMMENT '实际终止日期',
 
     -- 运输与贸易
-    transport_mode     TINYINT COMMENT '运输方式: 1-海运；2-空运；3-铁路；4-公路；5-多式联运',
-    incoterms          VARCHAR(10) COMMENT '国际贸易术语: FOB(离岸价)；CIF(到岸价)；EXW(工厂交货)等',
-    service_scope      TINYINT COMMENT '服务范围: 1-国内；2-国际；3-区域',
+    transport_mode        TINYINT COMMENT '运输方式: 1-海运；2-空运；3-铁路；4-公路；5-多式联运',
+    incoterms             VARCHAR(10) COMMENT '国际贸易术语: FOB(离岸价)；CIF(到岸价)；EXW(工厂交货)等',
+    service_scope         TINYINT COMMENT '服务范围: 1-国内；2-国际；3-区域',
 
     -- 金额与币种
-    total_amount       DECIMAL(18, 6) COMMENT '合同总金额',
-    currency_code      VARCHAR(3)            DEFAULT 'CNY' COMMENT '币种（ISO 4217）: CNY-人民币；USD-美元；EUR-欧元；GBP-英镑；JPY-日元；HKD-港币',
-    is_tax_inclusive   TINYINT(1) DEFAULT 0 COMMENT '是否含税: 0-不含税；1-含税',
+    total_amount          DECIMAL(18, 6) COMMENT '合同总金额',
+    currency_code         VARCHAR(3)            DEFAULT 'CNY' COMMENT '币种（ISO 4217）: CNY-人民币；USD-美元；EUR-欧元；GBP-英镑；JPY-日元；HKD-港币',
+    is_tax_inclusive      TINYINT DEFAULT 0 COMMENT '是否含税: 0-不含税；1-含税',
 
     -- 数量（煤炭物流特有）
-    total_quantity     DECIMAL(18, 3) COMMENT '合同总量（吨/立方米）',
-    unit_of_measure    TINYINT COMMENT '计量单位: 1-吨(TON)；2-立方米(CBM)；3-标准箱(TEU)',
+    total_quantity        DECIMAL(18, 3) COMMENT '合同总量（吨/立方米）',
+    unit_of_measure       VARCHAR(20) COMMENT '计量单位: 1-吨(TON)；2-立方米(CBM)；3-标准箱(TEU)，如 TON、CBM、TEU、BARREL',
 
     -- 审核流程
-    `audit_status`     TINYINT               DEFAULT 0 COMMENT '审核状态：0-待审批；1-已通过；2-已驳回；3-已撤回',
-    `audit_time`       DATETIME(3) DEFAULT NULL COMMENT '审核时间',
-    `audit_by`         BIGINT                DEFAULT NULL COMMENT '审核人ID',
-    `audit_by_name`    VARCHAR(100)          DEFAULT NULL COMMENT '审核人姓名',
-    `audit_opinion`    TEXT COMMENT '审核意见（如：驳回原因等）',
-    `audit_remark`     TEXT COMMENT '审核备注',
+    `audit_status`        TINYINT               DEFAULT 0 COMMENT '审核状态：0-待审批；1-已通过；2-已驳回；3-已撤回',
+    `audit_time`          DATETIME(3) DEFAULT NULL COMMENT '审核时间',
+    `audit_by`            BIGINT                DEFAULT NULL COMMENT '审核人ID',
+    `audit_by_name`       VARCHAR(100)          DEFAULT NULL COMMENT '审核人姓名',
+    `audit_opinion`       TEXT COMMENT '审核意见（如：驳回原因等）',
+    `audit_remark`        TEXT COMMENT '审核备注',
 
     -- 合同文件
-    contract_doc_url   VARCHAR(500) COMMENT '合同文档URL（系统存储）',
+    contract_doc_url      VARCHAR(500) COMMENT '合同文档URL（系统存储）',
+    signed_file_url       VARCHAR(500) NULL COMMENT '最终签署完成的合同文件URL',
+    signed_file_id        VARCHAR(500) NULL COMMENT '最终签署文件的e签宝fileId',
+    `active_sign_flow_id` BIGINT NULL COMMENT '当前生效的签署流程ID(关联sign_flow.id)',
 
     -- 状态
-    status             TINYINT      NOT NULL DEFAULT 0 COMMENT '状态: 0-草稿；1-待生效；2-生效中；3-已暂停；4-已终止；5-已过期；6-已归档',
+    status                TINYINT      NOT NULL DEFAULT 0 COMMENT '状态: 0-草稿；1-待生效；2-生效中；3-已暂停；4-已终止；5-已过期；6-已归档',
 
     -- 企业级审计与版本控制（硬性规范）
-    `version`          INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`       TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
-    `create_by`        BIGINT       NOT NULL COMMENT '创建人ID',
-    `create_by_name`   VARCHAR(255) NOT NULL COMMENT '创建人名称',
-    `create_time`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_by`        BIGINT COMMENT '更新人ID',
-    `update_by_name`   VARCHAR(255) COMMENT '更新人名称',
-    `update_time`      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `version`             INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
+    `is_deleted`          TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `create_by`           BIGINT       NOT NULL COMMENT '创建人ID',
+    `create_by_name`      VARCHAR(255) NOT NULL COMMENT '创建人名称',
+    `create_time`         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`           BIGINT COMMENT '更新人ID',
+    `update_by_name`      VARCHAR(255) COMMENT '更新人名称',
+    `update_time`         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 
-    UNIQUE KEY uk_contract_no (contract_no),
-    KEY                idx_status_deleted (status, is_deleted),
-    KEY                idx_audit_status_deleted (audit_status, is_deleted),
-    KEY                idx_party_a_deleted (party_a_id, is_deleted),
-    KEY                idx_party_b_deleted (party_b_id, is_deleted),
-    KEY                idx_signing_mode (signing_mode),
-    KEY                idx_subcontract_type (subcontract_type),
-    KEY                idx_shipper (shipper_id),
-    KEY                idx_carrier (carrier_id),
-    KEY                idx_project_id (project_id),
-    KEY                idx_effective_date (effective_date),
-    KEY                idx_create_time (create_time)
+    UNIQUE KEY uk_contract_no (contract_no, is_deleted),
+    KEY                   idx_status_deleted (status, is_deleted),
+    KEY                   idx_audit_status_deleted (audit_status, is_deleted),
+    KEY                   idx_party_a_deleted (party_a_id, is_deleted),
+    KEY                   idx_party_b_deleted (party_b_id, is_deleted),
+    KEY                   idx_signing_mode (signing_mode),
+    KEY                   idx_subcontract_type (subcontract_type),
+    KEY                   idx_shipper (shipper_id),
+    KEY                   idx_carrier (carrier_id),
+    KEY                   idx_project_id (project_id),
+    KEY                   idx_effective_date (effective_date),
+    KEY                   idx_create_time (create_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='合同主表';
 
 
@@ -4042,7 +4066,7 @@ CREATE TABLE waybill
 
     -- 企业级审计与版本控制（硬性规范）
     `version`            INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`         TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`         TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`          BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name`     VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -4065,13 +4089,18 @@ DROP TABLE IF EXISTS `sign_flow`;
 CREATE TABLE sign_flow
 (
     id                    BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '流程记录ID',
-    contract_id           BIGINT       NOT NULL COMMENT '关联合同ID',
-    -- 多态关联字段（定位所属主体）
-    `source_type`         TINYINT      NOT NULL COMMENT '来源类型: 1-SHIPPER(货主) / 2-PLATFORM(平台) / 3-FLEET(车队)',
-    `source_id`           BIGINT       NOT NULL COMMENT '来源表ID（对应各业务表的主键）',
+
+    -- ========== 业务关联（通用） ==========
+    -- 推荐做法：用英文缩写，易读且稳定
+    biz_type              VARCHAR(30)  NOT NULL COMMENT '业务类型: CONTRACT, STATEMENT, SETTLEMENT, AGREEMENT',
+    biz_id                BIGINT       NOT NULL COMMENT '业务ID（根据biz_type关联对应业务表）',
+
+    -- ========== 主体关联（多态） ==========
+--     source_type           TINYINT      NOT NULL COMMENT '来源类型: 1-SHIPPER(货主)/2-PLATFORM(平台)/3-FLEET(车队)',
+--     source_id             BIGINT       NOT NULL COMMENT '来源表ID（对应各业务表的主键）',
+
     -- e签宝核心标识
-    sign_flow_id          VARCHAR(64)  NOT NULL COMMENT 'e签宝签署流程ID（全局唯一）',
-    auth_flow_id          VARCHAR(64) COMMENT '认证授权流程ID',
+    auth_id            VARCHAR(64) COMMENT '本次签署使用的企业授权流程ID（来自orgSign.authId）',
 
     -- 流程状态
     status                TINYINT      NOT NULL DEFAULT 0 COMMENT '0-草稿 1-签署中 2-已完成 3-已撤销 4-已过期 5-拒签',
@@ -4098,7 +4127,7 @@ CREATE TABLE sign_flow
 
     -- 企业级审计与版本控制（硬性规范）
     `version`             INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`          TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`          TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`           BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name`      VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -4108,9 +4137,7 @@ CREATE TABLE sign_flow
 
     UNIQUE KEY uk_sign_flow_id (sign_flow_id),
     UNIQUE KEY uk_auth_flow_id (auth_flow_id),
-    KEY                   idx_contract_id (contract_id),
-    KEY                   idx_status (status),
-    CONSTRAINT fk_sign_flow_contract FOREIGN KEY (contract_id) REFERENCES contract (id) ON DELETE RESTRICT
+    KEY                   idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='e签宝签署流程主表';
 
 
@@ -4124,16 +4151,16 @@ CREATE TABLE sign_signer
     flow_id          BIGINT       NOT NULL COMMENT '关联sign_flow.id',
     party_id         BIGINT       NOT NULL COMMENT '关联party.id',
     party_name       VARCHAR(200) COMMENT '冗余名称',
-    signer_type      VARCHAR(20)  NOT NULL COMMENT 'ORGANIZATION/PERSON',
+    signer_type      VARCHAR(20)  NOT NULL COMMENT '签署方类型:1-企业ORGANIZATION/2-个人PERSON',
     esign_account_id VARCHAR(64) COMMENT 'e签宝账号ID',
     sign_status      TINYINT               DEFAULT 0 COMMENT '0-待签 1-已签 2-拒签 3-超时',
     sign_order       INT COMMENT '签署顺序',
     sign_time        DATETIME(3) COMMENT '实际签署时间',
     sign_url         VARCHAR(500) COMMENT '该签署方专属签署链接',
-    auto_sign        TINYINT(1) DEFAULT 0 COMMENT '是否自动签署',
+    auto_sign        TINYINT DEFAULT 0 COMMENT '是否自动签署',
     -- 企业级审计与版本控制（硬性规范）
     `version`        INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`     TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`      BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name` VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -4152,32 +4179,27 @@ CREATE TABLE sign_signer
 -- Table structure for sign_file
 -- ----------------------------
 DROP TABLE IF EXISTS `sign_file`;
-CREATE TABLE sign_file
-(
-    id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-    flow_id          BIGINT       NOT NULL COMMENT '关联sign_flow.id',
-    file_id          VARCHAR(64)  NOT NULL COMMENT 'e签宝文件ID',
-    file_name        VARCHAR(255) NOT NULL COMMENT '文件名',
-    file_type        VARCHAR(20) COMMENT 'ORIGINAL/SIGNED/ATTACHMENT',
-    file_size        BIGINT COMMENT '文件大小（字节）',
-    file_md5         VARCHAR(32) COMMENT '文件MD5',
-    file_status      TINYINT COMMENT '1-上传中 2-转换中 5-可用',
-    download_url     VARCHAR(500) COMMENT '文件下载地址（签署后回填）',
-    is_template      TINYINT(1) DEFAULT 0,
-    template_id      VARCHAR(64) COMMENT 'e签宝模板ID（如果是模板）',
-    -- 企业级审计与版本控制（硬性规范）
-    `version`        INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
-    `create_by`      BIGINT       NOT NULL COMMENT '创建人ID',
-    `create_by_name` VARCHAR(255) NOT NULL COMMENT '创建人名称',
-    `create_time`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_by`      BIGINT COMMENT '更新人ID',
-    `update_by_name` VARCHAR(255) COMMENT '更新人名称',
-    `update_time`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-
-    UNIQUE KEY uk_file_id (file_id),
-    KEY              idx_flow_id (flow_id),
-    CONSTRAINT fk_file_flow FOREIGN KEY (flow_id) REFERENCES sign_flow (id) ON DELETE RESTRICT
+CREATE TABLE `sign_file` (
+                                 `id` bigint NOT NULL AUTO_INCREMENT,
+                                 `flow_id` bigint NOT NULL COMMENT '关联sign_flow.id',
+                                 `file_id` varchar(64) NOT NULL COMMENT '本地文件记录ID（UUID）',
+                                 `file_name` varchar(255) NOT NULL COMMENT '文件名',
+                                 `file_type` tinyint DEFAULT 1 COMMENT '文件类型: 1-原始文件, 2-签署中间文件, 3-最终签署文件',
+                                 `file_size` bigint DEFAULT NULL COMMENT '文件大小（字节）',
+                                 `file_status` tinyint DEFAULT 5 COMMENT '1-上传中 2-转换中 5-可用',
+                                 `download_url` varchar(500) DEFAULT NULL COMMENT '文件下载地址（OSS）',
+                                 `sign_service_id` varchar(64) DEFAULT NULL COMMENT 'e签宝签章记录ID（signServiceId）',
+                                 `version` int NOT NULL DEFAULT 1 COMMENT '乐观锁版本号',
+                                 `is_deleted` TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记',
+                                 `create_by` bigint NOT NULL COMMENT '创建人ID',
+                                 `create_by_name` varchar(255) NOT NULL COMMENT '创建人名称',
+                                 `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
+                                 `update_by_name` varchar(255) DEFAULT NULL COMMENT '更新人名称',
+                                 `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 PRIMARY KEY (`id`),
+                                 UNIQUE KEY `uk_file_id` (`file_id`),
+                                 KEY `idx_flow_id` (`flow_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='签署文件明细表';
 
 
@@ -4195,10 +4217,12 @@ CREATE TABLE sign_field
     pos_x            DECIMAL(10, 3) NOT NULL COMMENT 'X坐标（点）',
     pos_y            DECIMAL(10, 3) NOT NULL COMMENT 'Y坐标（点）',
     sign_style       TINYINT                 DEFAULT 1 COMMENT '签章样式: 1-标准 2-骑缝章 3-时间戳',
-    field_type       VARCHAR(20) COMMENT 'REGULAR/ESIGN/SEAL/DATE',
+    `field_type`     TINYINT        NOT NULL DEFAULT 1 COMMENT '控件类型: 1-文本域, 2-个人签署区, 3-企业印章区, 4-日期控件',
+    seal_source_type TINYINT COMMENT '印章来源(1-货主/2-平台/3-车队)',
+    seal_id          BIGINT COMMENT '关联sys_seal.id',
     -- 企业级审计与版本控制（硬性规范）
     `version`        INT            NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`     TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`      BIGINT         NOT NULL COMMENT '创建人ID',
     `create_by_name` VARCHAR(255)   NOT NULL COMMENT '创建人名称',
     `create_time`    DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -4215,6 +4239,15 @@ CREATE TABLE sign_field
 
 
 -- 印章表 （seal）
+
+-- 在签署时生成印章相比在授权回调中生成，有以下优点：
+--
+-- 对比项	授权回调中生成	签署时生成（推荐）
+-- 触发时机	授权成功立即生成	首次签署时按需生成
+-- 资源占用	所有企业都生成，可能用不上	只有实际签署的企业才生成
+-- 灵活性	固定生成两种印章	可按需生成指定印章
+-- 失败处理	回调中处理复杂	签署流程中统一处理
+
 -- ----------------------------
 -- Table structure for seal
 -- ----------------------------
@@ -4228,18 +4261,19 @@ CREATE TABLE `seal`
     `source_id`      BIGINT       NOT NULL COMMENT '来源表ID（对应各业务表的主键）',
 
     -- 印章业务核心字段
+--     `seal_usage` TINYINT NOT NULL DEFAULT 1 COMMENT '印章用途：1-合同专用章，2-财务专用章，3-人事专用章，4-发票专用章，5-项目专用章，6-其他',
     `seal_name`      VARCHAR(64)  NOT NULL COMMENT '印章名称（如：合同专用章、财务专用章）',
     `seal_data`      LONGTEXT     NOT NULL COMMENT '印章图片Base64数据（LONGTEXT最大4GB）',
     `seal_type`      TINYINT               DEFAULT 1 COMMENT '印章类型：1-标准公章，2-椭圆章，3-圆形无五角星章',
     `seal_color`     TINYINT               DEFAULT 1 COMMENT '印章颜色：1-红色，2-蓝色，3-黑色',
-    `is_default`     TINYINT(1) DEFAULT 0 COMMENT '是否默认印章（用于签署时快速选取）：0-否，1-是',
+    `is_default`     TINYINT DEFAULT 0 COMMENT '是否默认印章（用于签署时快速选取）：0-否，1-是',
 
     -- 业务状态
     `status`         TINYINT               DEFAULT 1 COMMENT '状态：0-停用，1-启用',
 
     -- 企业级审计与版本控制（硬性规范）
     `version`        INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号（用于并发控制）',
-    `is_deleted`     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `is_deleted`     TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
     `create_by`      BIGINT       NOT NULL COMMENT '创建人ID',
     `create_by_name` VARCHAR(255) NOT NULL COMMENT '创建人名称',
     `create_time`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -4264,13 +4298,13 @@ CREATE TABLE `sign_callback_log`
     `id`                BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
 
     -- ========== 回调通用信息 ==========
-    `action`            VARCHAR(50)  NOT NULL COMMENT '事件类型：ORG_SILENCESIGN_AUTH(授权结果) / ORG_SILENCESIGN_AUTH_NEARLY_EXPIRED(授权即将过期) / ORG_SILENCESIGN_AUTH_ALREADY_EXPIRED(授权已过期) / SDK_EVIDENCE_REPORT(出证结果)',
-    `callback_raw_data` JSON         NOT NULL COMMENT '回调原始JSON数据（完整保存）',
+    `action`            VARCHAR(50) NOT NULL COMMENT '事件类型：ORG_SILENCESIGN_AUTH(授权结果) / ORG_SILENCESIGN_AUTH_NEARLY_EXPIRED(授权即将过期) / ORG_SILENCESIGN_AUTH_ALREADY_EXPIRED(授权已过期) / SDK_EVIDENCE_REPORT(出证结果)',
+    `callback_raw_data` JSON        NOT NULL COMMENT '回调原始JSON数据（完整保存）',
     `callback_time`     DATETIME(3) NOT NULL COMMENT '回调触发时间（从回调数据中提取或取当前时间）',
 
     -- ========== 业务关联（多态） ==========
-    `biz_type`          VARCHAR(30)  NOT NULL COMMENT '业务类型：AUTH(授权) / SIGN(签署) / EVIDENCE(出证)',
-    `biz_id`            VARCHAR(64)  NOT NULL COMMENT '业务ID（对应各业务场景的ID：authId / signFlowId / recordNo）',
+    `biz_type`          VARCHAR(30) NOT NULL COMMENT '业务类型：AUTH(授权) / SIGN(签署) / EVIDENCE(出证)',
+    `biz_id`            VARCHAR(64) NOT NULL COMMENT '业务ID（对应各业务场景的ID：authId / signFlowId / recordNo）',
 
     -- ========== 授权回调业务字段（可空） ==========
     `auth_id`           VARCHAR(64) NULL COMMENT '授权流程ID',
@@ -4289,23 +4323,23 @@ CREATE TABLE `sign_callback_log`
     `evidence_message`  VARCHAR(500) NULL COMMENT '出证失败原因',
 
     -- ========== 处理状态 ==========
-    `process_status`    TINYINT               DEFAULT 0 COMMENT '处理状态：0-待处理，1-处理成功，2-处理失败，3-已忽略',
+    `process_status`    TINYINT              DEFAULT 0 COMMENT '处理状态：0-待处理，1-处理成功，2-处理失败，3-已忽略',
     `process_remark`    VARCHAR(500) NULL COMMENT '处理备注/错误信息',
-    `process_time`   DATETIME NULL COMMENT '业务处理完成时间',
+    `process_time`      DATETIME NULL COMMENT '业务处理完成时间',
 
     -- ========== 请求上下文 ==========
     `request_headers`   JSON NULL COMMENT '请求头（含签名信息）',
     `request_ip`        VARCHAR(45) NULL COMMENT '回调来源IP',
 
     -- ========== 审计字段 ==========
-    `version`           INT          NOT NULL DEFAULT 1 COMMENT '乐观锁版本号',
-    `is_deleted`        TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
-    `create_by`         BIGINT       NOT NULL COMMENT '创建人ID',
-    `create_by_name`    VARCHAR(255) NOT NULL COMMENT '创建人名称',
-    `create_time`       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_by`         BIGINT NULL COMMENT '更新人ID',
-    `update_by_name`    VARCHAR(255) NULL COMMENT '更新人名称',
-    `update_time`       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `version`           INT         NOT NULL DEFAULT 1 COMMENT '乐观锁版本号',
+    `is_deleted`        TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除标记：0-未删除；1-已删除',
+    `create_by`         BIGINT               DEFAULT NULL COMMENT '创建人ID',
+    `create_by_name`    VARCHAR(255)         DEFAULT NULL COMMENT '创建人名称',
+    `create_time`       DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by`         BIGINT               DEFAULT NULL COMMENT '更新人ID',
+    `update_by_name`    VARCHAR(255)         DEFAULT NULL COMMENT '更新人名称',
+    `update_time`       DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 
     -- ========== 索引 ==========
     KEY                 `idx_action` (`action`),

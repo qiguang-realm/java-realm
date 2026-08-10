@@ -1,6 +1,6 @@
 package cn.realm.cloud.module.system.toolkit;
 
-import cn.realm.cloud.module.system.core.toolkit.FileUtil;
+import cn.realm.cloud.framework.common.util.file.FileOperateUtil;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ class FileTest {
     @Test
     public void getAbsolutePathTest() {
 
-        String filePath = FileUtil.getAbsolutePath("static/input.txt");
+        String filePath = FileOperateUtil.getAbsolutePath("static/input.txt");
         logger.info("文件路径: {}", filePath);
 
     }
