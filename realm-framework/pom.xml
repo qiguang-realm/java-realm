@@ -8,7 +8,7 @@
 
     <!-- Parent project information -->
     <parent>
-        <artifactId>realm</artifactId>
+        <artifactId>realm-cloud</artifactId>
         <groupId>cn.realm.cloud</groupId>
         <version>${revision}</version>
     </parent>
@@ -31,6 +31,10 @@
         <module>realm-spring-boot-starter-biz-data-permission</module>
         <module>realm-spring-boot-starter-biz-ip</module>
         <module>realm-spring-boot-starter-env</module>
+        <module>realm-spring-boot-starter-mq</module>
+        <module>realm-spring-boot-starter-websocket</module>
+        <module>realm-spring-boot-starter-protection</module>
+        <module>realm-spring-boot-starter-biz-tenant</module>
     </modules>
 
     <!-- Project artifact identifier -->

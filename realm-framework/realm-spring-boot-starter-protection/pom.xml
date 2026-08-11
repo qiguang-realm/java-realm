@@ -4,88 +4,89 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  父 POM 继承 / Parent POM                                      -->
-    <!--  继承 realm-module-system，版本 ${revision} 由父 POM 统一管理。          -->
-    <!--  Inherits from realm-module-system; version ${revision} is managed by parent. -->
-    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <parent>
-        <groupId>cn.realm.cloud</groupId>
-        <artifactId>realm-module-system</artifactId>
-        <version>${revision}</version>
-    </parent>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  POM 模型版本（必需）                                           -->
-    <!--  [ SECTION ]  POM Model Version (Required)                              -->
+    <!--  [ SECTION ]  POM Model Version (Required)                               -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  项目标识 / Project Coordinates                                 -->
-    <!--  继承父 POM 的 groupId 和 version，此处仅需指定 artifactId。              -->
-    <!--  groupId and version are inherited from parent; only artifactId is set.  -->
+    <!--  [ SECTION ]  Parent POM (realm-framework)                               -->
+    <!--  Version ${revision} is managed by the parent.                          -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <artifactId>realm-module-system-api</artifactId>
+    <parent>
+        <artifactId>realm-framework</artifactId>
+        <groupId>cn.realm.cloud</groupId>
+        <version>${revision}</version>
+        <!-- relativePath not specified, Maven will search in default order -->
+    </parent>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Module Coordinates                                         -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <artifactId>realm-spring-boot-starter-protection</artifactId>
     <packaging>jar</packaging>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  项目信息 / Project Information                                 -->
+    <!--  [ SECTION ]  Project Name and Description                               -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <name>${project.artifactId}</name>
     <description>
-        系统模块 API 定义，包含 DTO、枚举、Feign 客户端等跨模块调用契约。
-        API definitions for the system module, including DTOs, enums,
-        Feign clients, and other cross-module invocation contracts.
+        Service protection starter providing distributed locks, idempotency,
+        rate limiting, circuit breaking, etc.
     </description>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  依赖配置 / Dependencies                                        -->
-    <!--  所有版本由父 POM 的 dependencyManagement 统一管控。                     -->
-    <!--  All versions are managed by parent's dependencyManagement.              -->
+    <!--  [ SECTION ]  Project URL (replace with actual repository URL)           -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <url>https://github.com/your-org/realm</url>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Dependencies                                               -->
+    <!--  All versions are inherited from parent's dependencyManagement.          -->
+    <!--  Dependencies are grouped by functional area.                           -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <dependencies>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  基础依赖 / Foundation Dependencies                                   -->
+        <!--  Web Framework (provided scope)                                       -->
+        <!--  Required for rate limiting and idempotency features; using provided  -->
+        <!--  scope allows consumers to choose their own web stack.              -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!-- 通用工具类 / 基础 POJO / Common utilities & base POJOs -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-common</artifactId>
-        </dependency>
-
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  接口文档支持 / API Documentation Support                              -->
-        <!--  使用最新版本的 Swagger 模型，运行时由具体模块提供实现。               -->
-        <!--  Uses the latest Swagger models; implementation is provided by the    -->
-        <!--  concrete module at runtime.                                         -->
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <artifactId>realm-spring-boot-starter-web</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  参数校验支持 / Validation Support                                     -->
-        <!--  提供校验注解支持，不强制依赖传递。                                   -->
-        <!--  Provides validation annotations; not forcibly propagated.           -->
+        <!--  Redis Integration                                                   -->
+        <!--  Provides distributed lock storage, rate limit counters, and         -->
+        <!--  idempotency key persistence.                                       -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-redis</artifactId>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Distributed Lock Implementation (optional)                          -->
+        <!--  Lock4j Redisson starter is marked optional, allowing consumers to   -->
+        <!--  replace with their own lock mechanism if needed.                   -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
             <optional>true</optional>
         </dependency>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  远程调用支持 / Remote Call Support (Feign)                           -->
-        <!--  提供 Feign 客户端支持，按需启用。                                    -->
-        <!--  Provides Feign client support; enabled on demand.                   -->
+        <!--  Test Support                                                         -->
+        <!--  Provides test utilities and mock environment for unit/integration   -->
+        <!--  testing of protection features.                                     -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <optional>true</optional>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

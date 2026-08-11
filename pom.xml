@@ -1,62 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  POM Model Version (Required)                               -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ========== 基础信息 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Project Coordinates                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <groupId>cn.realm.cloud</groupId>
-    <artifactId>realm</artifactId>
-    <!-- 使用 flatten 插件动态管理版本号 -->
+    <artifactId>realm-cloud</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
 
-    <name>${project.artifactId}</name>
-    <description>Realm 项目核心父模块，统一管理依赖及构建配置</description>
-    <!-- 建议替换为实际项目地址 -->
-    <url>https://mvnrepository.com/</url>
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Project Information                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <name>Realm Cloud Parent</name>
+    <description>
+        Parent POM for the Realm project, centralizing dependency version management
+        and build plugin configurations for all submodules.
+    </description>
+    <url>https://github.com/your-org/realm</url> <!-- Replace with the actual repository URL -->
 
-    <!-- ========== 子模块定义 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Module Definitions (sorted alphabetically)                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modules>
-        <!-- 项目文档模块 -->
-        <module>java-documentation</module>
-        <!-- 统一依赖管理模块 -->
-        <module>realm-dependencies</module>
-        <module>realm-gateway</module>
-        <module>realm-framework</module>
-        <module>realm-module-system</module>
-        <module>realm-server</module>
+        <module>realm-dependencies</module>     <!-- BOM for unified dependency management -->
+        <module>realm-documentation</module>    <!-- Project documentation module -->
+        <module>realm-framework</module>        <!-- Core framework module -->
+        <module>realm-gateway</module>          <!-- API gateway module -->
+        <module>realm-module-system</module>    <!-- System management module -->
+        <module>realm-server</module>           <!-- Main service module -->
     </modules>
 
-    <!-- ========== 全局属性配置 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Properties (Single Source of Truth for versions)          -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <properties>
-        <!-- 项目版本号（主版本） -->
-        <revision>2025.09-SNAPSHOT</revision>
+        <!-- Project version -->
+        <revision>2026.08-SNAPSHOT</revision>
 
-        <!-- JDK 版本配置 -->
+        <!-- JDK version -->
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- 构建插件版本 -->
-        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <!-- Core plugin versions -->
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
 
-        <!-- 依赖库版本 -->
+        <!-- Core dependency versions -->
+        <spring-boot.version>3.5.4</spring-boot.version>
         <lombok.version>1.18.38</lombok.version>
-        <!-- 统一 Spring Boot 属性命名风格 -->
-        <spring.boot.version>3.5.4</spring.boot.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-
-        <!-- 编码配置 -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mapstruct-lombok-binding.version>0.2.0</mapstruct-lombok-binding.version>
     </properties>
 
-    <!-- ========== 依赖管理 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Dependency Management (versions only, no actual imports)   -->
+    <!--  Submodules inherit these versions without specifying them.              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <dependencyManagement>
         <dependencies>
-            <!-- 导入统一依赖管理模块 -->
+            <!-- Import the BOM module to centrally manage all third-party dependency versions -->
             <dependency>
                 <groupId>cn.realm.cloud</groupId>
                 <artifactId>realm-dependencies</artifactId>
@@ -67,67 +81,77 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- ========== 构建配置 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Build Configuration                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <build>
-        <!-- 插件默认配置（可被子模块继承） -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Plugin Management (default configurations inherited by submodules)   -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <pluginManagement>
             <plugins>
-                <!-- 单元测试插件（需 3.0+ 以支持 JUnit 5） -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                </plugin>
-
-                <!-- 编译器插件（解决 Lombok + MapStruct 注解处理问题） -->
+                <!-- Compiler plugin: configures annotation processors for Lombok and MapStruct -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <!-- 配置注解处理器路径 -->
                         <annotationProcessorPaths>
-                            <!-- Spring 配置元数据生成 -->
+                            <!-- Spring Boot configuration metadata generator -->
                             <path>
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-configuration-processor</artifactId>
-                                <version>${spring.boot.version}</version>
+                                <version>${spring-boot.version}</version>
                             </path>
-                            <!-- Lombok 注解处理 -->
+                            <!-- Lombok annotation processor -->
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
                             </path>
-                            <!-- MapStruct 代码生成 -->
+                            <!-- Lombok-MapStruct binding to ensure they work together -->
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${mapstruct-lombok-binding.version}</version>
+                            </path>
+                            <!-- MapStruct code generator -->
                             <path>
                                 <groupId>org.mapstruct</groupId>
                                 <artifactId>mapstruct-processor</artifactId>
                                 <version>${mapstruct.version}</version>
                             </path>
                         </annotationProcessorPaths>
-                        <!-- 启用参数名称保留（Spring Boot 3+ 需要） -->
                         <compilerArgs>
+                            <!-- Preserve method parameter names for Spring Boot 3+ -->
                             <arg>-parameters</arg>
                         </compilerArgs>
                     </configuration>
                 </plugin>
+
+                <!-- Test plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
-        <!-- 全局生效的插件 -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Global Plugins (applied to all modules)                             -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <plugins>
-            <!-- 版本号统一管理插件 -->
+            <!-- Flatten Maven Plugin: replaces ${revision} with the actual version during release -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
                 <version>${flatten-maven-plugin.version}</version>
                 <configuration>
-                    <flattenMode>oss</flattenMode>  <!-- 开源项目模式 -->
+                    <flattenMode>oss</flattenMode>
                     <updatePomFile>true</updatePomFile>
                 </configuration>
                 <executions>
-                    <!-- 在 process-resources 阶段生成 flatten 文件 -->
                     <execution>
                         <id>flatten</id>
                         <phase>process-resources</phase>
@@ -135,9 +159,8 @@
                             <goal>flatten</goal>
                         </goals>
                     </execution>
-                    <!-- 清理时移除 flatten 文件 -->
                     <execution>
-                        <id>flatten.clean</id>
+                        <id>flatten-clean</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
@@ -148,36 +171,23 @@
         </plugins>
     </build>
 
-    <!-- ========== 仓库配置 ========== -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Repository Configuration (ordered by priority)             -->
+    <!--  Add third-party repositories only when necessary.                       -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <repositories>
-        <!-- 国内镜像优先 -->  <!-- 使用 huawei / aliyun 的 Maven 源，提升下载速度 -->
+        <!-- Huawei Cloud mirror -->
         <repository>
             <id>huaweicloud</id>
-            <name>huawei</name>
+            <name>Huawei Cloud Maven Mirror</name>
             <url>https://mirrors.huaweicloud.com/repository/maven/</url>
         </repository>
+        <!-- Alibaba Cloud mirror -->
         <repository>
-            <id>aliyunmaven</id>
-            <name>aliyun</name>
+            <id>aliyun</id>
+            <name>Alibaba Cloud Maven Mirror</name>
             <url>https://maven.aliyun.com/repository/public</url>
         </repository>
-
-        <!-- Spring 官方仓库 -->
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
     </repositories>
+
 </project>

@@ -3,38 +3,63 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- 继承父项目基础配置 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  父 POM 继承 / Parent POM                                      -->
+    <!--  继承 realm-cloud，版本 ${revision} 由父 POM 统一管理。                  -->
+    <!--  Inherits from realm-cloud; version ${revision} is managed by parent.   -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <parent>
         <groupId>cn.realm.cloud</groupId>
-        <artifactId>realm</artifactId>
-        <!-- 使用动态版本号变量，便于统一管理版本 -->
+        <artifactId>realm-cloud</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <!-- Maven 模型版本，固定值 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  POM 模型版本（必需）                                           -->
+    <!--  [ SECTION ]  POM Model Version (Required)                              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- 当前项目标识 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目标识 / Project Coordinates                                 -->
+    <!--  继承父 POM 的 groupId 和 version，此处仅需指定 artifactId。              -->
+    <!--  groupId and version are inherited from parent; only artifactId is set.  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <artifactId>realm-module-system</artifactId>
-    <!-- 打包方式为 pom，表示这是一个聚合模块 -->
+    <!-- 打包方式为 POM，表示这是一个聚合模块（用于组织子模块）                    -->
+    <!--  POM packaging indicates this is an aggregator module for submodules.   -->
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
-    <!-- 子模块定义（按字母顺序排序） -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  子模块定义 / Module Definitions                               -->
+    <!--  按字母顺序排列，便于维护。                                              -->
+    <!--  Sorted alphabetically for better maintainability.                      -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modules>
-        <!-- 系统模块 API 定义（供其他模块依赖） -->
+        <!-- 系统模块 API 定义（供其他模块依赖）                                   -->
+        <!--  API definitions for the system module (for other modules to depend on) -->
         <module>realm-module-system-api</module>
-        <!-- 系统模块 server 实现（包含具体业务逻辑） -->
+        <!-- 系统模块服务端实现（包含具体业务逻辑）                                -->
+        <!--  Server implementation of the system module (contains business logic)  -->
         <module>realm-module-system-server</module>
     </modules>
 
-    <!-- 项目描述 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目描述 / Project Description                                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <description>
         system 模块是平台的核心基础模块，主要包含：
         - 用户、角色、权限等基础身份管理
         - 组织架构（部门、岗位等）
         - 数据字典、系统配置等通用功能
         为上层业务模块提供基础支撑能力。
+
+        The system module is the core foundational module of the platform, mainly including:
+        - User, role, and permission management
+        - Organization structure (departments, positions, etc.)
+        - Data dictionary, system configuration, and other common features
+        It provides foundational support capabilities for upper-level business modules.
     </description>
 
 </project>

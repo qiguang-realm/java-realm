@@ -4,152 +4,144 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  POM 模型版本（必需）                                           -->
-    <!--  [ SECTION ]  POM Model Version (Required)                              -->
+    <!--  [ SECTION ]  POM Model Version (Required)                               -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  父 POM 继承 / Parent POM                                      -->
-    <!--  继承 realm-cloud，版本 ${revision} 由父 POM 统一管理。                  -->
-    <!--  Inherits from realm-cloud; version ${revision} is managed by parent.   -->
+    <!--  [ SECTION ]  Parent POM (realm-framework)                               -->
+    <!--  Version ${revision} is managed by the parent.                          -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <parent>
+        <artifactId>realm-framework</artifactId>
         <groupId>cn.realm.cloud</groupId>
-        <artifactId>realm-cloud</artifactId>
         <version>${revision}</version>
+        <!-- relativePath not specified, Maven will search in default order -->
     </parent>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  项目标识 / Project Coordinates                                 -->
-    <!--  继承父 POM 的 groupId 和 version，此处仅需指定 artifactId。              -->
-    <!--  groupId and version are inherited from parent; only artifactId is set.  -->
+    <!--  [ SECTION ]  Module Coordinates                                         -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <artifactId>realm-gateway</artifactId>
+    <artifactId>realm-spring-boot-starter-biz-tenant</artifactId>
     <packaging>jar</packaging>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  项目信息 / Project Information                                 -->
+    <!--  [ SECTION ]  Project Name and Description                               -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <name>${project.artifactId}</name>
     <description>
-        分布式 API 网关服务，基于 Spring Cloud Gateway 实现路由转发、流量控制和安全防护。
-        Distributed API gateway service built on Spring Cloud Gateway, providing
-        routing, traffic control, and security protection.
+        Multi-tenancy auto-configuration starter.
     </description>
-    <url>https://github.com/</url> <!-- 请替换为实际项目地址 / Replace with actual project URL -->
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  依赖配置 / Dependencies                                        -->
-    <!--  所有版本由父 POM 的 dependencyManagement 统一管控。                     -->
-    <!--  All versions are managed by parent's dependencyManagement.              -->
+    <!--  [ SECTION ]  Project URL (replace with actual repository URL)           -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <url>https://github.com/your-org/realm</url>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Dependencies                                               -->
+    <!--  All versions are inherited from parent's dependencyManagement.          -->
+    <!--  Non-essential dependencies are marked optional for consumer choice.     -->
+    <!--  Dependencies are grouped by functional area.                           -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <dependencies>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  业务模块依赖 / Business module dependencies                           -->
+        <!--  Core Utilities                                                       -->
+        <!--  Provides common utility functions used across the module.           -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-module-system-api</artifactId>
-            <version>${revision}</version>
-            <exclusions>
-                <!-- 排除冲突的 OpenAPI 依赖 / Exclude conflicting OpenAPI dependencies -->
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-webmvc-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>realm-common</artifactId>
         </dependency>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  网关核心组件 / Gateway core components                                -->
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
-        </dependency>
-
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  服务治理组件 / Service governance                                    -->
-        <!--  RPC 负载均衡 / Load balancing                                        -->
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-        <!-- 服务注册发现（Nacos） / Service registry & discovery (Nacos) -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <!-- 配置中心（Nacos） / Config center (Nacos) -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  网关辅助功能 / Gateway auxiliary features                             -->
-        <!--  API 文档集成（Knife4j Gateway） / API documentation (Knife4j Gateway) -->
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
-            <!-- 版本由父 POM 统一管理 / Version managed by parent POM -->
-        </dependency>
-
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  监控告警 / Monitoring & Alerting                                     -->
+        <!--  Security Integration                                                 -->
+        <!--  Provides current user and tenant information for tenant isolation.   -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-spring-boot-starter-monitor</artifactId>
+            <artifactId>realm-spring-boot-starter-security</artifactId>
         </dependency>
 
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  工具类库 / Utility libraries                                          -->
+        <!--  MyBatis Enhancement                                                  -->
+        <!--  Provides tenant plugin and data permission filtering.               -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Redis Integration                                                    -->
+        <!--  Used for caching tenant configurations and tenant-scoped data.       -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-redis</artifactId>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Optional Integrations (consumers may enable as needed)              -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+
+        <!-- RPC support for propagating tenant context to downstream services -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-rpc</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Job scheduling for tenant-aware batch processing -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-job</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Message queue abstraction layer -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mq</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Concrete MQ clients (used together with the MQ starter) -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Test Support                                                         -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Third-party Utilities                                                -->
+        <!--  Google Guava for caching and string manipulation utilities.          -->
         <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
 
-        <!-- Caffeine 缓存（必需，避免因缺少本地缓存实现导致告警）                  -->
-        <!-- Caffeine cache (required to avoid warnings from missing local cache)  -->
-        <!-- 详见 / See: https://gitee.com/yudaocode/yudao-cloud-mini/issues/IB5PXW -->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-
     </dependencies>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <!--  [ 章节 ]  构建配置 / Build Configuration                                 -->
-    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <build>
-        <!-- 设置构建的 JAR 包名 / Set the final JAR name -->
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <!-- Spring Boot Maven 打包插件 / Spring Boot Maven Plugin -->
-            <!-- 用于将应用打包为可执行 JAR（包含所有依赖）                         -->
-            <!-- Used to repackage the application as an executable JAR            -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- 版本继承自父 POM，但为了明确，此处显式声明（需与父 POM 保持一致） -->
-                <!-- Version inherited from parent, but explicitly declared here for clarity -->
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal> <!-- 将引入的 JAR 打入最终包 / Repackage with all dependencies -->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  POM Model Version (Required)                               -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Parent POM (realm-framework)                               -->
+    <!--  Version ${revision} is managed by the parent.                          -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <parent>
+        <artifactId>realm-framework</artifactId>
+        <groupId>cn.realm.cloud</groupId>
+        <version>${revision}</version>
+        <!-- relativePath not specified, Maven will search in default order -->
+    </parent>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Module Coordinates                                         -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <artifactId>realm-spring-boot-starter-websocket</artifactId>
+    <packaging>jar</packaging>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Project Name and Description                               -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <name>${project.artifactId}</name>
+    <description>
+        WebSocket framework with multi-node broadcast support.
+    </description>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Project URL (replace with actual repository URL)           -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <url>https://github.com/your-org/realm</url>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ SECTION ]  Dependencies                                               -->
+    <!--  All versions are inherited from parent's dependencyManagement.          -->
+    <!--  Dependencies are grouped by functional area.                           -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <dependencies>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Common Utilities                                                     -->
+        <!--  Core utility library used across all modules.                       -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-common</artifactId>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Security Integration (provided scope)                               -->
+        <!--  Required because WebSocket sessions are associated with the current -->
+        <!--  login user (see WebSocketSessionManagerImpl). We use `provided`    -->
+        <!--  to avoid forcing all consumers to include security if not needed.  -->
+        <!--  Note: We chose to let websocket depend on security rather than     -->
+        <!--  extending security with websocket features, to keep the websocket  -->
+        <!--  components cohesive and reduce conceptual overhead.                -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-security</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  WebSocket Core Support                                              -->
+        <!--  Spring Boot Starter for WebSocket functionality.                   -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Message Queue Abstraction                                            -->
+        <!--  Used for broadcasting WebSocket messages across multiple nodes.    -->
+        <!--  The specific MQ implementations are marked optional so consumers   -->
+        <!--  can pick the one they need.                                       -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-mq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Multi-Tenancy Integration (provided scope)                          -->
+        <!--  Required when broadcasting to users of a specific type: we need    -->
+        <!--  to filter by tenant to avoid leaking messages across tenants.      -->
+        <!--  We use `provided` to keep it optional for non-tenant deployments.  -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>cn.realm.cloud</groupId>
+            <artifactId>realm-spring-boot-starter-biz-tenant</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

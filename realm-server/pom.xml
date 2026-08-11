@@ -2,151 +2,200 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  父 POM 继承 / Parent POM                                      -->
+    <!--  继承 realm-cloud，版本 ${revision} 由父 POM 统一管理。                  -->
+    <!--  Inherits from realm-cloud; version ${revision} is managed by parent.   -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <parent>
-        <artifactId>realm</artifactId>
+        <artifactId>realm-cloud</artifactId>
         <groupId>cn.realm.cloud</groupId>
         <version>${revision}</version>
     </parent>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  POM 模型版本（必需）                                           -->
+    <!--  [ SECTION ]  POM Model Version (Required)                              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目标识 / Project Coordinates                                 -->
+    <!--  继承父 POM 的 groupId 和 version，此处仅需指定 artifactId。              -->
+    <!--  groupId and version are inherited from parent; only artifactId is set.  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <artifactId>realm-server</artifactId>
     <packaging>jar</packaging>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目信息 / Project Information                                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <name>${project.artifactId}</name>
     <description>
-        后端 Server 的主项目，通过引入需要 realm-module-xxx 的依赖，
-        从而实现提供 RESTful API 给 realm-ui-admin、realm-ui-user 等前端项目。
-        本质上来说，它就是个空壳（容器）！
-    </description>
-    <!-- 建议替换为实际项目地址 -->
-    <url>https://mvnrepository.com/</url>
+        后端 Server 的主项目，通过引入所需 realm-module-xxx 模块，
+        提供 RESTful API 给前端项目（如 realm-ui-admin、realm-ui-user 等）。
+        本质上，它是一个空壳（容器），通过组合不同的业务模块来构建完整的应用。
 
+        The main backend server project. It provides RESTful APIs to frontend projects
+        (e.g., realm-ui-admin, realm-ui-user) by including the required realm-module-xxx
+        dependencies. Essentially, it is a shell (container) that assembles business modules.
+    </description>
+    <url>https://mvnrepository.com/</url> <!-- 请替换为实际项目地址 / Replace with actual URL -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  依赖配置 / Dependencies                                        -->
+    <!--  所有版本由父 POM 的 dependencyManagement 统一管控。                     -->
+    <!--  All versions are managed by parent's dependencyManagement.              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <dependencies>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  业务模块依赖（按需引入，注释部分默认不启用以提升编译速度）              -->
+        <!--  Business module dependencies (enable as needed; commented by default -->
+        <!--  to speed up compilation)                                             -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+
+        <!-- 系统模块（核心基础模块） / System module (core foundation) -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
             <artifactId>realm-module-system-server</artifactId>
             <version>${revision}</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-module-infra-server</artifactId>-->
-<!--            <version>${revision}</version>-->
-<!--        </dependency>-->
+        <!-- 基础设施模块（可选，按需启用） / Infrastructure module (optional) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-infra-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- 会员中心。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-member-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 会员中心（默认注释，保证编译速度） / Member center (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-member-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- 数据报表。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-report-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
-        <!-- 工作流。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-bpm-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
-        <!-- 支付服务。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-pay-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 数据报表（默认注释，保证编译速度） / Data report (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-report-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- 微信公众号模块。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-mp-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 工作流（默认注释，保证编译速度） / Workflow (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-bpm-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- 商城相关模块。默认注释，保证编译速度-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-product-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-promotion-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-trade-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-statistics-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 支付服务（默认注释，保证编译速度） / Payment service (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-pay-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- CRM 相关模块。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-crm-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 微信公众号模块（默认注释，保证编译速度） / WeChat MP module (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-mp-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- ERP 相关模块。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-erp-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- 商城相关模块（默认注释，保证编译速度） / Mall modules (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-product-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-promotion-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-trade-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-statistics-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- AI 大模型相关模块。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-ai-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- CRM 相关模块（默认注释，保证编译速度） / CRM modules (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-crm-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- IoT 物联网相关模块。默认注释，保证编译速度 -->
-        <!--        <dependency>-->
-        <!--            <groupId>cn.realm.cloud</groupId>-->
-        <!--            <artifactId>realm-module-iot-server</artifactId>-->
-        <!--            <version>${revision}</version>-->
-        <!--        </dependency>-->
+        <!-- ERP 相关模块（默认注释，保证编译速度） / ERP modules (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-erp-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
 
-        <!-- spring boot 配置所需依赖 -->
+        <!-- AI 大模型相关模块（默认注释，保证编译速度） / AI module (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-ai-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
+
+        <!-- IoT 物联网相关模块（默认注释，保证编译速度） / IoT module (commented by default) -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-module-iot-server</artifactId> -->
+        <!--     <version>${revision}</version> -->
+        <!-- </dependency> -->
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Spring Boot 配置处理器（编译时生成元数据，可选）                       -->
+        <!--  Spring Boot configuration processor (generates metadata, optional)  -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- 服务保障相关 -->
-<!--        <dependency>-->
-<!--            <groupId>cn.realm.cloud</groupId>-->
-<!--            <artifactId>realm-spring-boot-starter-protection</artifactId>-->
-<!--        </dependency>-->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  服务保障相关（可选，按需启用） / Service protection (optional)         -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!-- <dependency> -->
+        <!--     <groupId>cn.realm.cloud</groupId> -->
+        <!--     <artifactId>realm-spring-boot-starter-protection</artifactId> -->
+        <!-- </dependency> -->
 
-        <!-- Registry 注册中心相关 -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  注册中心（Nacos） / Service registry (Nacos)                           -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!-- Config 配置中心相关 -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  配置中心（Nacos） / Config center (Nacos)                              -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <!-- RPC 远程调用相关 -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  RPC 远程调用（排除 OpenFeign，以便单体启动时禁用）                    -->
+        <!--  RPC remote call (excludes OpenFeign to disable it in standalone mode) -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
             <artifactId>realm-spring-boot-starter-rpc</artifactId>
-            <!-- 目的：realm-server 单体启动，禁用 openfeign -->
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.cloud</groupId>
@@ -157,19 +206,26 @@
 
     </dependencies>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  构建配置 / Build Configuration                                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <build>
-        <!-- 设置构建的 jar 包名 -->
+        <!-- 设置构建的 JAR 包名 / Set the final JAR name -->
         <finalName>${project.artifactId}</finalName>
         <plugins>
-            <!-- 打包 -->
+            <!-- Spring Boot Maven 打包插件 / Spring Boot Maven Plugin -->
+            <!-- 用于将应用打包为可执行 JAR（包含所有依赖）                         -->
+            <!-- Used to repackage the application as an executable JAR            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
+                <!-- 版本继承自父 POM，但为了明确，此处显式声明（需与父 POM 保持一致） -->
+                <!-- Version inherited from parent, but explicitly declared here for clarity -->
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>repackage</goal> <!-- 将引入的 jar 打入其中 -->
+                            <goal>repackage</goal> <!-- 将引入的 JAR 打入最终包 / Repackage with all dependencies -->
                         </goals>
                     </execution>
                 </executions>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  基础配置 / Basic Configuration                                 -->
+    <!--  ═══════════════════════════════════════════════════════════════════════════ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  父 POM 继承 / Parent POM                                      -->
+    <!--  继承 realm-cloud，版本 ${revision} 由父 POM 统一管理。                  -->
+    <!--  Inherits from realm-cloud; version ${revision} is managed by parent.   -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <parent>
+        <groupId>cn.realm.cloud</groupId>
+        <artifactId>realm-cloud</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目标识 / Project Coordinates                                 -->
+    <!--  继承父 POM 的 groupId 和 version，此处仅需指定 artifactId。              -->
+    <!--  groupId and version are inherited from parent; only artifactId is set.  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <artifactId>realm-documentation</artifactId>
+    <packaging>pom</packaging>   <!-- 文档模块打包为 POM，用于聚合文档相关配置 / POM packaging for documentation aggregation -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目信息 / Project Information                                 -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <name>${project.artifactId}</name>
+    <description>
+        Documentation module for the Realm project, including API documentation,
+        technical specifications, and deployment guides.
+        项目文档模块，包含 API 文档、技术规范及部署指南。
+    </description>
+    <url>https://github.com/</url> <!-- 请替换为实际文档站点地址 / Replace with actual doc site URL -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  扩展配置（文档生成插件） / Extension Config (Doc Plugins)      -->
+    <!--  如需管理文档生成工具（如 Asciidoctor、Maven Javadoc 等），可在此添加。   -->
+    <!--  Add documentation generation plugins (e.g., Asciidoctor, Javadoc) here. -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+    <!--
+        文档生成插件示例（已注释，按需启用）：
+        Documentation plugin example (commented out, enable as needed):
+    -->
+    <!-- <build> -->
+    <!--     <plugins> -->
+    <!--         <plugin> -->
+    <!--             <groupId>org.asciidoctor</groupId> -->
+    <!--             <artifactId>asciidoctor-maven-plugin</artifactId> -->
+    <!--             <version>2.2.0</version> -->
+    <!--             <configuration> -->
+    <!--                 <sourceDirectory>src/docs/asciidoc</sourceDirectory> -->
+    <!--                 <outputDirectory>${project.build.directory}/generated-docs</outputDirectory> -->
+    <!--             </configuration> -->
+    <!--         </plugin> -->
+    <!--     </plugins> -->
+    <!-- </build> -->
+
+</project>
