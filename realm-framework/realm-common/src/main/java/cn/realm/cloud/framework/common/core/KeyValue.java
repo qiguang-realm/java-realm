@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @param <K> 键的类型
  * @param <V> 值的类型
- * @author qig
+ * @author QI Guang
  */
 public class KeyValue<K, V> implements Serializable {
 

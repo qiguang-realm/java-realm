@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * <p>默认使用 {@link BeanUtil} 作为底层实现，性能足够满足绝大多数业务场景。
  * 对于复杂的对象转换，建议使用 MapStruct 等工具。
  *
- * @author qig
+ * @author QI Guang
  */
 public class BeanUtils {
 

@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author qig
+ * @author QI Guang
  */
 @Service
 public class TemplateDownloadService {

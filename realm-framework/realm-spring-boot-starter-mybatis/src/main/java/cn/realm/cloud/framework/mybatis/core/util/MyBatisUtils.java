@@ -30,7 +30,7 @@ import java.util.List;
  *
  * <p>提供分页构建、排序处理、拦截器管理等通用功能。
  *
- * @author qig
+ * @author QI Guang
  */
 public class MyBatisUtils {
 

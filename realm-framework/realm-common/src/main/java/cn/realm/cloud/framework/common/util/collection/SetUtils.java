@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * <p>本工具类封装了常见的 Set 创建方法，增强空值安全性和日志记录，便于排查问题。
  *
- * @author qig
+ * @author QI Guang
  */
 public class SetUtils {
 

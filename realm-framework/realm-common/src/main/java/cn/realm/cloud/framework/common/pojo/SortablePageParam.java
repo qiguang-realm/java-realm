@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * <p>在 {@link PageParam} 基础上增加排序字段列表，支持多字段排序。
  *
- * @author qig
+ * @author QI Guang
  */
 @Schema(description = "可排序的分页参数")
 @Data

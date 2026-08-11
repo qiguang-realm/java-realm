@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Spring 工具类，继承自 Hutool 的 SpringUtil，并提供生产环境判断等增强功能。
  *
- * @author qig
+ * @author QI Guang
  */
 public class SpringUtils extends SpringUtil {
 

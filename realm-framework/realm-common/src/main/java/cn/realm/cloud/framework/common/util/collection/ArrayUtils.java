@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * 数组工具类，提供数组的合并、转换和安全访问等常用操作。
  *
- * @author qig
+ * @author QI Guang
  */
 public class ArrayUtils {
 

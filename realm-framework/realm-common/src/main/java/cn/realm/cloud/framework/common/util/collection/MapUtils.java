@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 /**
  * Map 工具类，提供常用的 Map 操作增强方法。
  *
- * @author qig
+ * @author QI Guang
  */
 public class MapUtils {
 

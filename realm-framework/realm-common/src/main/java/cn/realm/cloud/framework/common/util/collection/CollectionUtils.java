@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 /**
  * 集合（Collection）工具类，提供集合的转换、过滤、分组、比较等常用操作。
  *
- * @author qig
+ * @author QI Guang
  */
 public class CollectionUtils {
 

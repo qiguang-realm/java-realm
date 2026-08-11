@@ -11,7 +11,7 @@ import java.util.List;
  * 通用分页结果类
  *
  * @param <T> 数据列表中元素的类型
- * @author qig
+ * @author QI Guang
  */
 @Schema(description = "通用分页结果类")
 @Data

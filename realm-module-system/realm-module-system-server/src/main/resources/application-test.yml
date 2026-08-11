@@ -1,13 +1,25 @@
-#nacos:
-#  discovery:
-#    server-addr: ${nacos.server.address}
-#    namespace: ${nacos.server.namespace}
-#    group: ${nacos.server.group}
-#  config:
-#    server-addr: ${nacos.server.address}
-#    namespace: ${nacos.server.namespace}
-#    data-id: ${nacos.server.dataId}
-#    username: ${nacos.server.username}
-#    password: ${nacos.server.password}
-#    type: yaml
-#    auto-refresh: true
+# ================================================================
+#  Nacos 配置（已注释，按需启用）
+#  Nacos Configuration (commented out, enable as needed)
+# ================================================================
+
+# nacos:
+#   # ------------------------------------------
+#   #  服务发现配置 / Service Discovery
+#   # ------------------------------------------
+#   discovery:
+#     server-addr: ${nacos.server.address}       # Nacos 服务地址 / Nacos server address
+#     namespace: ${nacos.server.namespace}       # 命名空间 / Namespace
+#     group: ${nacos.server.group}               # 分组 / Group
+#
+#   # ------------------------------------------
+#   #  配置中心配置 / Config Center
+#   # ------------------------------------------
+#   config:
+#     server-addr: ${nacos.server.address}       # Nacos 服务地址 / Nacos server address
+#     namespace: ${nacos.server.namespace}       # 命名空间 / Namespace
+#     data-id: ${nacos.server.dataId}            # 配置 Data ID / Config Data ID
+#     username: ${nacos.server.username}         # 用户名 / Username
+#     password: ${nacos.server.password}         # 密码 / Password
+#     type: yaml                                 # 配置格式 / Config format (yaml/properties)
+#     auto-refresh: true                         # 是否自动刷新配置 / Auto-refresh configuration

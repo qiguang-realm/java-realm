@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * Object 工具类，提供对象克隆、比较、空值处理等常用操作。
  *
- * @author qig
+ * @author QI Guang
  */
 public class ObjectUtils {
 

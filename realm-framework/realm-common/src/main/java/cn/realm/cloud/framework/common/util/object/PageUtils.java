@@ -16,7 +16,7 @@ import java.util.Collections;
 /**
  * {@link PageParam} 工具类，提供分页参数处理、排序字段构建等常用功能。
  *
- * @author qig
+ * @author QI Guang
  */
 public class PageUtils {
 

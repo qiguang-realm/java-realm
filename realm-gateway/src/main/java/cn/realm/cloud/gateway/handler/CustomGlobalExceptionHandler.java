@@ -28,7 +28,7 @@ import java.util.Map;
  * <p>
  * 通过 @Order(-1) 提高优先级，确保在默认的 ErrorWebExceptionHandler 之前执行。
  *
- * @author qig
+ * @author QI Guang
  */
 @Slf4j
 @Configuration

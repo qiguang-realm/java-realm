@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 网关服务启动类
  *
- * @author qig
+ * @author QI Guang
  */
 @SpringBootApplication
 public class GatewayServerApplication {

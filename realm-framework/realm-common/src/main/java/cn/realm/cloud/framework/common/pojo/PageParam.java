@@ -13,7 +13,7 @@ import java.io.Serializable;
  *
  * <p>支持普通分页和“不分页”（pageSize = -1）两种模式，适用于列表查询和导出等场景。
  *
- * @author qig
+ * @author QI Guang
  */
 @Schema(description = "分页参数")
 @Data

@@ -117,7 +117,6 @@
 
         <!-- Caffeine 缓存（必需，避免因缺少本地缓存实现导致告警）                  -->
         <!-- Caffeine cache (required to avoid warnings from missing local cache)  -->
-        <!-- 详见 / See: https://gitee.com/yudaocode/yudao-cloud-mini/issues/IB5PXW -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>

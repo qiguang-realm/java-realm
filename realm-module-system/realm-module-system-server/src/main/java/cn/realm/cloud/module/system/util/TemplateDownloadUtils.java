@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 模板下载工具类
  *
- * @author qig
+ * @author QI Guang
  */
 public final class TemplateDownloadUtils {
     private static final Logger logger = LoggerFactory.getLogger(TemplateDownloadUtils.class);

@@ -38,7 +38,7 @@ import java.util.List;
  * 防止 SQL 注入。本接口不提供自动白名单过滤，请调用方自行保证。
  *
  * @param <T> 实体类型
- * @author qig
+ * @author QI Guang
  */
 public interface BaseMapperX<T> extends MPJBaseMapper<T> {
 

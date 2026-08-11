@@ -1,6 +1,6 @@
 package cn.realm.cloud.module.system.json;
 
-import cn.realm.cloud.module.system.util.json.JacksonUtils;
+import cn.realm.cloud.framework.common.util.json.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ class JacksonTest {
 
         // 使用全局工具类替代临时ObjectMapper（线程安全）
         // Use global utility class instead of temporary ObjectMapper (thread-safe)
-        ObjectMapper objectMapper = JacksonUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.getObjectMapper();
 
         try {
             // 将JSON字符串解析为树形结构

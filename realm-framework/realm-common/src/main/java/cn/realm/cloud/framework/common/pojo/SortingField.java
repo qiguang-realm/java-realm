@@ -20,7 +20,7 @@ import java.io.Serializable;
  * <b>安全说明：</b>使用此类构建 SQL 排序时，务必对 {@link #field} 进行白名单校验，
  * 防止 SQL 注入（例如仅允许表真实列名或预定义字段集合）。
  *
- * @author qig
+ * @author QI Guang
  */
 @Data
 @NoArgsConstructor

@@ -1,40 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================
+     Logback 日志配置（logback-spring.xml）
+     Logback Logging Configuration (logback-spring.xml)
+     参考 Spring Boot 默认配置（defaults.xml, file-appender.xml）
+     Based on Spring Boot default configuration (defaults.xml, file-appender.xml)
+     ================================================================ -->
 <configuration>
-    <!-- 参考 org/springframework/boot/logging/logback/defaults.xml 配置，优化 CONSOLE_LOG_PATTERN、FILE_LOG_PATTERN -->
-    <!-- 格式化输出：%d 表示日期，%thread 表示线程名，%-5level：级别从左显示 5 个字符宽度，%msg：日志消息，%n是换行符 -->
-    <!-- CONSOLE_LOG_PATTERN 相比 FILE_LOG_PATTERN 多了 highlight、cyan 等高亮 -->
-    <property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{50}:%L) - %msg%n"/>
-    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n"/>
 
-    <!-- 控制台 Appender -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">　　　　　
+    <!-- ================================================================
+         日志输出格式定义 / Log Pattern Definitions
+         - CONSOLE_LOG_PATTERN: 控制台输出（带高亮）
+         - FILE_LOG_PATTERN: 文件输出（无高亮）
+         - 格式化说明：%d 日期 / %thread 线程名 / %-5level 日志级别（左对齐5字符）
+           %msg 日志消息 / %n 换行 / %logger{50} 日志记录器名称（最长50字符）/%L 行号
+         ================================================================ -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{50}:%L) - %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n"/>
+
+    <!-- ================================================================
+         控制台 Appender（STDOUT）
+         Console Appender (STDOUT)
+         将日志输出到控制台，使用 CONSOLE_LOG_PATTERN 格式（含高亮）
+         ================================================================ -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <!-- 文件 Appender -->
-    <!-- 参考 Spring Boot 的 file-appender.xml 编写 -->
-    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- ================================================================
+         文件 Appender（FILE）
+         File Appender (FILE)
+         基于大小和时间的滚动策略，输出到 ${LOG_FILE}，使用 FILE_LOG_PATTERN
+         - 每日滚动，按大小分片
+         - 保留最近 30 天日志
+         - 单文件最大 10MB
+         ================================================================ -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
-        <!-- 日志文件名 -->
-        <file>${LOG_FILE}</file>
-        <!-- 滚动策略：基于【每天 + 大小】创建日志文件 -->
+        <file>${LOG_FILE}</file>                                       <!-- 日志文件路径 / Log file path -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- 日志文件输出的文件名 -->
-            <maxHistory>30</maxHistory> <!-- 日志文件的保留天数 -->
-            <maxFileSize>10MB</maxFileSize> <!-- 日志文件，到达多少容量，进行滚动 -->
+            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- 滚动文件名模式 / Rolling file name pattern -->
+            <maxHistory>30</maxHistory>                                <!-- 保留天数 / Retention days -->
+            <maxFileSize>10MB</maxFileSize>                            <!-- 单文件大小上限 / Max file size per file -->
         </rollingPolicy>
     </appender>
-    <!-- 异步写入日志，提升性能 -->
+
+    <!-- ================================================================
+         异步 Appender（ASYNC）
+         Async Appender (ASYNC)
+         异步写入日志（基于 FILE Appender），提升性能
+         - 队列大小 512（默认 256）
+         - 不丢弃任何级别日志（discardingThreshold=0）
+         ================================================================ -->
     <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <discardingThreshold>0</discardingThreshold> <!-- 不丢失日志。默认的，如果队列的 80% 已满,则会丢弃 TRACT、DEBUG、INFO 级别的日志 -->
-        <queueSize>512</queueSize> <!-- 更改默认的队列的深度，该值会影响性能。默认值为 256 -->
+        <discardingThreshold>0</discardingThreshold>                  <!-- 不丢弃日志（0 = 不丢弃） / No discarding (0 = disabled) -->
+        <queueSize>512</queueSize>                                    <!-- 队列大小 / Queue size -->
         <appender-ref ref="FILE"/>
     </appender>
 
-    <!-- SkyWalking Appender：GRPC 日志收集，实现日志中心 -->
+    <!-- ================================================================
+         SkyWalking Appender（可选）
+         SkyWalking Appender (optional)
+         通过 GRPC 将日志发送到 SkyWalking 日志中心
+         已注释，需取消注释并添加相应依赖方可启用
+         ================================================================ -->
     <!--
     <appender name="SKYWALKING" class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
@@ -45,11 +79,17 @@
     </appender>
     -->
 
+    <!-- ================================================================
+         根日志记录器（Root Logger）
+         - 日志级别：INFO
+         - 输出目标：控制台（STDOUT）+ 异步文件（ASYNC）
+         - 本地环境下，可注释掉 ASYNC 以禁用文件日志
+         - 如需启用 SkyWalking，取消注释 SKYWALKING
+         ================================================================ -->
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-        <!-- 本地环境下，如果不想【FILE】打印日志，可以注释掉本行 -->
-        <appender-ref ref="ASYNC"/>
-        <!-- 如果想接入【SkyWalking 日志服务】，可以取消注释掉本行 -->
+        <appender-ref ref="STDOUT"/>                                   <!-- 控制台 / Console -->
+        <appender-ref ref="ASYNC"/>                                    <!-- 异步文件 / Async file -->
+        <!-- 如需接入 SkyWalking 日志中心，请取消注释下行 / Uncomment below to enable SkyWalking -->
         <!-- <appender-ref ref="SKYWALKING"/> -->
     </root>
 

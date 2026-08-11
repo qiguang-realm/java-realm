@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 通用排序方向枚举
  *
- * @author qig
+ * @author QI Guang
  */
 @Getter
 public enum OrderDirection {

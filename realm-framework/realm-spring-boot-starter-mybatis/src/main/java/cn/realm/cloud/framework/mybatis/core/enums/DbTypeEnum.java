@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 针对 MyBatis Plus 的 {@link DbType} 增强，补充更多信息
  *
- * @author qig
+ * @author QI Guang
  */
 @Getter
 @AllArgsConstructor

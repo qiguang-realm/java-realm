@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * @author qig
+ * @author QI Guang
  */
 @RestController
 @RequestMapping("/system/templates")

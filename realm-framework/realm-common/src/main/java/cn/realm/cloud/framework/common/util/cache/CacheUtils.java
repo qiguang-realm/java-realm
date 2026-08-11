@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * <p>该类封装了常用的缓存构建模式，支持最大容量（默认 10000）和刷新时间配置。
  *
- * @author qig
+ * @author QI Guang
  */
 public class CacheUtils {
 
