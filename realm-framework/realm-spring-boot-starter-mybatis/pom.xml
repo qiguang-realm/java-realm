@@ -2,114 +2,196 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <!-- 基础项目定义 -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  POM 模型版本（必需）                                           -->
+    <!--  [ SECTION ]  POM Model Version (Required)                              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  父 POM（realm-framework）                                     -->
+    <!--  [ SECTION ]  Parent POM (realm-framework)                              -->
+    <!--  版本 ${revision} 由父 POM 统一管理。                                   -->
+    <!--  Version ${revision} is managed by the parent.                         -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <parent>
         <groupId>cn.realm.cloud</groupId>
         <artifactId>realm-framework</artifactId>
         <version>${revision}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  模块坐标 / Module Coordinates                                  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <artifactId>realm-spring-boot-starter-mybatis</artifactId>
     <packaging>jar</packaging>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  项目名称与描述 / Project Name and Description                  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <name>${project.artifactId}</name>
-    <description>数据库连接池、多数据源、事务管理、MyBatis 拓展支持</description>
+    <description>
+        数据库连接池、多数据源、事务管理及 MyBatis 扩展支持。
+        Database connection pool, multi-datasource, transaction management,
+        and MyBatis extension support.
+    </description>
     <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+    <!--  [ 章节 ]  依赖管理 / Dependencies                                        -->
+    <!--  所有版本由父 POM 的 dependencyManagement 统一管控。                     -->
+    <!--  All versions are managed by parent's dependencyManagement.              -->
+    <!--  依赖按功能分组，便于阅读和维护。                                        -->
+    <!--  Dependencies are grouped by functional area for clarity.               -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <dependencies>
-        <!-- ==================== 基础依赖 ==================== -->
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  基础工具类 / Foundation Utilities                                     -->
+        <!--  提供 Realm 通用工具和基础 POJO。                                    -->
+        <!--  Realm common utilities and base POJOs.                              -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
-            <artifactId>realm-common</artifactId> <!-- 项目通用工具和基础类 -->
+            <artifactId>realm-common</artifactId>
         </dependency>
 
-        <!-- ==================== Web 相关 ==================== -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  Web 与安全（provided 范围） / Web & Security (provided scope)        -->
+        <!--  仅用于 OncePerRequestFilter；由使用者在运行时提供安全实现。          -->
+        <!--  Required for OncePerRequestFilter; consumers provide their own     -->
+        <!--  security implementation at runtime.                                -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>cn.realm.cloud</groupId>
             <artifactId>realm-spring-boot-starter-security</artifactId>
-            <scope>provided</scope> <!-- 仅 OncePerRequestFilter 使用 -->
+            <scope>provided</scope>
         </dependency>
 
-        <!-- ==================== 数据库驱动支持 ==================== -->
-        <!-- 默认 MySQL 驱动 -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  默认数据库驱动 / Default Database Drivers                            -->
+        <!--  默认包含 MySQL 驱动。                                              -->
+        <!--  MySQL driver is included by default.                               -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
-        <!-- 可选数据库驱动（按需引入） -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  可选数据库驱动 / Optional Database Drivers                          -->
+        <!--  其他数据库驱动标记为 optional，由使用者按需引入。                  -->
+        <!--  Other database drivers are marked optional; consumers may add       -->
+        <!--  the specific driver they need.                                     -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <optional>true</optional> <!-- Oracle 驱动 -->
+            <optional>true</optional>               <!-- Oracle 驱动 / Oracle driver -->
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <optional>true</optional> <!-- PostgreSQL 驱动 -->
+            <optional>true</optional>               <!-- PostgreSQL 驱动 -->
         </dependency>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <optional>true</optional> <!-- SQL Server 驱动 -->
+            <optional>true</optional>               <!-- SQL Server 驱动 -->
         </dependency>
         <dependency>
             <groupId>com.dameng</groupId>
             <artifactId>DmJdbcDriver18</artifactId>
-            <optional>true</optional> <!-- 达梦数据库驱动 -->
+            <optional>true</optional>               <!-- 达梦数据库驱动 / Dameng database driver -->
         </dependency>
         <dependency>
             <groupId>cn.com.kingbase</groupId>
             <artifactId>kingbase8</artifactId>
-            <optional>true</optional> <!-- 人大金仓驱动 -->
+            <optional>true</optional>               <!-- 人大金仓驱动 / Kingbase database driver -->
         </dependency>
         <dependency>
             <groupId>org.opengauss</groupId>
             <artifactId>opengauss-jdbc</artifactId>
-            <optional>true</optional> <!-- 华为 openGauss 驱动 -->
+            <optional>true</optional>               <!-- 华为 openGauss 驱动 / Huawei openGauss driver -->
         </dependency>
 
-        <!-- ==================== 数据库连接池 ==================== -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  连接池（Druid） / Connection Pool (Druid)                           -->
+        <!--  阿里巴巴 Druid 连接池，与 Spring Boot 3 集成。                     -->
+        <!--  Alibaba Druid connection pool with Spring Boot 3 integration.      -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-3-starter</artifactId> <!-- Druid 连接池 -->
+            <artifactId>druid-spring-boot-3-starter</artifactId>
         </dependency>
 
-        <!-- ==================== MyBatis 增强 ==================== -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  MyBatis-Plus 增强 / MyBatis-Plus Enhancements                       -->
+        <!--  包含 MyBatis-Plus 核心、SQL 解析器和联表查询支持。                  -->
+        <!--  Core MyBatis-Plus, SQL parser, and join query support.             -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId> <!-- MyBatis-Plus 核心 -->
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-jsqlparser</artifactId> <!-- SQL 解析器 -->
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.yulichang</groupId>
-            <artifactId>mybatis-plus-join-boot-starter</artifactId> <!-- 联表查询支持 -->
+            <artifactId>mybatis-plus-join-boot-starter</artifactId>
         </dependency>
 
-        <!-- ==================== 多数据源支持 ==================== -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  多数据源支持 / Multi-Datasource Support                              -->
+        <!--  动态数据源路由，与 Spring Boot 3 集成。                             -->
+        <!--  排除 Undertow 避免不必要的依赖。                                    -->
+        <!--  Dynamic datasource routing with Spring Boot 3.                     -->
+        <!--  Excluding Undertow to avoid unnecessary dependencies.              -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId> <!-- 排除不必要的依赖 -->
+                    <artifactId>spring-boot-starter-undertow</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
 
-        <!-- ==================== 数据翻译支持 ==================== -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  数据翻译（Easy-Trans） / Data Translation (Easy-Trans)              -->
+        <!--  提供 VO 数据翻译功能，集成 MyBatis-Plus。                           -->
+        <!--  VO data translation support with MyBatis-Plus integration.        -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>easy-trans-spring-boot-starter</artifactId> <!-- VO 数据翻译核心 -->
+            <artifactId>easy-trans-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>easy-trans-mybatis-plus-extend</artifactId> <!-- MyBatis-Plus 扩展支持 -->
+            <artifactId>easy-trans-mybatis-plus-extend</artifactId>
         </dependency>
+
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <!--  代码生成器（可选） / Code Generator (optional)                       -->
+        <!--  仅用于开发阶段生成代码，不传递到依赖方。                            -->
+        <!--  Used only during development for code generation; not transitive.   -->
+        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <scope>provided</scope>               <!-- 编译时可用，但不传递 / Available at compile time, not transitive -->
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <scope>provided</scope>               <!-- 同上，用于生成器模板引擎 / Same as above, for generator template engine -->
+        </dependency>
+
     </dependencies>
 
 </project>
