@@ -1,0 +1,145 @@
+# ================================================================
+#  应用名称与环境
+# ================================================================
+
+spring:
+  application:
+    name: infra-server                                # 应用名称 / Application name
+
+#  profiles:
+#    active: dev                                     # 当前激活的配置文件 / Active profile
+
+  # -------- 注册中心 + 配置中心（Nacos） --------
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848                     # Nacos 服务器地址 / Nacos server address
+      username:                                       # Nacos 账号 / Nacos username
+      password:                                       # Nacos 密码 / Nacos password
+      discovery:                                      # 服务发现配置（注册中心） / Service discovery (registry)
+        enabled: false                                # 禁用服务发现客户端
+        register-enabled: false                       # 禁止服务注册
+        namespace: dev                                # 命名空间（dev 开发环境） / Namespace (dev)
+        group: DEFAULT_GROUP                          # 分组 / Group
+        metadata:
+          version: 1.0.0                              # 服务版本号（用于灰度发布） / Service version (for gray release)
+      config:                                         # 配置中心配置 / Config center
+        namespace: dev
+        group: DEFAULT_GROUP
+
+  # -------- 数据源配置（Druid + 多数据源） --------
+  autoconfigure:
+    exclude:                                          # 自动配置排除项 / Auto-configuration exclusions
+
+  datasource:
+    druid:                                            # Druid 监控配置 / Druid monitoring config
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+        allow:                                        # 白名单（不填则允许所有访问） / Allow list (empty = allow all)
+        url-pattern: /druid/*
+        login-username:                               # 控制台用户名 / Console username
+        login-password:                               # 控制台密码 / Console password
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true                          # 记录慢 SQL / Log slow SQL
+          slow-sql-millis: 100                        # 慢 SQL 阈值（毫秒） / Slow SQL threshold (ms)
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true               # 允许多语句 / Allow multi-statement
+
+    dynamic:                                          # 多数据源配置 / Multi-datasource config
+      druid:                                          # Druid 连接池全局配置 / Druid connection pool global config
+        initial-size: 5                               # 初始连接数 / Initial connections
+        min-idle: 10                                  # 最小空闲连接数 / Minimum idle connections
+        max-active: 20                                # 最大活动连接数 / Maximum active connections
+        max-wait: 60000                               # 获取连接超时时间（毫秒） / Connection acquisition timeout (ms)
+        time-between-eviction-runs-millis: 60000      # 空闲连接检测间隔（毫秒） / Idle connection check interval (ms)
+        min-evictable-idle-time-millis: 600000        # 最小空闲存活时间（毫秒） / Minimum idle time before eviction (ms)
+        max-evictable-idle-time-millis: 1800000       # 最大空闲存活时间（毫秒） / Maximum idle time before eviction (ms)
+        validation-query: SELECT 1 FROM DUAL          # 连接校验 SQL / Validation query
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        pool-prepared-statements: true                # 启用 PreparedStatement 缓存 / Enable PreparedStatement cache
+        max-pool-prepared-statement-per-connection-size: 20  # 每个连接缓存最大数量 / Max cached statements per connection
+
+      primary: master                                 # 主数据源 / Primary datasource
+      datasource:
+        master:                                       # 主库配置 / Master database
+          url: jdbc:mysql://127.0.0.1:3306/database?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true
+          username: root
+          password: root
+        slave:                                        # 从库配置（模拟） / Slave database (simulated)
+          lazy: true                                  # 开启懒加载，加快启动速度 / Lazy initialization for faster startup
+          url: jdbc:mysql://127.0.0.1:3306/database?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true
+          username: root
+          password: root
+
+  # -------- Redis 配置 --------
+  data:
+    redis:
+      host: 192.168.2.193                             # Redis 主机地址 / Redis host
+      port: 6379                                      # Redis 端口 / Redis port
+      database: 1                                     # 数据库索引 / Database index
+      # password: 123456                              # 密码（建议生产环境开启） / Password (recommended for production)
+
+  # -------- RabbitMQ 配置 --------
+  rabbitmq:
+    host: 127.0.0.1                                   # RabbitMQ 服务地址 / RabbitMQ host
+    port: 5672                                        # RabbitMQ 服务端口 / RabbitMQ port
+    username: guest                                   # RabbitMQ 账号 / RabbitMQ username
+    password: guest                                   # RabbitMQ 密码 / RabbitMQ password
+
+  # -------- Kafka 配置 --------
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092                 # Kafka Broker 地址（可多个，逗号分隔） / Kafka broker addresses
+
+  # -------- Spring Boot Admin 监控客户端配置 --------
+  boot:
+    admin:
+      client:
+        instance:
+          service-host-type: IP                       # 注册时优先使用 IP / Prefer IP over hostname
+        username: admin
+        password: admin
+      context-path: /admin                            # Admin Server 上下文路径 / Admin Server context path
+
+# ================================================================
+#  RocketMQ 配置
+# ================================================================
+rocketmq:
+  name-server: 127.0.0.1:9876                         # RocketMQ Namesrv 地址 / Namesrv address
+
+# ================================================================
+#  定时任务（XXL-JOB）配置
+# ================================================================
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:9090/xxl-job-admin  # 调度中心地址 / Scheduler admin address
+
+# ================================================================
+#  服务保障（分布式锁等）配置
+# ================================================================
+lock4j:
+  acquire-timeout: 3000                               # 获取锁超时时间（毫秒） / Lock acquisition timeout (ms)
+  expire: 30000                                      # 锁持有时间（毫秒） / Lock expiration time (ms)
+
+# ================================================================
+#  监控端点（Actuator）配置
+# ================================================================
+management:
+  endpoints:
+    web:
+      base-path: /actuator                            # Actuator API 根路径 / Actuator base path
+      exposure:
+        include: '*'                                  # 开放所有端点（默认仅 health 和 info） / Expose all endpoints
+
+# ================================================================
+# （Realm）自定义配置
+# ================================================================
+realm:
+  demo: true                                         # 开启演示模式 / Enable demo mode

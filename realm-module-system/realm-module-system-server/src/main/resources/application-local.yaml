@@ -71,13 +71,13 @@ spring:
         master:                                      # 主库配置 / Master database
           url: jdbc:mysql://127.0.0.1:3306/database?useSSL=true&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
           # MySQL Connector/J 5.X 示例（已注释） / MySQL Connector/J 5.X example (commented)
-          # url: jdbc:mysql://127.0.0.1:3306/ruoyi-vue-pro?useSSL=true&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+          # url: jdbc:mysql://127.0.0.1:3306/database?useSSL=true&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
           # PostgreSQL 示例（已注释） / PostgreSQL example (commented)
-          # url: jdbc:postgresql://127.0.0.1:5432/ruoyi-vue-pro
+          # url: jdbc:postgresql://127.0.0.1:5432/database
           # Oracle 示例（已注释） / Oracle example (commented)
           # url: jdbc:oracle:thin:@127.0.0.1:1521:xe
           # SQL Server 示例（已注释） / SQL Server example (commented)
-          # url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=ruoyi-vue-pro
+          # url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=database
           # 达梦数据库示例（已注释） / Dameng DB example (commented)
           # url: jdbc:dm://10.211.55.4:5236?schema=RUOYI_VUE_PRO
           username: root
@@ -91,7 +91,7 @@ spring:
         # 从库配置（模拟，已注释） / Slave database (simulated, commented)
         # slave:
         #   lazy: true                               # 开启懒加载，加快启动速度 / Lazy initialization
-        #   url: jdbc:mysql://127.0.0.1:3306/ruoyi-vue-pro?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true
+        #   url: jdbc:mysql://127.0.0.1:3306/database?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true
         #   username: root
         #   password: 123456
 

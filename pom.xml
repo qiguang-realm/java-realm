@@ -19,7 +19,7 @@
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <!--  [ SECTION ]  Project Information                                        -->
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-    <name>Realm Cloud Parent</name>
+    <name>realm-cloud</name>
     <description>
         Parent POM for the Realm project, centralizing dependency version management
         and build plugin configurations for all submodules.
@@ -36,6 +36,7 @@
         <module>realm-gateway</module>          <!-- API gateway module -->
         <module>realm-module-system</module>    <!-- System management module -->
         <module>realm-server</module>           <!-- Main service module -->
+        <module>realm-module-infra</module>
     </modules>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->

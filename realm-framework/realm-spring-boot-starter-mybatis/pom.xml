@@ -36,7 +36,7 @@
         Database connection pool, multi-datasource, transaction management,
         and MyBatis extension support.
     </description>
-    <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
+    <url>https://github.com/</url>
 
     <!-- ═══════════════════════════════════════════════════════════════════════════ -->
     <!--  [ 章节 ]  依赖管理 / Dependencies                                        -->
@@ -174,22 +174,6 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>easy-trans-mybatis-plus-extend</artifactId>
-        </dependency>
-
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <!--  代码生成器（可选） / Code Generator (optional)                       -->
-        <!--  仅用于开发阶段生成代码，不传递到依赖方。                            -->
-        <!--  Used only during development for code generation; not transitive.   -->
-        <!-- ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈ -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <scope>provided</scope>               <!-- 编译时可用，但不传递 / Available at compile time, not transitive -->
-        </dependency>
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <scope>provided</scope>               <!-- 同上，用于生成器模板引擎 / Same as above, for generator template engine -->
         </dependency>
 
     </dependencies>
