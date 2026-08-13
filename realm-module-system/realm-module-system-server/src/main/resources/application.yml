@@ -141,7 +141,7 @@ aj:
     cache-number: 1000                            # local 缓存阈值 / Local cache threshold
     timing-clear: 180                             # local 缓存清理间隔（秒） / Local cache clear interval (seconds)
     type: blockPuzzle                             # 验证码类型：blockPuzzle 滑块 / clickWord 文字点选 / pictureWord 文本输入
-    water-mark: qig                               # 水印文字（中文需 Unicode） / Watermark text
+    water-mark: qi guang                          # 水印文字（中文需 Unicode） / Watermark text
     interference-options: 0                       # 干扰项级别 / Interference level
     req-frequency-limit-enable: false             # 是否开启请求频率限制 / Enable request frequency limit
     req-get-lock-limit: 5                         # 获取验证码失败锁定次数 / Lock after fail count

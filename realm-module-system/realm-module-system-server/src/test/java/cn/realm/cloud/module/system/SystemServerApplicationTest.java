@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SystemServerApplicationTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(SystemServerApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(SystemServerApplicationTest.class);
 
     /**
      * https://stackoverflow.com/questions/157944/create-arraylist-from-array

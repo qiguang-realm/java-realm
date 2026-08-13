@@ -1,7 +1,7 @@
-package cn.realm.cloud.system.server.controller.admin.template;
+package cn.realm.cloud.system.server.module.system.controller.admin.template;
 
-import cn.realm.cloud.system.server.service.TemplateDownloadService;
-import cn.realm.cloud.system.server.util.TemplateDownloadUtils;
+import cn.realm.cloud.system.server.common.util.TemplateDownloadUtil;
+import cn.realm.cloud.system.server.module.system.service.TemplateDownloadService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class TemplateDownloadController {
     public void downloadUserImportTemplate(HttpServletResponse response) {
         String fileName = "user-template.xlsx";
         try {
-            TemplateDownloadUtils.downloadTemplate(fileName, response);
+            TemplateDownloadUtil.downloadTemplate(fileName, response);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "用户导入模板下载失败");
         }

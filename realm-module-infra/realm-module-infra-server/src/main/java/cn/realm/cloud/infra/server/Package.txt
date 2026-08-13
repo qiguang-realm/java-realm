@@ -167,6 +167,28 @@ cn.realm.cloud.infra.server
 │
 └── InfraServerApplication.java  ← Spring Boot 启动类（放在根包下）
 
+
+cn.realm.cloud.system.server
+├── module/                     ← 业务模块（如 user、order）
+│   ├── user/
+│   │   ├── controller/
+│   │   ├── service/
+│   │   └── model/
+│   └── role/
+│       └── ...
+├── infra/                      ← 技术基础设施层
+│   ├── captcha/                ← 验证码组件
+│   │   ├── RedisCaptchaServiceImpl.java   ← 核心实现
+│   │   └── CaptchaProperties.java         （配置属性，如过期时间）
+│   ├── job/                    （定时任务框架封装）
+│   ├── monitor/                （监控指标采集）
+│   └── generator/              （代码生成器核心）
+├── common/                     ← 全局共享层
+│   ├── util/
+│   ├── constant/
+│   └── exception/
+└── config/                     ← Spring 全局配置（如 WebMvc、Security）
+
 📌 如何选择？决策树
 
 
@@ -184,6 +206,72 @@ cn.realm.cloud.infra.server.controller
 ├── admin/          ← 后台管理接口（供运营、管理员使用）
 ├── app/            ← 移动端接口（供 App/小程序使用）
 └── internal/       ← 内部服务接口（可选，供其他微服务 RPC 调用）
+
+
+common 包结构示例
+
+纯粹的、与业务无关的工具类（Utils），应当放在 common 包下，而不是 core 包下。
+
+
+区分 util 与 helper：
+
+util：存放纯技术性、与业务无关的工具类，例如 DateUtil、HttpClientUtil。
+
+helper：存放与特定业务场景相关的辅助类，例如 OrderHelper。
+
+
+cn.realm.cloud.system.server.common
+├── annotation/                 # 自定义注解
+│   └── RequirePermission.java
+├── aspect/                     # AOP 切面
+│   └── LogAspect.java
+├── config/                     # 全局配置
+│   ├── WebMvcConfig.java
+│   └── MyBatisPlusConfig.java
+├── constant/                   # 常量
+│   └── SystemConstants.java
+├── enums/                      # 全局枚举
+│   └── ResultCode.java
+├── exception/                  # 异常处理
+│   ├── BusinessException.java
+│   └── GlobalExceptionHandler.java
+├── filter/                     # 全局过滤器
+│   └── RequestLogFilter.java
+├── holder/                     # 上下文持有者
+│   └── UserContextHolder.java
+├── interceptor/                # 拦截器
+│   └── LoginInterceptor.java
+├── properties/                 # 配置属性类
+│   └── JwtProperties.java
+├── serializer/                 # 自定义序列化器
+│   └── DateJsonSerializer.java
+├── support/                    # 通用支持组件
+│   └── CacheSupport.java
+├── util/                       # 工具类（纯静态方法）
+│   ├── DateUtil.java
+│   ├── FileUtil.java
+│   └── TemplateDownloadUtil.java
+└── validator/                  # 自定义校验器
+    └── PhoneValidator.java
+
+
+
+对外提供接口的唯一合法方式是通过 API 层（Controller 或 RPC Facade）
+
+cn.realm.cloud.system.server
+├── module/
+│   └── system/
+│       ├── controller/admin/template/
+│       │   └── TemplateDownloadController.java    ← 对外HTTP接口（唯一入口）
+│       └── service/
+│           ├── TemplateDownloadService.java       ← 保留，处理业务逻辑
+│           └── impl/
+│               └── TemplateDownloadServiceImpl.java
+└── common/
+    └── util/
+        └── FileStreamUtil.java                    ← 仅保留纯静态工具（如流复制）
+
+
 
 
 📁 测试目录结构示例

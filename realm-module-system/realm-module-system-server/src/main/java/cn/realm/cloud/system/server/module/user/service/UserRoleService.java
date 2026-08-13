@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author QI Guang
- * @since 2026-08-12
  */
 public interface UserRoleService extends IService<UserRole> {
 

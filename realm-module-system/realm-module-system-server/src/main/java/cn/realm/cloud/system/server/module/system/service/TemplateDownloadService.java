@@ -1,4 +1,4 @@
-package cn.realm.cloud.system.server.util;
+package cn.realm.cloud.system.server.module.system.service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -18,12 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 模板下载工具类
- *
  * @author QI Guang
  */
-public final class TemplateDownloadUtils {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateDownloadUtils.class);
+@Service
+public class TemplateDownloadService {
+    private static final Logger logger = LoggerFactory.getLogger(TemplateDownloadService.class);
 
     private static final String TEMPLATE_DIR = "/templates/";
     private static final List<String> ALLOWED_TEMPLATES = Arrays.asList(
@@ -33,14 +33,10 @@ public final class TemplateDownloadUtils {
             "data-import-template.xls"
     );
 
-    private TemplateDownloadUtils() {
-        throw new UnsupportedOperationException("工具类不允许实例化");
-    }
-
     /**
      * 验证文件名是否合法
      */
-    public static boolean isValidFileName(String fileName) {
+    public boolean isValidFileName(String fileName) {
         if (fileName == null) {
             logger.debug("File name is null");
             return false;
@@ -70,7 +66,7 @@ public final class TemplateDownloadUtils {
     /**
      * 获取模板资源
      */
-    public static Resource getTemplateResource(String fileName) {
+    public Resource getTemplateResource(String fileName) {
         if (!isValidFileName(fileName)) {
             throw new IllegalArgumentException("Invalid file name: " + fileName);
         }
@@ -86,7 +82,7 @@ public final class TemplateDownloadUtils {
     /**
      * 下载模板文件
      */
-    public static void downloadTemplate(String fileName, HttpServletResponse response) throws IOException {
+    public void downloadTemplate(String fileName, HttpServletResponse response) throws IOException {
         Resource resource = getTemplateResource(fileName);
         setResponseHeaders(response, fileName);
 
@@ -99,7 +95,8 @@ public final class TemplateDownloadUtils {
     /**
      * 设置响应头
      */
-    private static void setResponseHeaders(HttpServletResponse response, String fileName) {
+    private void setResponseHeaders(HttpServletResponse response, String fileName) {
+        // 使用RFC 5987标准进行文件名编码，支持中文文件名
         String encodedFileName = "attachment; filename=\"" + fileName + "\"; " +
                 "filename*=UTF-8''" + encodeRFC5987(fileName);
 
@@ -114,7 +111,7 @@ public final class TemplateDownloadUtils {
     /**
      * 根据文件扩展名获取Content-Type
      */
-    private static String getContentType(String fileName) {
+    private String getContentType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         switch (extension) {
             case "xlsx":
@@ -123,6 +120,10 @@ public final class TemplateDownloadUtils {
                 return "application/vnd.ms-excel";
             case "csv":
                 return "text/csv";
+            case "pdf":
+                return "application/pdf";
+            case "docx":
+                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
             default:
                 return "application/octet-stream";
         }
@@ -131,7 +132,7 @@ public final class TemplateDownloadUtils {
     /**
      * RFC 5987编码
      */
-    private static String encodeRFC5987(String value) {
+    private String encodeRFC5987(String value) {
         try {
             return URLEncoder.encode(value, StandardCharsets.UTF_8.name())
                     .replace("+", "%20")
@@ -139,14 +140,25 @@ public final class TemplateDownloadUtils {
                     .replace("%7E", "~");
         } catch (UnsupportedEncodingException e) {
             logger.warn("Failed to encode filename: {}", value, e);
-            return value;
+            return value; // fallback
         }
     }
 
     /**
      * 获取允许的模板列表
      */
-    public static List<String> getAllowedTemplates() {
+    public List<String> getAllowedTemplates() {
         return ALLOWED_TEMPLATES;
+    }
+
+    /**
+     * 发送错误响应
+     */
+    public void sendErrorResponse(HttpServletResponse response, int status, String message) {
+        try {
+            response.sendError(status, message);
+        } catch (IOException ioException) {
+            logger.error("Failed to send error response: {}", ioException.getMessage(), ioException);
+        }
     }
 }

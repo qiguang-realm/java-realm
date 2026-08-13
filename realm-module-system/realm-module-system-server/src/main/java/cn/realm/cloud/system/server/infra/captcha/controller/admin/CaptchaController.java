@@ -1,4 +1,4 @@
-package cn.realm.cloud.system.server.controller.admin.captcha;
+package cn.realm.cloud.system.server.infra.captcha.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import cn.realm.cloud.framework.common.util.servlet.ServletUtils;

@@ -56,7 +56,6 @@ import java.util.stream.Collectors;
  *
  * @author QI Guang
  * @version 2.0.1
- * @since 2026-08-10
  */
 public final class InMemoryJoinUtils {
 
