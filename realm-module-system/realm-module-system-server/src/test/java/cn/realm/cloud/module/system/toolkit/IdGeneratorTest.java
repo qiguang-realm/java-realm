@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicLong;
 class IdGeneratorTest {
     private static final Logger logger = LoggerFactory.getLogger(IdGeneratorTest.class);
 
+    // IdUtil.getSnowflakeNextIdStr()（Hutool 的雪花算法）
+
     @Test
     public void generatorTest() {
 

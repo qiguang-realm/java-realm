@@ -4103,7 +4103,7 @@ CREATE TABLE sign_flow
     auth_id            VARCHAR(64) COMMENT '本次签署使用的企业授权流程ID（来自orgSign.authId）',
 
     -- 流程状态
-    status                TINYINT      NOT NULL DEFAULT 0 COMMENT '0-草稿 1-签署中 2-已完成 3-已撤销 4-已过期 5-拒签',
+    status                TINYINT      NOT NULL DEFAULT 0 COMMENT '0-待签署 1-签署中 2-已完成 3-已撤销 4-已过期 5-拒签',
     status_desc           VARCHAR(100) COMMENT '状态描述',
 
     -- 签署配置

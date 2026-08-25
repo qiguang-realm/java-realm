@@ -193,3 +193,14 @@ try {
 
 
 
+/**
+ * 下载运输账单（Excel格式）
+ *
+ * <p><b>⚠️ 重要提醒：</b>此方法生成的 Excel 模板与电子签章系统紧密关联，
+ * 任何对表格列、字段映射、排版样式的修改，<b>必须同步修改</b>
+ * {@link me.zhengjie.modules.system.service.statement.StatementPdfService#generateTransportPdfBytes(Long)}
+ * 否则将导致签章文件与实际对账数据不一致，影响法律效力。</p>
+ *
+ * @author QI Guang
+ * @see me.zhengjie.modules.system.service.statement.StatementPdfService#generateTransportPdfBytes(Long)
+ */
