@@ -170,3 +170,63 @@ public String getAuthStatusText() {
 ---
 
 
+
+
+
+# 📄 MyBatis 官方文档：XML 与注解的配置方式
+
+本文档摘录 MyBatis 官方说明，展示其同时支持 **XML** 和 **注解** 两种映射方式。
+
+---
+
+## 📖 1. 中文简介（MyBatis 3 | 简介）
+
+> MyBatis 可以通过简单的 **XML 或注解**来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。[reference:0]
+
+📎 原文链接：[MyBatis 3 | 简介](https://mybatis.org/mybatis-3/zh_CN/index.html)
+
+---
+
+## 📖 2. 英文入门指南（MyBatis 3 | Getting started）
+
+> Mapper classes are Java classes that contain **SQL Mapping Annotations** that avoid the need for XML mapping.[reference:1]
+>
+> （映射器类是包含 SQL 映射注解的 Java 类，可以避免使用 XML 映射。）
+
+官方同时指出：
+
+> However, due to some limitations of Java Annotations and the complexity of some MyBatis mappings, **XML mapping is still required for the most advanced mappings (e.g. Nested Join Mapping).**[reference:2]
+>
+> （然而，由于Java注解的一些限制以及某些MyBatis映射的复杂性，**最先进的映射（如嵌套连接映射）仍然需要使用XML映射**。）
+
+📎 原文链接：[MyBatis 3 | Getting started](https://mybatis.org/mybatis-3/getting-started)
+
+---
+
+## 📘 3. Java API：注解的局限性
+
+MyBatis 官方在 Java API 页面中，明确指出了注解在表达力和灵活性上的局限：
+
+> **官方原文（英文）**：
+>
+> "Java annotations are unfortunately limited in their expressiveness and flexibility. Despite a lot of time spent in investigation, design and trials, the most powerful MyBatis mappings simply cannot be built with annotations – without getting ridiculous that is."[reference:3]
+>
+> **中文翻译**：
+>
+> 不幸的是，Java注解的表达力和灵活性十分有限。尽管很多时间都花在调查、设计和试验上，最强大的MyBatis映射并不能用注解来构建——并不是在开玩笑，的确是这样。
+
+该页面还进一步指出：
+
+> "You will notice that join mapping is not supported via the Annotations API. This is due to the limitation in Java Annotations that does not allow for circular references."[reference:4]
+>
+> （你会注意到，连接映射（join mapping）不受注解API支持。这是由于Java注解不允许循环引用这一限制所致。）
+
+📎 原文链接：[MyBatis 3 | Java API](https://mybatis.org/mybatis-3/java-api.html)
+
+---
+
+## 📝 总结
+
+MyBatis 官方同时提供 XML 和注解两种映射方式：
+- **注解**适合简单的映射场景，可以减少配置开销。
+- **XML**在处理复杂映射（如嵌套连接映射、关联集合）时具有不可替代的优势，是官方在复杂场景下更推荐的方式。
